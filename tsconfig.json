@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["./*"],
+      "components": ["components/*"],
+      "store": ["store/*"],
+      "screens": ["screens/*"],
+      "utils": ["utils/*"],
+      "constants/*": ["constants/*"],
+      "assets/*": ["assets/*"],
+      "models/*": ["models/*"]
+    }
+  },
+  "extends": "expo/tsconfig.base"
+}
