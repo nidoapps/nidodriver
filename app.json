@@ -12,10 +12,20 @@
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": ["**/*"],
+    "assets": ["./src/assets"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.nidoapp-driver",
-      "associatedDomains": ["applinks:nidoapp.io"]
+      "associatedDomains": ["applinks:nidoapp.io"],
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.588179861015-sud8a3flp5l9tpnhi8a2kc1hlhtpqfpj"
+            ]
+          }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -45,6 +55,15 @@
       "eas": {
         "projectId": "7ac4a4b9-0d96-409f-adcf-5d9349ec5ced"
       }
-    }
+    },
+    "plugins": [
+      ["expo-font"],
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.588179861015-sud8a3flp5l9tpnhi8a2kc1hlhtpqfpj"
+        }
+      ]
+    ]
   }
 }

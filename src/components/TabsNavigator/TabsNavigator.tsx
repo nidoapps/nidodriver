@@ -7,6 +7,7 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Home } from "@/screens/Home";
+import { SignIn } from "@/screens/SignIn";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -17,7 +18,7 @@ export type RootStackParamList = {
 const TabsNavigator = () => {
   const BottomTabBar = ({ navigation, state }: any) => (
     <BottomNavigation
-      style={{ height: 80 }}
+      style={{ height: 100 }}
       selectedIndex={state.index}
       appearance="noIndicator"
       onSelect={(index) => navigation.navigate(state.routeNames[index])}
@@ -34,22 +35,27 @@ const TabsNavigator = () => {
       />
     </BottomNavigation>
   );
-  const TabNavigator = () => (
+  // const TabNavigator = () => (
+  //   <Navigator tabBar={(props) => <BottomTabBar {...props} />}>
+  //     <Screen options={{ headerShown: false }} name="Inicio" component={Home} />
+  //     <Screen options={{ headerShown: false }} name="Ruta" component={SignIn} />
+  //     <Screen
+  //       options={{ headerShown: false }}
+  //       name="Notificaciones"
+  //       component={Home}
+  //     />
+  //     <Screen options={{ headerShown: false }} name="Cuenta" component={Home} />
+  //   </Navigator>
+  // );
+  return (
     <Navigator tabBar={(props) => <BottomTabBar {...props} />}>
-      <Screen options={{ headerShown: false }} name="Inicio" component={Home} />
-      <Screen options={{ headerShown: false }} name="Ruta" component={Home} />
+      <Screen options={{ headerShown: false }} name="Home" component={Home} />
       <Screen
         options={{ headerShown: false }}
-        name="Notificaciones"
-        component={Home}
+        name="Login"
+        component={SignIn}
       />
-      <Screen options={{ headerShown: false }} name="Cuenta" component={Home} />
     </Navigator>
-  );
-  return (
-    <NavigationContainer>
-      <TabNavigator />
-    </NavigationContainer>
   );
 };
 
