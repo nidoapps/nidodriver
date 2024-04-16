@@ -7,5 +7,6 @@ export const es = {
     home: "Inicio",
     route: "Ruta",
     notifications: "Notificaciones",
+    signUp: "Regístrate",
   },
 };

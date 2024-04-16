@@ -10,9 +10,7 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
-
-import { styled } from "nativewind";
-const StyledView = styled(View);
+import { colors } from "@/themeColors";
 
 GoogleSignin.configure({
   scopes: ["https://www.googleapis.com/auth/gmail.readonly"],
@@ -47,9 +45,9 @@ const SignIn = () => {
 
   return (
     <SafeAreaView>
-      <Container justifyContent="center" padding="30" alignItems="center">
-        <Text category="h3">Iniciar sesión</Text>
-        <Container margin="20px 0">
+      <View className="container   p-10 h-screen">
+        <Text category="h3">{t("common.signIn")}</Text>
+        <View className="my-6">
           <Input
             style={styles.input}
             placeholder="Correo electrónico"
@@ -65,45 +63,28 @@ const SignIn = () => {
             onChangeText={setPassword}
           />
           <Text category="s2">¿Olvidaste tu contraseña?</Text>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "flex-end",
-              marginVertical: 30,
-            }}
-          >
-            <Button
-              disabled={!isValidEmail(email) || !password}
-              style={{ flex: 1 }}
-            >
-              <Text category="h2">Continuar</Text>
-            </Button>
-          </View>
-          <View style={styles.linkContainer}>
-            <Text category="s1">¿No tienes cuenta aún?</Text>
-            <TouchableOpacity>
-              <Text category="s1" style={styles.link}>
-                Registrate
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "flex-end",
-              marginVertical: 30,
-            }}
-          >
-            <GoogleSigninButton
-              style={{ flex: 1 }}
-              size={GoogleSigninButton.Size.Wide}
-              color={GoogleSigninButton.Color.Light}
-              onPress={() => {}}
-            />
-          </View>
-          <StyledView className=""></StyledView>
-        </Container>
-      </Container>
+        </View>
+        <View className="w-full">
+          <Button disabled={!isValidEmail(email) || !password}>
+            <Text category="h2">Continuar</Text>
+          </Button>
+        </View>
+        <View className="flex-row my-4 gap-x-6">
+          <Text category="s1">¿No tienes cuenta aún?</Text>
+          <TouchableOpacity>
+            <Text category="s1" style={{ color: colors.light.primary }}>
+              {t("common.signUp")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View>
+          <GoogleSigninButton
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Light}
+            onPress={() => {}}
+          />
+        </View>
+      </View>
     </SafeAreaView>
   );
 };

@@ -7,5 +7,6 @@ export const en = {
     home: "Home",
     route: "Route",
     notifications: "Notifications",
+    signUp: "Sign up",
   },
 };
