@@ -1,10 +1,4 @@
 {
   "strict": {},
-  "components": {
-    "Button": {
-      "meta": {
-        "padding": "30px"
-      }
-    }
-  }
+  "components": {}
 }

@@ -1,22 +1,22 @@
-import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import { RouteProp } from "@react-navigation/native";
-import BackButton from "@/components/BackButton/BackButton";
-import { TabsNavigator } from "@/components/TabsNavigator";
-import { NavigationContainer } from "@react-navigation/native";
-import { SignIn } from "@/screens/SignIn";
-import { ValidateOtpCode } from "@/screens/ValidateOtpCode";
+import { RouteProp, NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+
+import BackButton from '@/components/BackButton/BackButton';
+import { TabsNavigator } from '@/components/TabsNavigator';
+import { SignIn } from '@/screens/SignIn';
+import { ValidateOtpCode } from '@/screens/ValidateOtpCode';
 
 const Stack = createStackNavigator();
 
-type ScreenRouteProp = RouteProp<RootStackParams, "signin">;
+type ScreenRouteProp = RouteProp<RootStackParams, 'signin'>;
 
 const MainNavigation = () => {
-  let initialRoute = "signin";
+  let initialRoute = 'signin';
   const isAuth = false;
 
   if (isAuth) {
-    initialRoute = "main";
+    initialRoute = 'main';
   }
 
   return (
@@ -26,16 +26,11 @@ const MainNavigation = () => {
         screenOptions={({ route, navigation }) => ({
           headerShown: false,
           headerTransparent: true,
-          headerTitle: "",
+          headerTitle: '',
           headerLeft: (props) => (
-            <BackButton
-              {...props}
-              params={route.params}
-              navigation={navigation}
-            />
+            <BackButton {...props} params={route.params} navigation={navigation} />
           ),
-        })}
-      >
+        })}>
         {!isAuth ? (
           <>
             <Stack.Screen

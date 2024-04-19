@@ -1,8 +1,9 @@
-import React, { useCallback } from "react";
-import { TouchableOpacity } from "react-native";
-import { StackHeaderProps } from "@react-navigation/stack";
-import { NavigationProp } from "@react-navigation/native";
-import { Icon } from "@ui-kitten/components";
+import { RootStackParams } from '@/navigation/NavigationParams';
+import { NavigationProp } from '@react-navigation/native';
+import { StackHeaderProps } from '@react-navigation/stack';
+import { Icon } from '@ui-kitten/components';
+import React, { useCallback } from 'react';
+import { TouchableOpacity } from 'react-native';
 
 interface BackButtonProps {
   params?: object;

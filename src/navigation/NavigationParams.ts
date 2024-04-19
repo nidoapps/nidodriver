@@ -1,4 +1,4 @@
-type RootStackParams = {
+export type RootStackParams = {
   validateOtpCode: {
     type: AuthFlowType;
     phoneNumber: number;
@@ -7,14 +7,14 @@ type RootStackParams = {
     phoneCountry: string;
     referralCode?: string;
   };
-  changePassword: {};
-  splash: {};
+  changePassword: object;
+  splash: object;
   signUpOtp: {
     pinId: string;
     pin: string;
     customerData?: CustomerSignUpData;
   };
-  main: {};
-  signin: {};
-  otpCode: {};
+  main: object;
+  signin: object;
+  otpCode: object;
 };

@@ -1,4 +1,4 @@
-type AuthFlowType = "SIGN_IN" | "SIGN_UP" | "UPDATE";
+type AuthFlowType = 'SIGN_IN' | 'SIGN_UP' | 'UPDATE';
 
 interface CustomerSignUpData {
   name: string;
