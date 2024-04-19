@@ -32,7 +32,14 @@ const BackButton = ({
   }
   return (
     <TouchableOpacity onPress={handlePress}>
-      <Icon name="arrow-back" />
+      <Icon
+        name="chevron-left-outline"
+        fill="#000"
+        style={{
+          width: 32,
+          height: 32,
+        }}
+      />
     </TouchableOpacity>
   );
 };

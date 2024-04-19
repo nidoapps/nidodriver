@@ -16,4 +16,5 @@ type RootStackParams = {
   };
   main: {};
   signin: {};
+  otpCode: {};
 };

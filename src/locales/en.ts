@@ -8,5 +8,6 @@ export const en = {
     route: "Route",
     notifications: "Notifications",
     signUp: "Sign up",
+    phone: "Phone number",
   },
 };

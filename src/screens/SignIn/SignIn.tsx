@@ -1,16 +1,16 @@
 import { Container } from "@/components/Container";
 import React, { useState } from "react";
 import { Dimensions, SafeAreaView, TouchableOpacity, View } from "react-native";
-import { Button, Icon, Input, Text } from "@ui-kitten/components";
+import { Button, Icon, Input, Text, useTheme } from "@ui-kitten/components";
 import { t } from "@/locales/i18n";
 import { styles } from "./styles";
-import { isValidEmail } from "@/utils/common";
+import { isValidEmail, isValidPhone } from "@/utils/common";
 import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
-import { colors } from "@/themeColors";
+import { useNavigation } from "@react-navigation/native";
 
 GoogleSignin.configure({
   scopes: ["https://www.googleapis.com/auth/gmail.readonly"],
@@ -22,8 +22,11 @@ GoogleSignin.configure({
 
 const SignIn = () => {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const theme = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const { navigate } = useNavigation();
 
   const toggleSecureEntry = (): void => {
     setSecureTextEntry(!secureTextEntry);
@@ -43,47 +46,80 @@ const SignIn = () => {
     </TouchableOpacity>
   );
 
+  const SignInType = {
+    ["otp"]: (
+      <>
+        <Input
+          style={styles.input}
+          placeholder="66753124"
+          label={t("common.phone")}
+          onChangeText={setPhone}
+          keyboardType="number-pad"
+          value={phone.replace(/(\d{1})(\d{3})(\d{4})/, "$1$2-$3")}
+          size="large"
+        />
+      </>
+    ),
+    ["email"]: (
+      <>
+        <Input
+          style={styles.input}
+          placeholder="Correo electrónico"
+          label={t("common.email")}
+          onChangeText={setEmail}
+        />
+        <Input
+          style={styles.input}
+          placeholder="Contraseña"
+          secureTextEntry={secureTextEntry}
+          accessoryRight={renderInputIcon}
+          label={t("common.password")}
+          onChangeText={setPassword}
+        />
+        <Text category="s2">¿Olvidaste tu contraseña?</Text>
+      </>
+    ),
+  };
+
   return (
-    <SafeAreaView>
-      <View className="container   p-10 h-screen">
-        <Text category="h3">{t("common.signIn")}</Text>
-        <View className="my-6">
-          <Input
-            style={styles.input}
-            placeholder="Correo electrónico"
-            label={t("common.email")}
-            onChangeText={setEmail}
-          />
-          <Input
-            style={styles.input}
-            placeholder="Contraseña"
-            secureTextEntry={secureTextEntry}
-            accessoryRight={renderInputIcon}
-            label={t("common.password")}
-            onChangeText={setPassword}
-          />
-          <Text category="s2">¿Olvidaste tu contraseña?</Text>
-        </View>
+    <SafeAreaView className="bg-white">
+      <View className="container   py-20 px-8 h-screen">
+        <Text category="h3">{t("signIn.signIn")}</Text>
+        <View className="my-6">{SignInType["otp"]}</View>
         <View className="w-full">
-          <Button disabled={!isValidEmail(email) || !password}>
-            <Text category="h2">Continuar</Text>
+          <Button
+            size="large"
+            disabled={!isValidPhone(phone)}
+            onPress={() => navigate("validateOtpCode")}
+          >
+            <Text category="h2">{t("common.continue")}</Text>
           </Button>
         </View>
-        <View className="flex-row my-4 gap-x-6">
-          <Text category="s1">¿No tienes cuenta aún?</Text>
-          <TouchableOpacity>
-            <Text category="s1" style={{ color: colors.light.primary }}>
-              {t("common.signUp")}
-            </Text>
-          </TouchableOpacity>
+
+        <View className="items-center my-6">
+          <Text category="s1">{t("signIn.orSignInWith")}</Text>
         </View>
-        <View>
+        <View className="my-10 gap-y-4">
+          <Button
+            appearance="outline"
+            style={{ backgroundColor: theme["color-basic-100"] }}
+          >
+            <Text category="h2">Email</Text>
+          </Button>
           <GoogleSigninButton
             size={GoogleSigninButton.Size.Wide}
             color={GoogleSigninButton.Color.Light}
             onPress={() => {}}
           />
         </View>
+        {/* <View className="flex-row my-4 gap-x-6">
+          <Text category="s1">¿No tienes cuenta aún?</Text>
+          <TouchableOpacity>
+            <Text category="s1" style={{ color: colors.light.primary }}>
+              {t("common.signUp")}
+            </Text>
+          </TouchableOpacity>
+        </View> */}
       </View>
     </SafeAreaView>
   );
