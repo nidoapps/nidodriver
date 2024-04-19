@@ -1,1 +1,1 @@
-export {default as TabsNavigator} from './TabsNavigator';
+export { default as TabsNavigator } from './TabsNavigator';

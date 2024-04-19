@@ -1,1 +1,1 @@
-export { default as ValidateOtpCode } from "./ValidateOtpCode";
+export { default as ValidateOtpCode } from './ValidateOtpCode';

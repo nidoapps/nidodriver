@@ -1,19 +1,19 @@
-import * as React from "react";
-import * as eva from "@eva-design/eva";
-import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
-import { registerRootComponent } from "expo";
-import { EvaIconsPack } from "@ui-kitten/eva-icons";
-import { Appearance } from "react-native";
-import { useEffect } from "react";
-import { default as theme } from "./custom-theme.json";
-import { default as mapping } from "../mapping.json";
-import MainNavigation from "./navigation/MainNavigation";
-import "./global.css";
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { registerRootComponent } from 'expo';
+import * as React from 'react';
+import { useEffect } from 'react';
+import { Appearance } from 'react-native';
+
+import { default as theme } from './custom-theme.json';
+import MainNavigation from './navigation/MainNavigation';
+import { default as mapping } from '../mapping.json';
+import './global.css';
+import { ColorSchema } from './constants/common';
 
 export default function App() {
-  const [colorScheme, setColorScheme] = React.useState(
-    Appearance.getColorScheme()
-  );
+  const [colorScheme, setColorScheme] = React.useState(Appearance.getColorScheme());
 
   useEffect(() => {
     const subscription = Appearance.addChangeListener(() => {
@@ -22,7 +22,7 @@ export default function App() {
     });
 
     return () => subscription.remove();
-  }, [Appearance.getColorScheme()]);
+  }, [Appearance.getColorScheme(), setColorScheme]);
 
   return (
     <>
@@ -30,8 +30,7 @@ export default function App() {
       <ApplicationProvider
         {...eva}
         customMapping={mapping}
-        theme={{ ...eva.light, ...theme }}
-      >
+        theme={{ ...eva[colorScheme as ColorSchema], ...theme }}>
         <MainNavigation />
       </ApplicationProvider>
     </>

@@ -1,13 +1,9 @@
-import React from "react";
-import {
-  BottomNavigation,
-  BottomNavigationTab,
-  Icon,
-} from "@ui-kitten/components";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Home } from "@/screens/Home";
-import { SignIn } from "@/screens/SignIn";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { BottomNavigation, BottomNavigationTab, Icon } from '@ui-kitten/components';
+import React from 'react';
+
+import { Home } from '@/screens/Home';
+import { SignIn } from '@/screens/SignIn';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -21,18 +17,11 @@ const TabsNavigator = () => {
       style={{ height: 100 }}
       selectedIndex={state.index}
       appearance="noIndicator"
-      onSelect={(index) => navigation.navigate(state.routeNames[index])}
-    >
+      onSelect={(index) => navigation.navigate(state.routeNames[index])}>
       <BottomNavigationTab title="Inicio" icon={<Icon name="home-outline" />} />
       <BottomNavigationTab title="Ruta" icon={<Icon name="car-outline" />} />
-      <BottomNavigationTab
-        title="Notificaciones"
-        icon={<Icon name="bell-outline" />}
-      />
-      <BottomNavigationTab
-        title="Cuenta"
-        icon={<Icon name="person-outline" />}
-      />
+      <BottomNavigationTab title="Notificaciones" icon={<Icon name="bell-outline" />} />
+      <BottomNavigationTab title="Cuenta" icon={<Icon name="person-outline" />} />
     </BottomNavigation>
   );
   // const TabNavigator = () => (
@@ -50,11 +39,7 @@ const TabsNavigator = () => {
   return (
     <Navigator tabBar={(props) => <BottomTabBar {...props} />}>
       <Screen options={{ headerShown: false }} name="Home" component={Home} />
-      <Screen
-        options={{ headerShown: false }}
-        name="Login"
-        component={SignIn}
-      />
+      <Screen options={{ headerShown: false }} name="Login" component={SignIn} />
     </Navigator>
   );
 };

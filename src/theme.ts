@@ -1,7 +1,8 @@
-import {Appearance} from 'react-native';
 import * as eva from '@eva-design/eva';
-import {ColorSchema} from './constants/common';
-import {colors, darkContrast, lightContrast, themeColors} from './themeColors';
+import { Appearance } from 'react-native';
+
+import { ColorSchema } from './constants/common';
+import { colors, darkContrast, lightContrast, themeColors } from './themeColors';
 
 const contrast = {
   [ColorSchema.light]: lightContrast,
@@ -22,6 +23,6 @@ export const buildTheme = (colorScheme: ColorSchema) => {
   };
 };
 
-export {themeColors};
+export { themeColors };
 
 export const theme = buildTheme(Appearance.getColorScheme() as ColorSchema);
