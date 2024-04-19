@@ -13,7 +13,7 @@ const { Navigator, Screen } = createBottomTabNavigator();
 
 export type RootStackParamList = {
   Home: undefined;
-  Login: undefined;
+  ValidateOtpCode: undefined;
 };
 const TabsNavigator = () => {
   const BottomTabBar = ({ navigation, state }: any) => (

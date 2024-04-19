@@ -11,6 +11,7 @@ const resources = {
 
 const i18n = new I18n(resources);
 i18n.locale = Localization.getLocales()[0].languageCode || "es";
+i18n.interpolate.bind(i18n);
 
 export const t = i18n.t.bind(i18n);
 export default i18n;

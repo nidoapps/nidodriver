@@ -5,6 +5,7 @@ import BackButton from "@/components/BackButton/BackButton";
 import { TabsNavigator } from "@/components/TabsNavigator";
 import { NavigationContainer } from "@react-navigation/native";
 import { SignIn } from "@/screens/SignIn";
+import { ValidateOtpCode } from "@/screens/ValidateOtpCode";
 
 const Stack = createStackNavigator();
 
@@ -36,14 +37,24 @@ const MainNavigation = () => {
         })}
       >
         {!isAuth ? (
-          <Stack.Screen
-            name="signin"
-            component={SignIn}
-            initialParams={{ arrowDark: true }}
-            options={{
-              headerShown: false,
-            }}
-          />
+          <>
+            <Stack.Screen
+              name="signin"
+              component={SignIn}
+              initialParams={{ arrowDark: true }}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="validateOtpCode"
+              component={ValidateOtpCode}
+              initialParams={{ arrowDark: true }}
+              options={{
+                headerShown: true,
+              }}
+            />
+          </>
         ) : null}
 
         {isAuth ? (
