@@ -11,6 +11,7 @@ platform :ios, podfile_properties['ios.deploymentTarget'] || '13.4'
 install! 'cocoapods',
   :deterministic_uuids => false
 
+
 prepare_react_native_project!
 
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
@@ -37,6 +38,8 @@ elsif podfile_properties.key?('ios.flipper') then
   end
 end
 
+
+
 target 'nidodriver' do
   use_expo_modules!
   config = use_native_modules!
@@ -52,6 +55,10 @@ target 'nidodriver' do
     # Note that if you have use_frameworks! enabled, Flipper will not work if enabled
     :flipper_configuration => flipper_config
   )
+
+    # React Native Maps dependencies
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path 
 
   post_install do |installer|
     react_native_post_install(

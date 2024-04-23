@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.flex-1 {
+  flex: 1 1 0%;
+}

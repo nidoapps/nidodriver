@@ -1,31 +1,36 @@
-import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
-import { useNavigation } from '@react-navigation/native';
-import { Button, Icon, Input, Text, useTheme } from '@ui-kitten/components';
-import React, { useState } from 'react';
-import { SafeAreaView, TouchableOpacity, View } from 'react-native';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from '@react-native-google-signin/google-signin'
+import { useNavigation } from '@react-navigation/native'
+import { Button, Icon, Input, Text, useTheme } from '@ui-kitten/components'
+import React, { useEffect, useState } from 'react'
+import { SafeAreaView, TouchableOpacity, View } from 'react-native'
 
-import { styles } from './styles';
+import { styles } from './styles'
 
-import { t } from '@/locales/i18n';
-import { isValidPhone } from '@/utils/common';
+import { t } from '@/locales/i18n'
+import { isValidPhone } from '@/utils/common'
 
 GoogleSignin.configure({
   scopes: ['https://www.googleapis.com/auth/gmail.readonly'],
-  iosClientId: 'com.googleusercontent.apps.588179861015-sud8a3flp5l9tpnhi8a2kc1hlhtpqfpj',
-  webClientId: '588179861015-p02rbn9gukbikddveceg82qkp3hte4oi.apps.googleusercontent.com',
-});
+  iosClientId:
+    'com.googleusercontent.apps.588179861015-sud8a3flp5l9tpnhi8a2kc1hlhtpqfpj',
+  webClientId:
+    '588179861015-p02rbn9gukbikddveceg82qkp3hte4oi.apps.googleusercontent.com',
+})
 
 const SignIn = () => {
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const theme = useTheme();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [phone, setPhone] = useState('');
-  const { navigate } = useNavigation();
+  const [secureTextEntry, setSecureTextEntry] = useState(true)
+  const theme = useTheme()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const { navigate } = useNavigation()
 
   const toggleSecureEntry = (): void => {
-    setSecureTextEntry(!secureTextEntry);
-  };
+    setSecureTextEntry(!secureTextEntry)
+  }
 
   const renderInputIcon = (props): React.ReactElement => (
     <TouchableOpacity onPress={toggleSecureEntry}>
@@ -39,19 +44,20 @@ const SignIn = () => {
         }}
       />
     </TouchableOpacity>
-  );
+  )
 
   const SignInType = {
     otp: (
       <>
         <Input
           style={styles.input}
-          placeholder="66753124"
+          placeholder="6675-3124"
           label={t('common.phone')}
-          onChangeText={setPhone}
+          onChangeText={setPhoneNumber}
           keyboardType="number-pad"
-          value={phone.replace(/(\d{1})(\d{3})(\d{4})/, '$1$2-$3')}
+          value={phoneNumber.replace(/(\d{1})(\d{3})(\d{4})/, '$1$2-$3')}
           size="large"
+          maxLength={8}
         />
       </>
     ),
@@ -74,7 +80,7 @@ const SignIn = () => {
         <Text category="s2">¿Olvidaste tu contraseña?</Text>
       </>
     ),
-  };
+  }
 
   return (
     <SafeAreaView className="bg-white">
@@ -84,8 +90,8 @@ const SignIn = () => {
         <View className="w-full">
           <Button
             size="large"
-            disabled={!isValidPhone(phone)}
-            onPress={() => navigate('validateOtpCode')}>
+            disabled={!isValidPhone(phoneNumber)}
+            onPress={() => navigate('validateOtpCode', { phoneNumber })}>
             <Text category="h2">{t('common.continue')}</Text>
           </Button>
         </View>
@@ -93,8 +99,10 @@ const SignIn = () => {
         <View className="items-center my-6">
           <Text category="s1">{t('signIn.orSignInWith')}</Text>
         </View>
-        <View className="my-10 gap-y-4">
-          <Button appearance="outline" style={{ backgroundColor: theme['color-basic-100'] }}>
+        <View className="my-10 gap-y-4 w-full">
+          <Button
+            appearance="outline"
+            style={{ backgroundColor: theme['color-basic-100'] }}>
             <Text category="h2">Email</Text>
           </Button>
           <GoogleSigninButton
@@ -113,7 +121,7 @@ const SignIn = () => {
         </View> */}
       </View>
     </SafeAreaView>
-  );
-};
+  )
+}
 
-export default SignIn;
+export default SignIn

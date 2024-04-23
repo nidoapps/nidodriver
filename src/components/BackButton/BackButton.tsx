@@ -1,16 +1,17 @@
-import { RootStackParams } from '@/navigation/NavigationParams';
-import { NavigationProp } from '@react-navigation/native';
-import { StackHeaderProps } from '@react-navigation/stack';
-import { Icon } from '@ui-kitten/components';
-import React, { useCallback } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { NavigationProp } from '@react-navigation/native'
+import { StackHeaderProps } from '@react-navigation/stack'
+import { Icon } from '@ui-kitten/components'
+import React, { useCallback } from 'react'
+import { TouchableOpacity } from 'react-native'
+
+import { RootStackParams } from '@/navigation/NavigationParams'
 
 interface BackButtonProps {
-  params?: object;
-  navigation: NavigationProp<RootStackParams>;
-  onPress?: () => void;
-  overrideBack?: RootStackParams;
-  canGoBack?: boolean;
+  params?: object
+  navigation: NavigationProp<RootStackParams>
+  onPress?: () => void
+  overrideBack?: RootStackParams
+  canGoBack?: boolean
 }
 
 const BackButton = ({
@@ -22,14 +23,14 @@ const BackButton = ({
 }: BackButtonProps) => {
   const handlePress = useCallback(() => {
     if (overrideBack) {
-      navigate(overrideBack as any, params);
+      navigate(overrideBack as any, params)
     } else if (onPress) {
-      onPress();
+      onPress()
     }
-  }, [overrideBack, navigate, onPress, params]);
+  }, [overrideBack, navigate, onPress, params])
 
   if (!canGoBack) {
-    return null;
+    return null
   }
   return (
     <TouchableOpacity onPress={handlePress}>
@@ -42,7 +43,7 @@ const BackButton = ({
         }}
       />
     </TouchableOpacity>
-  );
-};
+  )
+}
 
-export default BackButton;
+export default BackButton
