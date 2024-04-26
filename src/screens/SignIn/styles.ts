@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native'
 
-import { colors } from '@/themeColors';
+import { colors } from '@/themeColors'
 
 export const styles = StyleSheet.create({
   input: {
@@ -18,4 +18,4 @@ export const styles = StyleSheet.create({
     color: colors.light.primary,
     textDecorationLine: 'none',
   },
-});
+})

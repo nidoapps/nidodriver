@@ -10,4 +10,4 @@ export const en = {
     signUp: 'Sign up',
     phone: 'Phone number',
   },
-};
+}

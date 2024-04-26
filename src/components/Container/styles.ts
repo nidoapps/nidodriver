@@ -1,23 +1,23 @@
-import styled from 'styled-components/native';
+import styled from 'styled-components/native'
 
 export interface ContainerWrapperProps {
-  padding?: string;
-  margin?: string;
-  backgroundColor?: string;
-  borderRadius?: string;
-  width?: string;
-  height?: string;
-  display?: string;
-  flexDirection?: string;
-  justifyContent?: string;
-  alignItems?: string;
-  border?: string;
-  shadow?: string;
+  padding?: string
+  margin?: string
+  backgroundColor?: string
+  borderRadius?: string
+  width?: string
+  height?: string
+  display?: string
+  flexDirection?: string
+  justifyContent?: string
+  alignItems?: string
+  border?: string
+  shadow?: string
   media?: {
-    large?: string;
-    xlarge?: string;
-  };
-  flex?: string;
+    large?: string
+    xlarge?: string
+  }
+  flex?: string
 }
 export const ContainerWrapper = styled.View<ContainerWrapperProps>`
   padding: ${(props) => (props?.padding && `${props.padding}`) || 0}px;
@@ -32,4 +32,4 @@ export const ContainerWrapper = styled.View<ContainerWrapperProps>`
   align-items: ${(props) => props.alignItems || 'flex-start'};
   border: ${(props) => props.border || 'none'};
   flex: ${(props) => props.flex || 'none'};
-`;
+`

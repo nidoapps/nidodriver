@@ -1,22 +1,29 @@
-import { RouteProp, NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import React from 'react';
+import { RouteProp, NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
+import React from 'react'
+import { Text } from 'react-native'
 
-import BackButton from '@/components/BackButton/BackButton';
-import { TabsNavigator } from '@/components/TabsNavigator';
-import { SignIn } from '@/screens/SignIn';
-import { ValidateOtpCode } from '@/screens/ValidateOtpCode';
+import { RootStackParams } from './NavigationParams'
 
-const Stack = createStackNavigator();
+import BackButton from '@/components/BackButton/BackButton'
+import { ModalCheckinEstudent } from '@/components/ModalCheckinEstudent'
+import { TabsNavigator } from '@/components/TabsNavigator'
+import { Home } from '@/screens/Home'
+import { SignIn } from '@/screens/SignIn'
+import { StopDetail } from '@/screens/StopDetail'
+import { Students } from '@/screens/Students'
+import { ValidateOtpCode } from '@/screens/ValidateOtpCode'
 
-type ScreenRouteProp = RouteProp<RootStackParams, 'signin'>;
+const Stack = createStackNavigator()
+
+type ScreenRouteProp = RouteProp<RootStackParams, 'main'>
 
 const MainNavigation = () => {
-  let initialRoute = 'signin';
-  const isAuth = false;
+  let initialRoute = 'signIn'
+  const isAuth = true
 
   if (isAuth) {
-    initialRoute = 'main';
+    initialRoute = 'home'
   }
 
   return (
@@ -28,25 +35,28 @@ const MainNavigation = () => {
           headerTransparent: true,
           headerTitle: '',
           headerLeft: (props) => (
-            <BackButton {...props} params={route.params} navigation={navigation} />
+            <BackButton
+              {...props}
+              params={route.params}
+              navigation={navigation}
+            />
           ),
         })}>
+        <Stack.Screen
+          name="main"
+          component={TabsNavigator}
+          options={{
+            headerShown: false,
+          }}
+        />
         {!isAuth ? (
           <>
             <Stack.Screen
-              name="signin"
+              name="signIn"
               component={SignIn}
               initialParams={{ arrowDark: true }}
               options={{
                 headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="validateOtpCode"
-              component={ValidateOtpCode}
-              initialParams={{ arrowDark: true }}
-              options={{
-                headerShown: true,
               }}
             />
           </>
@@ -55,17 +65,51 @@ const MainNavigation = () => {
         {isAuth ? (
           <>
             <Stack.Screen
-              name="main"
-              component={TabsNavigator}
+              name="stopDetail"
+              component={StopDetail}
+              initialParams={{ arrowDark: true }}
+              options={({ route: { params: paramsStack } }) => ({
+                headerShown: true,
+                headerTransparent: false,
+                headerTitle: () => {
+                  const { stopId, stopTitle } = paramsStack
+                  return (
+                    <Text className="text-md font-semibold"> {stopTitle}</Text>
+                  )
+                },
+                gestureEnabled: true,
+              })}
+            />
+            <Stack.Screen
+              name="students"
+              component={Students}
+              initialParams={{ arrowDark: false }}
               options={{
                 headerShown: false,
               }}
             />
           </>
         ) : null}
+        <Stack.Screen
+          name="validateOtpCode"
+          component={ValidateOtpCode}
+          initialParams={{ arrowDark: true }}
+          options={{
+            headerShown: true,
+          }}
+        />
+        <Stack.Screen
+          name="modalCheckin"
+          component={ModalCheckinEstudent}
+          options={{
+            // Set the presentation mode to modal for our modal route.
+            presentation: 'modal',
+            gestureResponseDistance: 100,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
-  );
-};
+  )
+}
 
-export default MainNavigation;
+export default MainNavigation

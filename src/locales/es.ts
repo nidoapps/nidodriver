@@ -9,6 +9,9 @@ export const es = {
     signUp: 'Regístrate',
     phone: 'Teléfono',
     continue: 'Continuar',
+    address: 'Dirección',
+    students: 'Estudiantes',
+    student: 'Estudiante',
   },
   signIn: {
     signIn: 'Iniciar sesión',
@@ -19,4 +22,4 @@ export const es = {
     dontHaveAccount: '¿No tienes cuenta aún?',
     otpCodeWasSent: 'Un código de 4 dígitos fue enviado a',
   },
-};
+}

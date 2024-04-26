@@ -1,13 +1,13 @@
-import React from 'react';
+import React from 'react'
 
-import { ContainerWrapper, ContainerWrapperProps } from './styles';
+import { ContainerWrapper, ContainerWrapperProps } from './styles'
 
 interface ContainerProps extends ContainerWrapperProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 const Container = ({ children, ...props }: ContainerProps) => {
-  return <ContainerWrapper {...props}>{children}</ContainerWrapper>;
-};
+  return <ContainerWrapper {...props}>{children}</ContainerWrapper>
+}
 
-export default Container;
+export default Container
