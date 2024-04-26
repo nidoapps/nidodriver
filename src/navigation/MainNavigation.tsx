@@ -9,6 +9,7 @@ import BackButton from '@/components/BackButton/BackButton'
 import { ModalCheckinEstudent } from '@/components/ModalCheckinEstudent'
 import { TabsNavigator } from '@/components/TabsNavigator'
 import { Home } from '@/screens/Home'
+import { Routes } from '@/screens/Routes'
 import { SignIn } from '@/screens/SignIn'
 import { StopDetail } from '@/screens/StopDetail'
 import { Students } from '@/screens/Students'
@@ -83,6 +84,14 @@ const MainNavigation = () => {
             <Stack.Screen
               name="students"
               component={Students}
+              initialParams={{ arrowDark: false }}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="routes"
+              component={Routes}
               initialParams={{ arrowDark: false }}
               options={{
                 headerShown: false,

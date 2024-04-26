@@ -7,6 +7,7 @@ import {
 import React from 'react'
 
 import { Home } from '@/screens/Home'
+import { Routes } from '@/screens/Routes'
 import { Students } from '@/screens/Students'
 
 const { Navigator, Screen } = createBottomTabNavigator()
@@ -23,8 +24,8 @@ const TabsNavigator = () => {
       selectedIndex={state.index}
       appearance="noIndicator"
       onSelect={(index) => navigation.navigate(state.routeNames[index])}>
-      <BottomNavigationTab title="Inicio" icon={<Icon name="home-outline" />} />
-      <BottomNavigationTab title="Ruta" icon={<Icon name="car-outline" />} />
+      <BottomNavigationTab title="Nido" icon={<Icon name="home-outline" />} />
+      <BottomNavigationTab title="Viajes" icon={<Icon name="map-outline" />} />
       <BottomNavigationTab
         title="Estudiantes"
         icon={<Icon name="people-outline" />}
@@ -50,7 +51,11 @@ const TabsNavigator = () => {
   return (
     <Navigator tabBar={(props) => <BottomTabBar {...props} />}>
       <Screen options={{ headerShown: false }} name="home" component={Home} />
-      <Screen options={{ headerShown: false }} name="route" component={Home} />
+      <Screen
+        options={{ headerShown: false }}
+        name="routes"
+        component={Routes}
+      />
       <Screen
         options={{ headerShown: false }}
         name="students"

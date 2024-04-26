@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import { Icon, ListItem } from '@ui-kitten/components'
+import { Icon, List, ListItem } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React, { useState } from 'react'
 import { TouchableOpacity, View, Text, ImageProps } from 'react-native'
@@ -9,7 +9,7 @@ import DraggableFlatList, {
 } from 'react-native-draggable-flatlist'
 
 import { t } from '@/locales/i18n'
-import { stops } from '@/mocks/stops'
+import { PickupStops } from '@/mocks/PickupStops'
 import { IStop, StopStatus } from '@/models/common'
 import { colors } from '@/themeColors'
 
@@ -17,7 +17,7 @@ const StyledIcon = styled(Icon)
 
 const StopsList = () => {
   const { navigate } = useNavigation()
-  const [data, setData] = useState(stops)
+  const [data, setData] = useState(PickupStops)
 
   const pulseIconRef = React.useRef<Icon<Partial<ImageProps>>>()
   React.useEffect(() => {
@@ -42,22 +42,18 @@ const StopsList = () => {
     [StopStatus.completed]: colors.success,
   }
 
-  const renderDraggableItem = ({
-    item,
-    drag,
-    isActive,
-  }: RenderItemParams<any>) => {
+  const renderItem = ({ item, index }: any): React.ReactElement => {
     return (
-      <ScaleDecorator>
+      <>
         <TouchableOpacity
           onPress={() =>
             navigate('stopDetail', { stopId: item.id, stopTitle: item.title })
           }
-          onLongPress={drag}
-          disabled={isActive}
-          className={`h-20  px-3 py-4 mx-2 border-2 flex-row items-center justify-between rounded-lg my-1 ${statusClasses[item.status]} ${isActive && 'bg-teal-50'}`}>
+          className={`h-20  px-3 py-4 mx-2 border-2 flex-row items-center justify-between rounded-lg my-1 ${statusClasses[item.status]}`}>
           <View className=" flex-row items-center justify-center mr-2 gap-x-2">
-            <Text className="font-semibold text-lg">{item.index}</Text>
+            <Text className="font-semibold text-lg text-neutral-800">
+              {index + 1}
+            </Text>
             <View className="">
               <Text className="text-lg font-semibold text-neutral-800">
                 {item.title}
@@ -82,8 +78,17 @@ const StopsList = () => {
                     name="people"
                   />
                   <Text className="text-sm !text-neutral-700">
-                    {' '}
                     {t('common.students')}: {item.students.length}
+                    {item.status === 'completed' && (
+                      <>
+                        /
+                        {
+                          item.students.filter(
+                            (student) => student.stopStatus === 'completed'
+                          ).length
+                        }
+                      </>
+                    )}
                   </Text>
                 </View>
               </View>
@@ -97,22 +102,18 @@ const StopsList = () => {
             />
           </View>
         </TouchableOpacity>
-      </ScaleDecorator>
+      </>
     )
   }
 
   return (
-    <>
-      <Text className="my-2 text-semibold ml-2 text-base">
-        Orden de Paradas en la ruta
-      </Text>
-      <DraggableFlatList
+    <View className="h-full">
+      <List
         data={data}
-        onDragEnd={({ data }) => setData(data)}
         keyExtractor={(item) => String(item.id)}
-        renderItem={renderDraggableItem as any}
+        renderItem={renderItem as any}
       />
-    </>
+    </View>
   )
 }
 
