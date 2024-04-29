@@ -3,8 +3,10 @@ import { Button, Input, Text } from '@ui-kitten/components'
 import React, { useState, useRef } from 'react'
 import { SafeAreaView, View, TextInput } from 'react-native'
 
+import { useDriversContext } from '@/hooks/useDriversContext'
 import { t } from '@/locales/i18n'
 import { RootStackParams } from '@/navigation/NavigationParams'
+import { setIsAuthAction } from '@/store/actions'
 
 interface ValidateOtpCodeProps {
   route: RouteProp<RootStackParams, 'validateOtpCode'>
@@ -15,6 +17,7 @@ const ValidateOtpCode = ({ route }: ValidateOtpCodeProps) => {
   const inputRefs = useRef<(TextInput | null)[]>([null, null, null, null])
   const { phoneNumber } = route.params || {}
   const { navigate } = useNavigation()
+  const { dispatch } = useDriversContext()
 
   const handleInputChange = (value: any, index: number) => {
     const updatedOtp = [...otpCode]
@@ -65,7 +68,10 @@ const ValidateOtpCode = ({ route }: ValidateOtpCodeProps) => {
           <Button
             size="large"
             disabled={otpCode.some((e) => !e)}
-            onPress={() => navigate('main')}>
+            onPress={() => {
+              dispatch(setIsAuthAction(true))
+              navigate('main')
+            }}>
             <Text category="h2"> {t('common.continue')} </Text>
           </Button>
         </View>

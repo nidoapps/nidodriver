@@ -5,6 +5,7 @@ import { SafeAreaView, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { StopsList } from '@/components/StopsList'
+import { useDriversContext } from '@/hooks/useDriversContext'
 
 const StyledIcon = styled(Icon)
 

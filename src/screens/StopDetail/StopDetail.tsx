@@ -15,13 +15,11 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { ModalCallContacts } from '@/components/ModalCallContacts'
 import { ModalCheckinEstudent } from '@/components/ModalCheckinEstudent'
 import { StudentStopStatus } from '@/constants/common'
-import { PickupStops } from '@/mocks/PickupStops'
+import { PickupStops } from '@/mocks/stops'
 import { StopStatus } from '@/models/common'
 import { RootStackParams } from '@/navigation/NavigationParams'
 import { colors } from '@/themeColors'
-import { buildShadow } from '@/utils/boxShadow'
 import useIncrementalTimer from '@/utils/useIncrementalTimer'
-import useTimer from '@/utils/useTimer'
 
 const StyledIcon = styled(Icon)
 interface StopDetailProps {

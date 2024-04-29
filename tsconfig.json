@@ -13,7 +13,9 @@
       "utils": ["utils/*"],
       "constants/*": ["constants/*"],
       "assets/*": ["assets/*"],
-      "models/*": ["models/*"]
+      "models/*": ["models/*"],
+      "hooks": ["hooks/*"],
+      "mocks": ["mocks/*"]
     }
   },
   "extends": "expo/tsconfig.base"

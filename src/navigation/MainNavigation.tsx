@@ -8,6 +8,7 @@ import { RootStackParams } from './NavigationParams'
 import BackButton from '@/components/BackButton/BackButton'
 import { ModalCheckinEstudent } from '@/components/ModalCheckinEstudent'
 import { TabsNavigator } from '@/components/TabsNavigator'
+import { useDriversContext } from '@/hooks/useDriversContext'
 import { Home } from '@/screens/Home'
 import { Routes } from '@/screens/Routes'
 import { SignIn } from '@/screens/SignIn'
@@ -20,8 +21,10 @@ const Stack = createStackNavigator()
 type ScreenRouteProp = RouteProp<RootStackParams, 'main'>
 
 const MainNavigation = () => {
+  const {
+    state: { isAuth },
+  } = useDriversContext()
   let initialRoute = 'signIn'
-  const isAuth = true
 
   if (isAuth) {
     initialRoute = 'home'

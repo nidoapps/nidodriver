@@ -12,6 +12,7 @@ import { Appearance } from 'react-native'
 
 import { ColorSchema } from './constants/common'
 import { default as theme } from './custom-theme.json'
+import { DriversAppProvider } from './hooks/useDriversContext'
 import MainNavigation from './navigation/MainNavigation'
 import { default as mapping } from '../mapping.json'
 import './global.css'
@@ -34,12 +35,14 @@ export default function App() {
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
-      <ApplicationProvider
-        {...eva}
-        customMapping={mapping}
-        theme={{ ...eva[colorScheme as ColorSchema], ...theme }}>
-        <MainNavigation />
-      </ApplicationProvider>
+      <DriversAppProvider>
+        <ApplicationProvider
+          {...eva}
+          customMapping={mapping}
+          theme={{ ...eva[colorScheme as ColorSchema], ...theme }}>
+          <MainNavigation />
+        </ApplicationProvider>
+      </DriversAppProvider>
     </>
   )
 }

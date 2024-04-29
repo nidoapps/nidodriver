@@ -9,6 +9,7 @@ import { SafeAreaView, TouchableOpacity, View } from 'react-native'
 
 import { styles } from './styles'
 
+import { useDriversContext } from '@/hooks/useDriversContext'
 import { t } from '@/locales/i18n'
 import { isValidPhone } from '@/utils/common'
 

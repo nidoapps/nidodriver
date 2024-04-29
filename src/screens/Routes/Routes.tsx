@@ -6,7 +6,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { ModalCallContacts } from '@/components/ModalCallContacts'
-import { PickupStops } from '@/mocks/PickupStops'
+import { PickupStops } from '@/mocks/stops'
 import { colors } from '@/themeColors'
 
 const StyledTabBar = styled(TabBar)
