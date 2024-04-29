@@ -19,4 +19,5 @@ export type RootStackParams = {
   }
   modalCheckin: object
   students: object
+  routes: object
 }
