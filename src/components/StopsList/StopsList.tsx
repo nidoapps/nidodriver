@@ -9,7 +9,7 @@ import DraggableFlatList, {
 } from 'react-native-draggable-flatlist'
 
 import { t } from '@/locales/i18n'
-import { PickupStops } from '@/mocks/PickupStops'
+import { PickupStops } from '@/mocks/stops'
 import { IStop, StopStatus } from '@/models/common'
 import { colors } from '@/themeColors'
 
