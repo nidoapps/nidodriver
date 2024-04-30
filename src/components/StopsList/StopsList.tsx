@@ -7,6 +7,7 @@ import DraggableFlatList, {
   RenderItemParams,
   ScaleDecorator,
 } from 'react-native-draggable-flatlist'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { t } from '@/locales/i18n'
 import { PickupStops } from '@/mocks/stops'
@@ -107,13 +108,23 @@ const StopsList = () => {
   }
 
   return (
-    <View className="h-full">
+    <SafeAreaView className="h-full">
+      <View className="bg-midblue-50 border flex-row items-center justify-between  border-neutral-200  px-2 h-16">
+        <Text className="text-md font-semibold">
+          Ruta Costa del Este Ida Iniciada
+        </Text>
+        <View className="flex-row  items-center justify-between">
+          <TouchableOpacity className="flex-row  h-9 w-9 justify-center items-center border border-neutral-900 rounded ">
+            <StyledIcon name="alert-circle" className="h-5 w-5 " />
+          </TouchableOpacity>
+        </View>
+      </View>
       <List
         data={data}
         keyExtractor={(item) => String(item.id)}
         renderItem={renderItem as any}
       />
-    </View>
+    </SafeAreaView>
   )
 }
 

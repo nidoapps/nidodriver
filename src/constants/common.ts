@@ -13,3 +13,9 @@ export enum StopStatus {
   active = 'active',
   completed = 'completed',
 }
+
+export enum TripStatus {
+  notStarted = 'notStarted',
+  started = 'started',
+  completed = 'completed',
+}

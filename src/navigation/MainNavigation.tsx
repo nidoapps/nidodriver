@@ -9,6 +9,7 @@ import BackButton from '@/components/BackButton/BackButton'
 import { ModalCheckinEstudent } from '@/components/ModalCheckinEstudent'
 import { TabsNavigator } from '@/components/TabsNavigator'
 import { useDriversContext } from '@/hooks/useDriversContext'
+import EditDriverProfileScreen from '@/screens/DriverProfile/DriverProfile'
 import { Home } from '@/screens/Home'
 import { Routes } from '@/screens/Routes'
 import { SignIn } from '@/screens/SignIn'
@@ -95,6 +96,14 @@ const MainNavigation = () => {
             <Stack.Screen
               name="routes"
               component={Routes}
+              initialParams={{ arrowDark: false }}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="profile"
+              component={EditDriverProfileScreen}
               initialParams={{ arrowDark: false }}
               options={{
                 headerShown: false,

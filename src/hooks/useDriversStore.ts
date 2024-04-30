@@ -7,6 +7,7 @@ import { combinedReducers } from '@/store/reducers'
 export const useDriversStore = () => {
   const initialState: DriversState = {
     assignedTrips: AssignedTrips,
+    isAuth: true,
   }
   const [state, dispatch] = useImmerReducer(combinedReducers, initialState)
   return {

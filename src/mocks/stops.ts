@@ -23,7 +23,7 @@ const contacts = [
 export const PickupStops = [
   {
     id: generateRandomId(),
-    title: 'Llevar a Escuela',
+    title: 'PH Costa del Este 1',
     description: 'Parada en Costa del Este',
     address: 'PH Costa del Este 1',
     latitude: 8.977789,
@@ -126,9 +126,9 @@ export const PickupStops = [
   },
   {
     id: generateRandomId(),
-    title: ' Costa del Este 4',
+    title: ' Colegio AIP',
     description: 'Parada en Ciudad de Panamá',
-    address: 'PH Costa del Este 4',
+    address: 'AIP, Provincia de Panama',
     latitude: 8.991944,
     longitude: -79.519444,
     status: 'pending', // Added status field
@@ -196,6 +196,27 @@ export const DropStops = [
       },
     ],
   },
+  {
+    id: generateRandomId(),
+    title: ' Costa del Este 3',
+    description: 'Parada en Ciudad de Panamá',
+    address: 'PH Costa del Este 3',
+    latitude: 8.991944,
+    longitude: -79.519444,
+    status: 'pending', // Added status field
+    holdTime: 5,
+    students: [
+      {
+        id: generateRandomId(),
+        name: 'David Torres',
+        description: 'Estudiante de derecho',
+        latitude: 8.991944,
+        longitude: -79.519444,
+        phone: '+507 777-7777',
+        contacts,
+      },
+    ],
+  },
 ]
 
 export const AssignedTrips = [
@@ -206,7 +227,7 @@ export const AssignedTrips = [
     address: 'PH Costa del Este 1',
     status: 'active',
     holdTime: 1,
-    PickupStops,
+    stops: PickupStops,
   },
   {
     id: generateRandomId(),
@@ -215,6 +236,6 @@ export const AssignedTrips = [
     address: 'PH Costa del Este 2',
     status: 'pending',
     holdTime: 1,
-    PickupStops: DropStops,
+    stops: DropStops,
   },
 ]
