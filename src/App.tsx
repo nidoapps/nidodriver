@@ -6,6 +6,7 @@ import {
 } from '@ui-kitten/components'
 import { EvaIconsPack } from '@ui-kitten/eva-icons'
 import { registerRootComponent } from 'expo'
+import { StatusBar } from 'expo-status-bar'
 import * as React from 'react'
 import { useEffect } from 'react'
 import { Appearance } from 'react-native'
@@ -40,6 +41,8 @@ export default function App() {
           {...eva}
           customMapping={mapping}
           theme={{ ...eva[colorScheme as ColorSchema], ...theme }}>
+          <StatusBar style="dark" />
+
           <MainNavigation />
         </ApplicationProvider>
       </DriversAppProvider>

@@ -1,9 +1,9 @@
 PODS:
-  - AppAuth (1.7.3):
-    - AppAuth/Core (= 1.7.3)
-    - AppAuth/ExternalUserAgent (= 1.7.3)
-  - AppAuth/Core (1.7.3)
-  - AppAuth/ExternalUserAgent (1.7.3):
+  - AppAuth (1.7.5):
+    - AppAuth/Core (= 1.7.5)
+    - AppAuth/ExternalUserAgent (= 1.7.5)
+  - AppAuth/Core (1.7.5)
+  - AppAuth/ExternalUserAgent (1.7.5):
     - AppAuth/Core
   - boost (1.83.0)
   - DoubleConversion (1.1.6)
@@ -76,7 +76,7 @@ PODS:
   - GTMAppAuth (2.0.0):
     - AppAuth/Core (~> 1.6)
     - GTMSessionFetcher/Core (< 4.0, >= 1.5)
-  - GTMSessionFetcher/Core (3.3.2)
+  - GTMSessionFetcher/Core (3.4.1)
   - hermes-engine (0.73.6):
     - hermes-engine/Pre-built (= 0.73.6)
   - hermes-engine/Pre-built (0.73.6)
@@ -1364,7 +1364,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AppAuth: a13994980c1ec792f7e2e665acd4d4aa6be43240
+  AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   EXConstants: 988aa430ca0f76b43cd46b66e7fae3287f9cc2fc
@@ -1384,7 +1384,7 @@ SPEC CHECKSUMS:
   GoogleMaps: 032f676450ba0779bd8ce16840690915f84e57ac
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
-  GTMSessionFetcher: 0e876eea9782ec6462e91ab872711c357322c94f
+  GTMSessionFetcher: 8000756fc1c19d2e5697b90311f7832d2e33f6cd
   hermes-engine: 9cecf9953a681df7556b8cc9c74905de8f3293c0
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   RCT-Folly: 7169b2b1c44399c76a47b5deaaba715eeeb476c0

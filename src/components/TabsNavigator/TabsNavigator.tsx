@@ -6,6 +6,7 @@ import {
 } from '@ui-kitten/components'
 import React from 'react'
 
+import EditDriverProfileScreen from '@/screens/DriverProfile/DriverProfile'
 import { Home } from '@/screens/Home'
 import { Routes } from '@/screens/Routes'
 import { Students } from '@/screens/Students'
@@ -64,7 +65,7 @@ const TabsNavigator = () => {
       <Screen
         options={{ headerShown: false }}
         name="profile"
-        component={Home}
+        component={EditDriverProfileScreen}
       />
     </Navigator>
   )
