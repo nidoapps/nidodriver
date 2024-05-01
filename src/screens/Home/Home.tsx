@@ -1,7 +1,7 @@
 import { Icon } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React, { useCallback, useMemo, useRef } from 'react'
-import { SafeAreaView, Text, View } from 'react-native'
+import { SafeAreaView, Text, View, Image } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { NotStartedTrip } from '@/components/NotStartedTrip'
@@ -22,10 +22,11 @@ const Home = () => {
   }
 
   return (
-    <SafeAreaView className="flex flex-1 bg-neutral-50">
-      <View className="">
-        {startedTrip ? <StopsList /> : <NotStartedTrip />}
+    <SafeAreaView className="flex  bg-neutral-50 justify-between">
+      <View className="flex justify-center items-center">
+        <Text className="font-semibold text-xl">Nido</Text>
       </View>
+      {startedTrip ? <StopsList /> : <NotStartedTrip />}
     </SafeAreaView>
   )
 }

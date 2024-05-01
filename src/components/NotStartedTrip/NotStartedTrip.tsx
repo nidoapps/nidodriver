@@ -1,15 +1,16 @@
 import { Card } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React from 'react'
-import { View, Text, Animated, Alert } from 'react-native'
+import { View, Text, Animated, Image } from 'react-native'
 import { Icon } from 'react-native-eva-icons'
 import {
   RectButton,
+  ScrollView,
   Swipeable,
   TouchableOpacity,
-  TouchableWithoutFeedback,
 } from 'react-native-gesture-handler'
 
+import NidoLogoBlue from '@/assets/images/nido-logo-blue.png'
 import { useDriversContext } from '@/hooks/useDriversContext'
 import { setStartedTripAction } from '@/store/actions'
 import { colors } from '@/themeColors'
@@ -54,10 +55,11 @@ const NotStartedTrip = () => {
 
   return (
     <View className="flex justify-between">
-      <View className="h-1/2 bg-neutral-100 items-center justify-center">
-        <Text className="text-3xl font-semibold"> Rutas asignadas</Text>
+      <View className="h-1/3 bg-neutral-100 items-center justify-center">
+        <Image source={NidoLogoBlue} className="h-20 w-20" resizeMode="cover" />
+        <Text className="text-2xl font-semibold"> Rutas asignadas</Text>
       </View>
-      <View className="   ">
+      <ScrollView>
         {assignedTrips.map((trip, index) => {
           return (
             <TouchableOpacity key={index}>
@@ -65,14 +67,11 @@ const NotStartedTrip = () => {
                 key={index}
                 dragOffsetFromLeftEdge={index === 0 ? 0 : Number.MAX_VALUE}
                 renderLeftActions={renderLeftActions}
-                onSwipeableOpen={(
-                  direction: 'left' | 'right',
-                  swipeable: Swipeable
-                ) => {
+                onSwipeableOpen={(direction: 'left' | 'right') => {
                   if (direction === 'left') dispatch(setStartedTripAction(true))
                 }}>
                 <View
-                  className={`bg-white flex-row px-4 py-8 my-1 border border-neutral-200 justify-between items-center ${index && 'opacity-60'}`}>
+                  className={`bg-white flex-row px-4 py-5 my-1 border border-neutral-200 justify-between items-center ${index && 'opacity-60'}`}>
                   <View className="flex  gap-y-1">
                     <Text className="text-2xl font-medium">{trip.title}</Text>
                     <Text>Origen: {trip.stops[0].title}</Text>
@@ -91,7 +90,7 @@ const NotStartedTrip = () => {
             </TouchableOpacity>
           )
         })}
-      </View>
+      </ScrollView>
     </View>
   )
 }

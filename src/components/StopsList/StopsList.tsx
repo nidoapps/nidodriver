@@ -108,8 +108,8 @@ const StopsList = () => {
   }
 
   return (
-    <SafeAreaView className="h-full">
-      <View className="bg-midblue-50 border flex-row items-center justify-between  border-neutral-200  px-2 h-16">
+    <View className=" h-full pt-2">
+      <View className="bg-midblue-50 border mb-3 flex-row items-center justify-between  border-neutral-200  px-2 h-16">
         <Text className="text-md font-semibold">
           Ruta Costa del Este Ida Iniciada
         </Text>
@@ -124,7 +124,7 @@ const StopsList = () => {
         keyExtractor={(item) => String(item.id)}
         renderItem={renderItem as any}
       />
-    </SafeAreaView>
+    </View>
   )
 }
 

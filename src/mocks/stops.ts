@@ -238,4 +238,13 @@ export const AssignedTrips = [
     holdTime: 1,
     stops: DropStops,
   },
+  {
+    id: generateRandomId(),
+    title: 'Afterschool',
+    description: 'Parada en Costa del Este',
+    address: 'PH Costa del Este 2',
+    status: 'pending',
+    holdTime: 1,
+    stops: DropStops,
+  },
 ]
