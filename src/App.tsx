@@ -41,8 +41,7 @@ export default function App() {
           {...eva}
           customMapping={mapping}
           theme={{ ...eva[colorScheme as ColorSchema], ...theme }}>
-          <StatusBar style="dark" />
-
+          <StatusBar style="light" />
           <MainNavigation />
         </ApplicationProvider>
       </DriversAppProvider>

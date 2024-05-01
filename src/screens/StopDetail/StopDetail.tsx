@@ -67,6 +67,12 @@ const StopDetail = ({ route }: StopDetailProps) => {
           className="h-20 w-20"
         />
         <Text className="text-lg font-semibold">Parada completada</Text>
+        <Text className="text-base">
+          Parada iniciada el 28/04/2024 a las 7:32am
+        </Text>
+        <Text className="text-base">
+          Parada completada el 28/04/2024 a las 7:35am
+        </Text>
       </TouchableOpacity>
     ),
     [StopStatus.active]: InitStop(),
@@ -114,7 +120,10 @@ const StopDetail = ({ route }: StopDetailProps) => {
         <Button
           status={`${student.stopStatus === StudentStopStatus.completed ? 'success' : 'basic'}`}
           accessoryRight={<Icon name="checkmark" />}
-          onPress={() => setVisible(true)}
+          onPress={() => {
+            if (student.stopStatus !== StudentStopStatus.completed)
+              setVisible(true)
+          }}
         />
       </View>
     )

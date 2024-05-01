@@ -1,16 +1,19 @@
-import { Divider, Icon, List, Tab, TabBar, Button } from '@ui-kitten/components'
+import { Icon, List, Tab, TabBar } from '@ui-kitten/components'
+import dayjs from 'dayjs'
+import es from 'dayjs/locale/es'
 import { styled } from 'nativewind'
 import React, { useCallback, useRef, useState } from 'react'
 import { View, Text } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import CalendarStrip from 'react-native-calendar-strip'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { AssignedRoutesList } from '@/components/AssignedRoutesList'
 import { ModalCallContacts } from '@/components/ModalCallContacts'
-import { PickupStops } from '@/mocks/stops'
 import { colors } from '@/themeColors'
+import { formatDate } from '@/utils/formatDate'
 
 const StyledTabBar = styled(TabBar)
-const StyledIcon = styled(Icon)
+
 const Routes = () => {
   const [selectedTab, setSelectedTab] = useState(0)
   const [expanded, setExpanded] = useState(false)
@@ -19,7 +22,18 @@ const Routes = () => {
     student: '',
     contacts: [],
   })
-  const currentIndex = useRef(null)
+
+  const datesWhitelist = [
+    new Date(),
+    {
+      start: dayjs(new Date()).subtract(2, 'weeks').toDate(),
+      end: new Date(),
+    },
+  ]
+
+  const datesBlacklistFunc = (date) => {
+    return date.isoWeekday() === 6 || date.isoWeekday() === 7
+  }
 
   const TopTabBar = useCallback(
     () => (
@@ -34,74 +48,40 @@ const Routes = () => {
     [selectedTab]
   )
 
-  const RouteStudents = ({ item }) => (
-    <View className="px-6 py-4 bg-neutral-50">
-      {item.students.map((student, i) => (
-        <View key={i} className="flex-row justify-between items-center my-1">
-          <Text className="my-2 text-lg">{student.name}</Text>
-          <Button
-            title=""
-            size="small"
-            appearance="outline"
-            accessoryLeft={<StyledIcon name="phone-call" />}
-            onPress={() => {
-              setContactsData({
-                student: student.name,
-                contacts: student.contacts,
-              })
-              setCallStudentModal(true)
-            }}
-          />
-        </View>
-      ))}
-    </View>
-  )
-
-  const renderItem = ({ item, index }: any): React.ReactElement => (
-    <>
-      <TouchableOpacity
-        onPress={() => {
-          setExpanded((prev) => !prev)
-          currentIndex.current = index
-        }}
-        className="px-4 py-6 flex-row justify-between  items-center">
-        <View className="flex-row items-center gap-x-2">
-          <StyledIcon
-            name="arrow-forward-outline"
-            className="w-8 h-8"
-            fill={colors.primary}
-          />
-          <View className="flex-col">
-            <Text className="text-lg font-semibold">{item.title}</Text>
-            <Text className="text-base">{item.address}</Text>
-          </View>
-        </View>
-
-        <StyledIcon
-          name={
-            expanded && currentIndex.current === index
-              ? 'arrow-ios-upward'
-              : 'arrow-ios-downward'
-          }
-          className="w-8 h-8"
-          fill={colors.grey}
-        />
-      </TouchableOpacity>
-      {expanded && currentIndex.current === index && (
-        <RouteStudents item={item} />
-      )}
-    </>
-  )
+  console.log(dayjs(new Date()).set('days', 1).toDate())
 
   return (
     <SafeAreaView className="bg-white">
       <TopTabBar />
+
+      <CalendarStrip
+        scrollable
+        minDate={dayjs(new Date()).subtract(2, 'weeks').toDate()}
+        datesBlacklist={datesBlacklistFunc}
+        maxDate={new Date()}
+        style={{ height: 100, paddingTop: 10, paddingBottom: 5 }}
+        startingDate={new Date()}
+        numDaysInWeek={5}
+        headerText="Fecha de Ruta"
+        locale={{ name: 'es', config: es }}
+        selectedDate={new Date()}
+        highlightDateContainerStyle={{
+          width: 50,
+          backgroundColor: colors.primary,
+          borderRadius: 5,
+          height: 52,
+        }}
+        highlightDateNumberStyle={{ color: colors.white, fontWeight: '800' }}
+        highlightDateNameStyle={{ color: colors.white, fontWeight: '800' }}
+        dateNameStyle={{ color: colors.darkGrey, fontWeight: '200' }}
+        dateNumberStyle={{ color: colors.darkGrey, fontWeight: '200' }}
+        calendarHeaderStyle={{ color: colors.darkGrey, fontWeight: '200' }}
+        disabledDateNameStyle={{ color: colors.darkGrey, fontWeight: '200' }}
+        disabledDateNumberStyle={{ color: colors.darkGrey, fontWeight: '200' }}
+      />
+
       <View className="h-full bg-white">
-        <List
-          ItemSeparatorComponent={Divider}
-          data={PickupStops}
-          renderItem={renderItem}
-        />
+        <AssignedRoutesList />
       </View>
       {callStudentModal && (
         <ModalCallContacts
