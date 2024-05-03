@@ -16,8 +16,15 @@ import { default as theme } from './custom-theme.json'
 import { DriversAppProvider } from './hooks/useDriversContext'
 import MainNavigation from './navigation/MainNavigation'
 import { default as mapping } from '../mapping.json'
+
 import './global.css'
+import MapboxGL from '@rnmapbox/maps'
+
 ModalService.setShouldUseTopInsets = true
+
+MapboxGL.setAccessToken(
+  'pk.eyJ1IjoiZGF2aWRlZ2QiLCJhIjoiY2x1cmpzcHR5MDg4dzJxbng2bnZjaDd6NyJ9.HhUONFQ9j0HeA9Sjahlgtg'
+)
 
 export default function App() {
   const [colorScheme, setColorScheme] = React.useState(

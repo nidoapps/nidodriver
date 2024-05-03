@@ -14,6 +14,7 @@ import { Home } from '@/screens/Home'
 import { Routes } from '@/screens/Routes'
 import { SignIn } from '@/screens/SignIn'
 import { StopDetail } from '@/screens/StopDetail'
+import { StudentDetail } from '@/screens/StudentDetail'
 import { Students } from '@/screens/Students'
 import { ValidateOtpCode } from '@/screens/ValidateOtpCode'
 
@@ -108,6 +109,22 @@ const MainNavigation = () => {
               options={{
                 headerShown: false,
               }}
+            />
+            <Stack.Screen
+              name="studentDetail"
+              component={StudentDetail}
+              initialParams={{ arrowDark: true }}
+              options={({ route: { params: paramsStack } }) => ({
+                headerShown: true,
+                headerTransparent: false,
+                headerTitle: () => {
+                  const { stopId, stopTitle } = paramsStack
+                  return (
+                    <Text className="text-md font-semibold"> {stopTitle}</Text>
+                  )
+                },
+                gestureEnabled: true,
+              })}
             />
           </>
         ) : null}

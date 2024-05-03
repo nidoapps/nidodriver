@@ -81,6 +81,15 @@ PODS:
     - hermes-engine/Pre-built (= 0.73.6)
   - hermes-engine/Pre-built (0.73.6)
   - libevent (2.1.12)
+  - MapboxCommon (23.9.2)
+  - MapboxCoreMaps (10.17.0):
+    - MapboxCommon (~> 23.9)
+  - MapboxMaps (10.17.0):
+    - MapboxCommon (= 23.9.2)
+    - MapboxCoreMaps (= 10.17.0)
+    - MapboxMobileEvents (= 1.0.10)
+    - Turf (= 2.7.0)
+  - MapboxMobileEvents (1.0.10)
   - RCT-Folly (2022.05.16.00):
     - boost
     - DoubleConversion
@@ -952,6 +961,10 @@ PODS:
   - React-Mapbuffer (0.73.6):
     - glog
     - React-debug
+  - react-native-geolocation (3.2.1):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - react-native-google-maps (1.14.0):
     - Google-Maps-iOS-Utils (= 4.2.2)
     - GoogleMaps (= 7.4.0)
@@ -1134,6 +1147,17 @@ PODS:
   - RNGoogleSignin (11.0.1):
     - GoogleSignIn (~> 7.0.0)
     - React-Core
+  - rnmapbox-maps (10.1.21):
+    - MapboxMaps (~> 10.17.0)
+    - React
+    - React-Core
+    - rnmapbox-maps/DynamicLibrary (= 10.1.21)
+    - Turf
+  - rnmapbox-maps/DynamicLibrary (10.1.21):
+    - MapboxMaps (~> 10.17.0)
+    - React
+    - React-Core
+    - Turf
   - RNReanimated (3.6.3):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1146,6 +1170,7 @@ PODS:
   - RNSVG (9.13.6):
     - React
   - SocketRocket (0.6.1)
+  - Turf (2.7.0)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -1188,6 +1213,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector-modern`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
+  - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -1213,6 +1239,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - "rnmapbox-maps (from `../node_modules/@rnmapbox/maps`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -1228,7 +1255,12 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - libevent
+    - MapboxCommon
+    - MapboxCoreMaps
+    - MapboxMaps
+    - MapboxMobileEvents
     - SocketRocket
+    - Turf
 
 EXTERNAL SOURCES:
   boost:
@@ -1304,6 +1336,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   React-Mapbuffer:
     :path: "../node_modules/react-native/ReactCommon"
+  react-native-geolocation:
+    :path: "../node_modules/@react-native-community/geolocation"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-maps:
@@ -1354,6 +1388,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  rnmapbox-maps:
+    :path: "../node_modules/@rnmapbox/maps"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -1387,6 +1423,10 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 8000756fc1c19d2e5697b90311f7832d2e33f6cd
   hermes-engine: 9cecf9953a681df7556b8cc9c74905de8f3293c0
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
+  MapboxCommon: 768660d6fca8193529ecf82eb6f5f9ae7a5acdf9
+  MapboxCoreMaps: be412ff97b16aa7820922c818115a9a0d8211caa
+  MapboxMaps: 87ef0003e6db46e45e7a16939f29ae87e38e7ce2
+  MapboxMobileEvents: de50b3a4de180dd129c326e09cd12c8adaaa46d6
   RCT-Folly: 7169b2b1c44399c76a47b5deaaba715eeeb476c0
   RCTRequired: ca1d7414aba0b27efcfa2ccd37637edb1ab77d96
   RCTTypeSafety: 678e344fb976ff98343ca61dc62e151f3a042292
@@ -1408,6 +1448,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 85583ef014ce53d731a98c66a0e24496f7a83066
   React-logger: 3eb80a977f0d9669468ef641a5e1fabbc50a09ec
   React-Mapbuffer: 84ea43c6c6232049135b1550b8c60b2faac19fab
+  react-native-geolocation: ed9e1d132f576b9a4a503af46f9704413ea0dec1
   react-native-google-maps: 94df984b1647973baffe17c0b7b52828d6b69d94
   react-native-maps: cbf2f03bfeebfd7ec45966b066db13a075fd2af3
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
@@ -1433,10 +1474,12 @@ SPEC CHECKSUMS:
   ReactCommon: 2aa35648354bd4c4665b9a5084a7d37097b89c10
   RNGestureHandler: 15c6ef51acba34c49ff03003806cf5dd6098f383
   RNGoogleSignin: 24d3b3261f78b0fae0aa013f8ab6f8d25e369b0c
+  rnmapbox-maps: f8beebfd696f25ac33d15ffda38125327d54a65a
   RNReanimated: f6b02d8f5eaa2830296411d4ec3b8ef5442dd13d
   RNScreens: b6b64d956af3715adbfe84808694ae82d3fec74f
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  Turf: 13d1a92d969ca0311bbc26e8356cca178ce95da2
   Yoga: 805bf71192903b20fc14babe48080582fee65a80
 
 PODFILE CHECKSUM: c8584f55b989d937ebbf9ba7231390782b56bdb3

@@ -9,6 +9,8 @@ import DraggableFlatList, {
 } from 'react-native-draggable-flatlist'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import MapTest from '../MapTest/MapTest'
+
 import { t } from '@/locales/i18n'
 import { PickupStops } from '@/mocks/stops'
 import { IStop, StopStatus } from '@/models/common'
@@ -48,7 +50,10 @@ const StopsList = () => {
       <>
         <TouchableOpacity
           onPress={() =>
-            navigate('stopDetail', { stopId: item.id, stopTitle: item.title })
+            navigate('studentDetail', {
+              stopId: item.id,
+              stopTitle: item.title,
+            })
           }
           className={`h-20  px-3 py-4 mx-2 border-2 flex-row items-center justify-between rounded-lg my-1 ${statusClasses[item.status]}`}>
           <View className=" flex-row items-center justify-center mr-2 gap-x-2">
