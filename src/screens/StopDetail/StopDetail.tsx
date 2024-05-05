@@ -12,6 +12,7 @@ import React, { useCallback, useState } from 'react'
 import { SafeAreaView, View, Text, Linking } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
+import MapTest from '@/components/MapTest/MapTest'
 import { ModalCallContacts } from '@/components/ModalCallContacts'
 import { ModalCheckinEstudent } from '@/components/ModalCheckinEstudent'
 import { StudentStopStatus } from '@/constants/common'
@@ -166,6 +167,7 @@ const StopDetail = ({ route }: StopDetailProps) => {
             renderItem={renderItem}
           />
         </View>
+        <MapTest />
       </View>
       {visible && (
         <ModalCheckinEstudent

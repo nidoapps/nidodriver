@@ -17,6 +17,7 @@ export const colors = {
   white: '#ffffff',
   success: '#10b981',
   error: '#ef4444',
+  blue: '#3b82f6',
   light: {
     primary: '#5BBCB4',
     white: '#ffffff',
