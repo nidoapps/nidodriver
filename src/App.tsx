@@ -10,6 +10,7 @@ import { StatusBar } from 'expo-status-bar'
 import * as React from 'react'
 import { useEffect } from 'react'
 import { Appearance } from 'react-native'
+import { OneSignal } from 'react-native-onesignal'
 
 import { ColorSchema } from './constants/common'
 import { default as theme } from './custom-theme.json'
@@ -26,6 +27,11 @@ MapboxGL.setAccessToken(
   'pk.eyJ1IjoiZGF2aWRlZ2QiLCJhIjoiY2x1cmpzcHR5MDg4dzJxbng2bnZjaDd6NyJ9.HhUONFQ9j0HeA9Sjahlgtg'
 )
 
+OneSignal.initialize('738993bd-0285-41fe-9eff-33ac439c213e')
+OneSignal.Notifications.requestPermission(true)
+OneSignal.Notifications.addEventListener('click', (event) => {
+  console.log('OneSignal: notification clicked:', event)
+})
 export default function App() {
   const [colorScheme, setColorScheme] = React.useState(
     Appearance.getColorScheme()
