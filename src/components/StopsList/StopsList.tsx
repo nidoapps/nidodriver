@@ -50,7 +50,7 @@ const StopsList = () => {
       <>
         <TouchableOpacity
           onPress={() =>
-            navigate('studentDetail', {
+            navigate('stopDetail', {
               stopId: item.id,
               stopTitle: item.title,
             })
