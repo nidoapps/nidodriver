@@ -48,8 +48,6 @@ const Routes = () => {
     [selectedTab]
   )
 
-  console.log(dayjs(new Date()).set('days', 1).toDate())
-
   return (
     <SafeAreaView className="bg-white">
       <TopTabBar />

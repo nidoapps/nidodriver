@@ -1,57 +1,44 @@
-import {
-  Divider,
-  Drawer,
-  DrawerGroup,
-  DrawerItem,
-  Icon,
-  List,
-  Popover,
-  Tab,
-  TabBar,
-  Button,
-} from '@ui-kitten/components'
+import { Divider, Icon, List, Button, Input } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React, { useCallback, useRef, useState } from 'react'
 import { View, Text } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { t } from '@/locales/i18n'
 import { PickupStops } from '@/mocks/stops'
 import { colors } from '@/themeColors'
+import { getInitials } from '@/utils/common'
 
-const StyledTabBar = styled(TabBar)
 const StyledIcon = styled(Icon)
 
+const StudentsList = [
+  ...PickupStops[0].students,
+  ...PickupStops[1].students,
+  ...PickupStops[2].students,
+]
+
 const Students = () => {
-  const students = PickupStops[0].students
-  const [selectedTab, setSelectedTab] = useState(0)
   const [expanded, setExpanded] = useState(false)
+  const [studentsData, setStudentsData] = useState(StudentsList)
   const currentIndex = useRef(null)
 
-  const TopTabBar = useCallback(
-    () => (
-      <StyledTabBar
-        className="py-4"
-        selectedIndex={selectedTab}
-        onSelect={(index) => setSelectedTab(index)}>
-        <Tab title="Costa del Este Ida" />
-        <Tab title="Costa del Este Vuelta" />
-      </StyledTabBar>
-    ),
-    [selectedTab]
-  )
-
   const StutendActions = ({ item }) => (
-    <View className=" px-6 py-2 pb-4  justify-center bg-neutral-50">
-      <Text className="text-base font-medium">Contactos:</Text>
-      <View className="flex-row justify-between my-2 items-center">
-        <Text className="text-base">{item.name}</Text>
-        <Button
-          size="medium"
-          status="basic"
-          accessoryLeft={<StyledIcon name="phone-call" />}
-        />
-      </View>
+    <View className=" py-2 pb-4  justify-center bg-neutral-50">
+      <Text className="text-base pl-6 mb-2 font-medium">Contactos:</Text>
+      <List
+        data={item.contacts}
+        renderItem={({ item }) => (
+          <View className="flex-row justify-between px-6 gap-y-2 py-3 bg-neutral-50 items-center">
+            <Text className="text-base">{item.name}</Text>
+            <Button
+              size="medium"
+              status="basic"
+              accessoryLeft={<StyledIcon name="phone-call" />}
+            />
+          </View>
+        )}
+      />
     </View>
   )
 
@@ -64,8 +51,13 @@ const Students = () => {
         }}>
         <View className="flex-row px-4 py-6 items-center justify-between">
           <View className="flex-row items-center">
-            <StudentIcon />
-            <Text className="text-lg font-semibold">{item.name}</Text>
+            <StudentIcon name={String(item.name || '')} />
+            <View className="flex">
+              <Text className="text-lg font-semibold">{item.name}</Text>
+              <Text className="text-base font-light leading-4">
+                {item.address}
+              </Text>
+            </View>
           </View>
           <StyledIcon
             name={
@@ -84,28 +76,51 @@ const Students = () => {
     </>
   )
 
-  const StudentIcon = (props: any) => (
-    <View className=" rounded-full bg-midblue-500 py-1 px-2 mr-3">
-      <Text className="text-lg text-white font-medium">JP</Text>
+  const StudentIcon = ({ name }) => (
+    <View className=" rounded-full bg-midblue-500 w-10 h-10 mr-3 items-center justify-center">
+      <Text className="text-lg text-white font-medium">
+        {getInitials(name)}
+      </Text>
     </View>
   )
 
+  const handleSearchStudent = useCallback(
+    (value) => {
+      if (value) {
+        const filteredData = studentsData.filter((student) =>
+          student.name.toLocaleLowerCase().includes(value.toLocaleLowerCase())
+        )
+        setStudentsData(filteredData)
+      } else {
+        setStudentsData(StudentsList)
+      }
+    },
+    [studentsData]
+  )
+
   return (
-    <SafeAreaView className="bg-white h-screen">
-      <TopTabBar />
-      {!selectedTab ? (
-        <List
-          data={PickupStops[0].students}
-          ItemSeparatorComponent={Divider}
-          renderItem={renderItem}
+    <SafeAreaView className="flex-1 grow  bg-white">
+      <Text className="my-4 mx-6 text-xl font-semibold">
+        {t('common.students')}
+      </Text>
+      <View className="my-2 px-4">
+        <Input
+          accessoryLeft={
+            <StyledIcon
+              name="search-outline"
+              fill={colors.darkGrey2}
+              className="w-1 h-1 "
+            />
+          }
+          placeholder="Buscar estudiante"
+          onChangeText={handleSearchStudent}
         />
-      ) : (
-        <List
-          data={PickupStops[1].students}
-          ItemSeparatorComponent={Divider}
-          renderItem={renderItem}
-        />
-      )}
+      </View>
+      <List
+        data={studentsData}
+        ItemSeparatorComponent={Divider}
+        renderItem={renderItem}
+      />
     </SafeAreaView>
   )
 }

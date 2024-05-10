@@ -5,7 +5,9 @@ import {
   Icon,
 } from '@ui-kitten/components'
 import React from 'react'
+import { Image } from 'react-native'
 
+import BusIcon from '@/assets/images/bus.png'
 import EditDriverProfileScreen from '@/screens/DriverProfile/DriverProfile'
 import { Home } from '@/screens/Home'
 import { Routes } from '@/screens/Routes'
@@ -25,8 +27,11 @@ const TabsNavigator = () => {
       selectedIndex={state.index}
       appearance="noIndicator"
       onSelect={(index) => navigation.navigate(state.routeNames[index])}>
-      <BottomNavigationTab title="Nido" icon={<Icon name="home-outline" />} />
-      <BottomNavigationTab title="Viajes" icon={<Icon name="map-outline" />} />
+      <BottomNavigationTab
+        title="Nido"
+        icon={<Image source={BusIcon} className="w-16 h-10" width={92} />}
+      />
+      <BottomNavigationTab title="Viajes" icon={<Icon name="swap" />} />
       <BottomNavigationTab
         title="Estudiantes"
         icon={<Icon name="people-outline" />}
