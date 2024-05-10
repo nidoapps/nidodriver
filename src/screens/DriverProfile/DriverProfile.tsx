@@ -36,7 +36,6 @@ const EditDriverProfileScreen = () => {
   const handleUpdateProfile = async (values) => {
     try {
       // Implement API call to update driver profile with `values`
-      console.log('Updating driver profile:', values)
       Toast.show({
         type: 'success',
         text1: 'Perfil del conductor actualizado con éxito',

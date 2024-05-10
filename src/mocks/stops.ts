@@ -40,6 +40,7 @@ export const PickupStops = [
         phone: '+507 666-6666',
         stopStatus: 'completed',
         contacts,
+        address: 'PH Costa del Este 1',
       },
       {
         id: generateRandomId(),
@@ -50,6 +51,7 @@ export const PickupStops = [
         phone: '+507 555-5555',
         stopStatus: 'completed',
         contacts,
+        address: 'PH Costa del Este ',
       },
       {
         id: generateRandomId(),
@@ -60,6 +62,7 @@ export const PickupStops = [
         phone: '+507 444-4444',
         stopStatus: 'completed',
         contacts,
+        address: 'PH Costa del Este 3',
       },
       {
         id: generateRandomId(),
@@ -70,6 +73,7 @@ export const PickupStops = [
         phone: '+507 333-3333',
         stopStatus: 'completed',
         contacts,
+        address: 'PH Costa del Este 4',
       },
     ],
   },
@@ -91,6 +95,7 @@ export const PickupStops = [
         longitude: -79.633333,
         phone: '+50722222222',
         contacts,
+        address: 'PH Grand Tower',
       },
       {
         id: generateRandomId(),
@@ -100,6 +105,7 @@ export const PickupStops = [
         longitude: -79.633333,
         phone: '+50711111111',
         contacts,
+        address: 'PH Grand Tower',
       },
     ],
   },
@@ -121,6 +127,7 @@ export const PickupStops = [
         longitude: -79.519444,
         phone: '+507 777-7777',
         contacts,
+        address: 'PH Grand Tower',
       },
     ],
   },
