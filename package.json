@@ -1,6 +1,6 @@
 {
   "name": "nido-driver",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "src/App.tsx",
   "scripts": {
     "start": "expo start",
@@ -44,6 +44,7 @@
     "expo-modules-autolinking": "^1.10.3",
     "expo-splash-screen": "^0.26.4",
     "expo-status-bar": "~1.11.1",
+    "expo-updates": "~0.24.12",
     "i18n-js": "^4.4.3",
     "immer": "^9.0.12",
     "nativewind": "^2.0.11",
