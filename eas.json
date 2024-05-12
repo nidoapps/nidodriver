@@ -4,7 +4,8 @@
   },
   "build": {
     "production": {
-      "node": "20.11.1"
+      "node": "20.11.1",
+      "channel": "production"
     },
     "development": {
       "extends": "production",
@@ -15,11 +16,12 @@
       },
       "ios": {
         "simulator": true
-      }
+      },
+      "channel": "development"
     },
     "preview": {
-      "extends": "production",
-      "distribution": "internal"
+      "distribution": "internal",
+      "channel": "preview"
     }
   },
   "submit": {
