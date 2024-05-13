@@ -10,7 +10,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { AssignedRoutesList } from '@/components/AssignedRoutesList'
 import { ModalCallContacts } from '@/components/ModalCallContacts'
 import { colors } from '@/themeColors'
-import { formatDate } from '@/utils/formatDate'
 
 const StyledTabBar = styled(TabBar)
 
@@ -49,10 +48,10 @@ const Routes = () => {
   )
 
   return (
-    <SafeAreaView className="bg-white">
+    <SafeAreaView className="flex-1 bg-white">
       <TopTabBar />
 
-      <CalendarStrip
+      {/* <CalendarStrip
         scrollable
         minDate={dayjs(new Date()).subtract(2, 'weeks').toDate()}
         datesBlacklist={datesBlacklistFunc}
@@ -76,7 +75,7 @@ const Routes = () => {
         calendarHeaderStyle={{ color: colors.darkGrey, fontWeight: '200' }}
         disabledDateNameStyle={{ color: colors.darkGrey, fontWeight: '200' }}
         disabledDateNumberStyle={{ color: colors.darkGrey, fontWeight: '200' }}
-      />
+      /> */}
 
       <View className="h-full bg-white">
         <AssignedRoutesList />

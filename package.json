@@ -1,6 +1,6 @@
 {
   "name": "nido-driver",
-  "version": "1.0.1",
+  "version": "0.1.2",
   "main": "src/App.tsx",
   "scripts": {
     "start": "expo start",
