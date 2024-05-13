@@ -1,11 +1,13 @@
 {
   "cli": {
-    "version": ">= 7.8.1"
+    "version": ">= 7.8.1",
+    "appVersionSource": "remote"
   },
   "build": {
     "production": {
       "node": "20.11.1",
-      "channel": "production"
+      "channel": "production",
+      "autoIncrement": true
     },
     "development": {
       "extends": "production",
@@ -21,7 +23,8 @@
     },
     "preview": {
       "distribution": "internal",
-      "channel": "preview"
+      "channel": "preview",
+      "autoIncrement": true
     }
   },
   "submit": {
