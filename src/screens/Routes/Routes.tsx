@@ -8,6 +8,7 @@ import CalendarStrip from 'react-native-calendar-strip'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { AssignedRoutesList } from '@/components/AssignedRoutesList'
+import { HorizontalCalendar } from '@/components/HorizontalCalendar'
 import { ModalCallContacts } from '@/components/ModalCallContacts'
 import { colors } from '@/themeColors'
 
@@ -15,7 +16,7 @@ const StyledTabBar = styled(TabBar)
 
 const Routes = () => {
   const [selectedTab, setSelectedTab] = useState(0)
-  const [expanded, setExpanded] = useState(false)
+  const [selectedDate, setselectedDate] = useState(new Date())
   const [callStudentModal, setCallStudentModal] = useState(false)
   const [contactsData, setContactsData] = useState({
     student: '',
@@ -23,15 +24,14 @@ const Routes = () => {
   })
 
   const datesWhitelist = [
-    new Date(),
-    {
-      start: dayjs(new Date()).subtract(2, 'weeks').toDate(),
-      end: new Date(),
-    },
+    { start: dayjs(new Date()).subtract(2, 'weeks').toDate() },
+    { end: new Date() },
   ]
 
   const datesBlacklistFunc = (date) => {
-    return date.isoWeekday() === 6 || date.isoWeekday() === 7
+    return (
+      date.isoWeekday() === 6 || date.isoWeekday() === 7 || date > new Date()
+    )
   }
 
   const TopTabBar = useCallback(
@@ -50,6 +50,10 @@ const Routes = () => {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <TopTabBar />
+      <HorizontalCalendar
+        selectedDate={selectedDate}
+        setSelectedDate={(date) => setselectedDate(date)}
+      />
 
       {/* <CalendarStrip
         scrollable
