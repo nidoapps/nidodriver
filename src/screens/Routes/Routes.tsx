@@ -1,38 +1,16 @@
-import { Icon, List, Tab, TabBar } from '@ui-kitten/components'
-import dayjs from 'dayjs'
-import es from 'dayjs/locale/es'
+import { Tab, TabBar } from '@ui-kitten/components'
 import { styled } from 'nativewind'
-import React, { useCallback, useRef, useState } from 'react'
-import { View, Text } from 'react-native'
-import CalendarStrip from 'react-native-calendar-strip'
+import React, { useCallback, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { AssignedRoutesList } from '@/components/AssignedRoutesList'
 import { HorizontalCalendar } from '@/components/HorizontalCalendar'
-import { ModalCallContacts } from '@/components/ModalCallContacts'
-import { colors } from '@/themeColors'
 
 const StyledTabBar = styled(TabBar)
 
 const Routes = () => {
   const [selectedTab, setSelectedTab] = useState(0)
   const [selectedDate, setselectedDate] = useState(new Date())
-  const [callStudentModal, setCallStudentModal] = useState(false)
-  const [contactsData, setContactsData] = useState({
-    student: '',
-    contacts: [],
-  })
-
-  const datesWhitelist = [
-    { start: dayjs(new Date()).subtract(2, 'weeks').toDate() },
-    { end: new Date() },
-  ]
-
-  const datesBlacklistFunc = (date) => {
-    return (
-      date.isoWeekday() === 6 || date.isoWeekday() === 7 || date > new Date()
-    )
-  }
 
   const TopTabBar = useCallback(
     () => (
@@ -55,43 +33,7 @@ const Routes = () => {
         setSelectedDate={(date) => setselectedDate(date)}
       />
 
-      {/* <CalendarStrip
-        scrollable
-        minDate={dayjs(new Date()).subtract(2, 'weeks').toDate()}
-        datesBlacklist={datesBlacklistFunc}
-        maxDate={new Date()}
-        style={{ height: 100, paddingTop: 10, paddingBottom: 5 }}
-        startingDate={new Date()}
-        numDaysInWeek={5}
-        headerText="Fecha de Ruta"
-        locale={{ name: 'es', config: es }}
-        selectedDate={new Date()}
-        highlightDateContainerStyle={{
-          width: 50,
-          backgroundColor: colors.primary,
-          borderRadius: 5,
-          height: 52,
-        }}
-        highlightDateNumberStyle={{ color: colors.white, fontWeight: '800' }}
-        highlightDateNameStyle={{ color: colors.white, fontWeight: '800' }}
-        dateNameStyle={{ color: colors.darkGrey, fontWeight: '200' }}
-        dateNumberStyle={{ color: colors.darkGrey, fontWeight: '200' }}
-        calendarHeaderStyle={{ color: colors.darkGrey, fontWeight: '200' }}
-        disabledDateNameStyle={{ color: colors.darkGrey, fontWeight: '200' }}
-        disabledDateNumberStyle={{ color: colors.darkGrey, fontWeight: '200' }}
-      /> */}
-
-      <View className="h-full bg-white">
-        <AssignedRoutesList />
-      </View>
-      {callStudentModal && (
-        <ModalCallContacts
-          contacts={contactsData.contacts}
-          open={callStudentModal}
-          handleClose={() => setCallStudentModal(false)}
-          studentName={contactsData.student}
-        />
-      )}
+      <AssignedRoutesList />
     </SafeAreaView>
   )
 }
