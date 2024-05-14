@@ -1,7 +1,7 @@
 {
   "cli": {
     "version": ">= 7.8.1",
-    "appVersionSource": "remote"
+    "appVersionSource": "local"
   },
   "build": {
     "production": {
@@ -10,7 +10,6 @@
       "autoIncrement": true
     },
     "development": {
-      "extends": "production",
       "developmentClient": true,
       "distribution": "internal",
       "env": {
@@ -19,7 +18,16 @@
       "ios": {
         "simulator": true
       },
+      "android": {
+        "buildType": "apk"
+      },
       "channel": "development"
+    },
+    "staging": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
     },
     "preview": {
       "distribution": "internal",

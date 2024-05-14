@@ -7,10 +7,10 @@ const useIncrementalTimer = (minutes: number) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setSeconds((prevSeconds) => {
-        if (prevSeconds >= totalSeconds - 1) {
-          clearInterval(interval)
-          return totalSeconds
-        }
+        // if (prevSeconds >= totalSeconds - 1) {
+        //   clearInterval(interval)
+        //   return totalSeconds
+        // }
         return prevSeconds + 1
       })
     }, 1000)

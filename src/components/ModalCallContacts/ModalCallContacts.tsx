@@ -1,7 +1,7 @@
 import { Button, Icon } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Linking } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { Modal } from '@/components/Modal'
@@ -29,7 +29,7 @@ const ModalCallContacts = ({
             <TouchableOpacity
               className="py-2 gap-y-2"
               key={i}
-              onPress={handleClose}>
+              onPress={() => Linking.openURL(`tel://${contact.phone}`)}>
               <View className="flex-row justify-between items-center">
                 <Text className="text-lg">{contact.name}</Text>
                 <StyledIcon name="phone-call" className="w-8 h-6" />

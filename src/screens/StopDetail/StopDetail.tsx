@@ -28,6 +28,9 @@ interface StopDetailProps {
 }
 const StopDetail = ({ route }: StopDetailProps) => {
   const { stopId } = route.params || {}
+  const { students, holdTime, status } = PickupStops.find(
+    (stop) => stop.id === stopId
+  ) || { holdTime: 3 }
   const [initiatedStop, setInitiatedStop] = React.useState(false)
   const [visible, setVisible] = React.useState(false)
   const [openModalContacts, setOpenModalContacts] = React.useState(false)
@@ -36,13 +39,8 @@ const StopDetail = ({ route }: StopDetailProps) => {
     contacts: [],
   })
 
-  let { students, holdTime, status } = PickupStops.find(
-    (stop) => stop.id === stopId
-  ) || { holdTime: 3 }
+  const [localStatus, setLocalStatus] = React.useState(status)
 
-  // const remainingTime = React.useMemo(() => {
-  //   return useTimer(holdTime)
-  // }, [holdTime])
   const elapsedTime = useIncrementalTimer(holdTime)
 
   const InitStop = () => (
@@ -69,10 +67,10 @@ const StopDetail = ({ route }: StopDetailProps) => {
         />
         <Text className="text-lg font-semibold">Parada completada</Text>
         <Text className="text-base">
-          Parada iniciada el 28/04/2024 a las 7:32am
+          Parada iniciada el 15/05/2024 a las 7:32am
         </Text>
         <Text className="text-base">
-          Parada completada el 28/04/2024 a las 7:35am
+          Parada completada el 15/05/2024 a las 7:35am
         </Text>
       </TouchableOpacity>
     ),
@@ -85,9 +83,9 @@ const StopDetail = ({ route }: StopDetailProps) => {
       <>
         {initiatedStop ? (
           <View
-            className={`mx-auto shadow rounded-xl bg-white justify-center h-16 w-32 items-center  px-4 my-2 ${elapsedTime === `${holdTime}:00` && '!text-red-600'}`}>
+            className={`mx-auto shadow rounded-xl bg-white justify-center h-16 w-32 items-center  px-4 my-2 ${elapsedTime >= `${holdTime}:00` && '!text-red-600'}`}>
             <Text
-              className={`font-bold text-emerald-600 text-3xl ${elapsedTime === `${holdTime}:00` && 'text-error'} `}>
+              className={`font-bold text-emerald-600 text-3xl ${elapsedTime >= `${holdTime}:00` && 'text-error'} `}>
               {elapsedTime}
             </Text>
           </View>
@@ -110,7 +108,6 @@ const StopDetail = ({ route }: StopDetailProps) => {
           status="basic"
           accessoryRight={<Icon name="phone-call-outline" />}
           onPress={() => {
-            // Linking.openURL(`tel://${phone}`)
             setOpenModalContacts(true)
             setContactsData({
               student: student.name,
@@ -119,7 +116,7 @@ const StopDetail = ({ route }: StopDetailProps) => {
           }}
         />
         <Button
-          status={`${student.stopStatus === StudentStopStatus.completed ? 'success' : 'basic'}`}
+          status={`${localStatus === StudentStopStatus.completed ? 'success' : 'basic'}`}
           accessoryRight={<Icon name="checkmark" />}
           onPress={() => {
             if (student.stopStatus !== StudentStopStatus.completed)
@@ -134,28 +131,38 @@ const StopDetail = ({ route }: StopDetailProps) => {
       <View>
         <View className="h-1/4 bg-neutral-100 items-center justify-center ">
           {!initiatedStop ? (
-            <>{StopActionsByStatus[status]}</>
+            <>{StopActionsByStatus[localStatus]}</>
           ) : (
             <TouchableOpacity
               className="p-2 items-center justify-center"
               onPress={() => {
-                status = StopStatus.completed
+                setLocalStatus(StopStatus.completed)
                 setInitiatedStop(false)
               }}>
               <StyledIcon
                 name={
-                  initiatedStop && elapsedTime <= '5:00'
+                  initiatedStop && elapsedTime <= `${holdTime}:00`
                     ? 'checkmark-circle'
-                    : 'checkmark-circle-2'
+                    : 'checkmark-circle'
                 }
                 fill={
-                  initiatedStop && elapsedTime <= '5:00'
+                  initiatedStop && elapsedTime <= `${holdTime}:00`
                     ? colors.darkGrey2
-                    : colors.success
+                    : colors.primary
                 }
-                className="h-20 w-20"
+                className="h-20 w-20 mb-2"
               />
-              <Text className="text-lg font-semibold">Completar Parada</Text>
+              <View
+                className={`p-3  rounded ${
+                  initiatedStop && elapsedTime <= `${holdTime}:00`
+                    ? 'bg-neutral-400'
+                    : 'bg-midblue-500'
+                }`}>
+                <Text
+                  className={`text-lg font-semibold text-white ${initiatedStop && elapsedTime <= `${holdTime}:00` ? 'text-neutral-200' : 'text-white'}`}>
+                  Completar Parada
+                </Text>
+              </View>
             </TouchableOpacity>
           )}
           {TimerComponent()}

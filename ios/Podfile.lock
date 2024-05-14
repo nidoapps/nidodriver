@@ -999,8 +999,6 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-maps (1.14.0):
-    - React-Core
   - react-native-onesignal (5.1.3):
     - OneSignalXCFramework (= 5.1.6)
     - React (< 1.0.0, >= 0.13.0)
@@ -1257,7 +1255,6 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
-  - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -1393,8 +1390,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
-  react-native-maps:
-    :path: "../node_modules/react-native-maps"
   react-native-onesignal:
     :path: "../node_modules/react-native-onesignal"
   react-native-safe-area-context:
@@ -1509,7 +1504,6 @@ SPEC CHECKSUMS:
   React-logger: 3eb80a977f0d9669468ef641a5e1fabbc50a09ec
   React-Mapbuffer: 84ea43c6c6232049135b1550b8c60b2faac19fab
   react-native-geolocation: ed9e1d132f576b9a4a503af46f9704413ea0dec1
-  react-native-maps: cbf2f03bfeebfd7ec45966b066db13a075fd2af3
   react-native-onesignal: 2db3d8baa6ae3adc637cde65d1373c6f8b138e78
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
   React-nativeconfig: b4d4e9901d4cabb57be63053fd2aa6086eb3c85f
