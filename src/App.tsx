@@ -1,4 +1,5 @@
 import * as eva from '@eva-design/eva'
+import MapboxGL from '@rnmapbox/maps'
 import {
   ApplicationProvider,
   IconRegistry,
@@ -10,6 +11,7 @@ import { StatusBar } from 'expo-status-bar'
 import * as React from 'react'
 import { useEffect } from 'react'
 import { Appearance } from 'react-native'
+import { MMKV } from 'react-native-mmkv'
 import { OneSignal } from 'react-native-onesignal'
 
 import { ColorSchema } from './constants/common'
@@ -19,7 +21,8 @@ import MainNavigation from './navigation/MainNavigation'
 import { default as mapping } from '../mapping.json'
 
 import './global.css'
-import MapboxGL from '@rnmapbox/maps'
+
+export const storage = new MMKV()
 
 ModalService.setShouldUseTopInsets = true
 

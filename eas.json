@@ -6,33 +6,41 @@
   "build": {
     "production": {
       "node": "20.11.1",
-      "channel": "production",
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "API_URL": "https://localhost:8000",
+        "EXPO_PUBLIC_MAPBOX_PUBLIC_TOKEN": "pk.eyJ1IjoiZGF2aWRlZ2QiLCJhIjoiY2x1cmpzcHR5MDg4dzJxbng2bnZjaDd6NyJ9.HhUONFQ9j0HeA9Sjahlgtg",
+        "EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID": "com.googleusercontent.apps.588179861015-sud8a3flp5l9tpnhi8a2kc1hlhtpqfpj",
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "588179861015-sud8a3flp5l9tpnhi8a2kc1hlhtpqfpj.apps.googleusercontent.com",
+        "EXPO_PUBLIC_AUTH_TOKEN": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhdmlkIiwiaWF0IjoxNzE3OTkwMjk0LCJleHAiOjE4MDQzOTAyOTR9.ExQzYTB6N1ym5IAX01E-Q_Pm8pEJq944_ErSykjrdwQ"
+      }
     },
     "development": {
+      "extends": "production",
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "API_URL": "https://localhost:3000"
+        "API_URL": "https://localhost:8000",
+        "EXPO_PUBLIC_MAPBOX_PUBLIC_TOKEN": "pk.eyJ1IjoiZGF2aWRlZ2QiLCJhIjoiY2x1cmpzcHR5MDg4dzJxbng2bnZjaDd6NyJ9.HhUONFQ9j0HeA9Sjahlgtg",
+        "EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID": "com.googleusercontent.apps.588179861015-sud8a3flp5l9tpnhi8a2kc1hlhtpqfpj",
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "588179861015-sud8a3flp5l9tpnhi8a2kc1hlhtpqfpj.apps.googleusercontent.com",
+        "EXPO_PUBLIC_AUTH_TOKEN": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhdmlkIiwiaWF0IjoxNzE3OTkwMjk0LCJleHAiOjE4MDQzOTAyOTR9.ExQzYTB6N1ym5IAX01E-Q_Pm8pEJq944_ErSykjrdwQ"
       },
       "ios": {
         "simulator": true
-      },
-      "android": {
-        "buildType": "apk"
-      },
-      "channel": "development"
-    },
-    "staging": {
-      "distribution": "internal",
-      "android": {
-        "buildType": "apk"
       }
     },
     "preview": {
+      "extends": "production",
       "distribution": "internal",
-      "channel": "preview",
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "API_URL": "https://nidoapp-a3672380868e.herokuapp.com/",
+        "EXPO_PUBLIC_MAPBOX_PUBLIC_TOKEN": "pk.eyJ1IjoiZGF2aWRlZ2QiLCJhIjoiY2x1cmpzcHR5MDg4dzJxbng2bnZjaDd6NyJ9.HhUONFQ9j0HeA9Sjahlgtg",
+        "EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID": "com.googleusercontent.apps.588179861015-sud8a3flp5l9tpnhi8a2kc1hlhtpqfpj",
+        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "588179861015-sud8a3flp5l9tpnhi8a2kc1hlhtpqfpj.apps.googleusercontent.com",
+        "EXPO_PUBLIC_AUTH_TOKEN": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhdmlkIiwiaWF0IjoxNzE3OTkwMjk0LCJleHAiOjE4MDQzOTAyOTR9.ExQzYTB6N1ym5IAX01E-Q_Pm8pEJq944_ErSykjrdwQ"
+      }
     }
   },
   "submit": {

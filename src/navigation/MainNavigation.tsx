@@ -29,7 +29,7 @@ const MainNavigation = () => {
   let initialRoute = 'signIn'
 
   if (isAuth) {
-    initialRoute = 'home'
+    initialRoute = 'main'
   }
 
   return (
@@ -48,13 +48,6 @@ const MainNavigation = () => {
             />
           ),
         })}>
-        <Stack.Screen
-          name="main"
-          component={TabsNavigator}
-          options={{
-            headerShown: false,
-          }}
-        />
         {!isAuth ? (
           <>
             <Stack.Screen
@@ -70,6 +63,13 @@ const MainNavigation = () => {
 
         {isAuth ? (
           <>
+            <Stack.Screen
+              name="main"
+              component={TabsNavigator}
+              options={{
+                headerShown: false,
+              }}
+            />
             <Stack.Screen
               name="stopDetail"
               component={StopDetail}

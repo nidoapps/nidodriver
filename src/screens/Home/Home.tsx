@@ -1,8 +1,7 @@
 import { Icon } from '@ui-kitten/components'
 import { styled } from 'nativewind'
-import React, { useCallback, useMemo, useRef } from 'react'
+import React from 'react'
 import { SafeAreaView, Text, View, Image } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { NotStartedTrip } from '@/components/NotStartedTrip'
 import { StopsList } from '@/components/StopsList'
