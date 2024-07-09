@@ -7,7 +7,7 @@ import axios, {
 } from 'axios'
 import axiosRetry from 'axios-retry'
 
-import { IGET, IPATCH, IPOST, ServicesTypes } from './axios.interface'
+import { IGET, IPATCH, IPOST, IPUT, ServicesTypes } from './axios.interface'
 
 import { storage } from '@/App'
 
@@ -121,6 +121,21 @@ export const patch = <T>({
 }: IPATCH): Promise<T> =>
   callService({
     method: 'PATCH',
+    url: `${serviceType(type)}${servicePath}`,
+    headers,
+    data,
+    ...rest,
+  })
+
+export const put = <T>({
+  servicePath,
+  data,
+  headers,
+  type,
+  ...rest
+}: IPUT): Promise<T> =>
+  callService({
+    method: 'PUT',
     url: `${serviceType(type)}${servicePath}`,
     headers,
     data,

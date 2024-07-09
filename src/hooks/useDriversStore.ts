@@ -4,6 +4,7 @@ import { useImmerReducer } from 'use-immer'
 import { useHandleAuthorization } from './auth/useHandleAuthorization'
 import { useHandleDriverData } from './driver/useHandleDriverData'
 import { useGetTrips } from './trip/useGetTrips'
+import { useHandleTrips } from './trip/useHandleTrips'
 
 import { storage } from '@/App'
 import { AssignedTrips } from '@/mocks/stops'
@@ -14,10 +15,8 @@ export const useDriversStore = () => {
   const initialState: DriversState = {
     assignedTrips: undefined,
     isAuth: false,
-    startedTrip: false,
     driverData: undefined,
     loadingHistoryTrips: false,
-    historyTrips: undefined,
   }
   const [state, dispatch] = useImmerReducer(combinedReducers, initialState)
 
@@ -33,6 +32,7 @@ export const useDriversStore = () => {
     ...useHandleAuthorization(dispatch),
     ...useGetTrips(dispatch),
     ...useHandleDriverData(dispatch),
+    ...useHandleTrips(dispatch),
   }
   return {
     state,

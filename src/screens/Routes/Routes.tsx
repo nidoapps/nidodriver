@@ -1,6 +1,7 @@
 import { Spinner, Tab, TabBar } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React, { useCallback, useEffect, useState } from 'react'
+import { View, Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { AssignedRoutesList } from '@/components/AssignedRoutesList'
@@ -24,9 +25,7 @@ const Routes = () => {
       `${selectedDate.toISOString().split('T')[0]}T00:00:00.000Z`,
       selectedTab === 0 ? TripDirection.going : TripDirection.return
     )
-  }, [selectedTab, selectedDate])
-
-  console.log(selectedDate)
+  }, [selectedDate, selectedTab])
 
   const TopTabBar = useCallback(
     () => (
@@ -48,8 +47,18 @@ const Routes = () => {
         selectedDate={selectedDate}
         setSelectedDate={(date) => setselectedDate(date)}
       />
-      {loadingHistoryTrips ? <Spinner /> : null}
-      {historyTrips && <AssignedRoutesList />}
+      {loadingHistoryTrips && (
+        <View className="flex justify-center items-center my-4">
+          <Spinner status="primary" animating />
+        </View>
+      )}
+      {historyTrips && historyTrips.length ? (
+        <AssignedRoutesList historyTrips={historyTrips} />
+      ) : (
+        <View className="flex justify-center items-center my-4">
+          <Text className="text-xl">No hay rutas para el día seleccionado</Text>
+        </View>
+      )}
     </SafeAreaView>
   )
 }

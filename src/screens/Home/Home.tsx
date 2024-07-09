@@ -13,14 +13,14 @@ const StyledIcon = styled(Icon)
 
 const Home = () => {
   const {
-    state: { startedTrip, assignedTrips, driverData },
-    hooks: { getTripsByDriverId, getDriverProfileData },
+    state: { startedTrip, assignedTrips, driverData, activeTrip },
+    hooks: { getTripsByDriverId, getDriverProfileData, getActiveTrip },
   } = useDriversContext()
 
-  const RenderHomeByTripState = {
-    [TripStatus.notStarted]: <NotStartedTrip />,
-    [TripStatus.started]: <StopsList />,
-  }
+  // const RenderHomeByTripState = {
+  //   [TripStatus.notStarted]: <NotStartedTrip />,
+  //   [TripStatus.started]: <StopsList />,
+  // }
 
   useEffect(() => {
     if (!driverData) getDriverProfileData(storage.getString('userId'))
@@ -30,12 +30,20 @@ const Home = () => {
     if (driverData && !assignedTrips) getTripsByDriverId(driverData.driverId)
   }, [driverData, assignedTrips])
 
+  useEffect(() => {
+    if (!activeTrip) getActiveTrip(startedTrip)
+  }, [startedTrip, activeTrip])
+
   return (
     <SafeAreaView className="flex  bg-neutral-50 justify-between">
       <View className="flex justify-center items-center">
         <Text className="font-semibold text-xl">Nido</Text>
       </View>
-      {startedTrip ? <StopsList /> : <NotStartedTrip />}
+      {startedTrip || (activeTrip && activeTrip?.status === 'InProgress') ? (
+        <StopsList activeTrip={activeTrip} />
+      ) : (
+        <NotStartedTrip />
+      )}
     </SafeAreaView>
   )
 }

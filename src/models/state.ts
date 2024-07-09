@@ -6,4 +6,5 @@ export interface DriversState {
   driverData?: object
   loadingHistoryTrips?: boolean
   historyTrips?: object[]
+  activeTrip?: object
 }

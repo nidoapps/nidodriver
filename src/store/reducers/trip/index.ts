@@ -10,7 +10,7 @@ export const setStartedTrip = (state: DriversState, action: ActionType) => {
 }
 
 export const setHistoryTrips = (state: DriversState, action: ActionType) => {
-  state.historyTrips = action.payload as any
+  state.historyTrips = action.payload
 }
 
 export const setLoadingHistoryTrips = (
@@ -18,4 +18,8 @@ export const setLoadingHistoryTrips = (
   action: ActionType
 ) => {
   state.loadingHistoryTrips = action.payload as boolean
+}
+
+export const setActiveTrip = (state: DriversState, action: ActionType) => {
+  state.activeTrip = action.payload
 }

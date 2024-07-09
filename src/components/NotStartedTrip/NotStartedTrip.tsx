@@ -20,9 +20,10 @@ import { colors } from '@/themeColors'
 const StyledRectButton = styled(RectButton)
 const StyledIcon = styled(Icon)
 
-const NotStartedTrip = () => {
+const NotStartedTrip = ({}) => {
   const {
     state: { assignedTrips },
+    hooks: { handleChangeTripStatus },
     dispatch,
   } = useDriversContext()
 
@@ -73,7 +74,8 @@ const NotStartedTrip = () => {
                   renderLeftActions={renderLeftActions}
                   onSwipeableOpen={(direction: 'left' | 'right') => {
                     if (direction === 'left')
-                      dispatch(setStartedTripAction(true))
+                      dispatch(setStartedTripAction(trip.tripId))
+                    handleChangeTripStatus(trip.tripId, 'InProgress')
                   }}>
                   <View
                     className={`bg-white flex-row px-4 py-5 my-1 border border-neutral-200 justify-between items-center ${index && 'opacity-60'}`}>
@@ -85,7 +87,7 @@ const NotStartedTrip = () => {
                         {t('common.direction')}:{' '}
                         {t(`${TripDirectionText[trip.route.direction]}`)}
                       </Text>
-                      <Text>Origen: {trip.stops[0].title}</Text>
+                      {/* <Text>Origen: {trip.stops[0].title}</Text> */}
                       <Text>
                         Destino:{' '}
                         {trip?.route?.direction === TripDirection.going

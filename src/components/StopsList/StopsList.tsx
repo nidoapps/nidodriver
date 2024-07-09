@@ -11,6 +11,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 import MapTest from '../MapTest/MapTest'
 
+import { TripDirectionText } from '@/constants/common'
 import { t } from '@/locales/i18n'
 import { PickupStops } from '@/mocks/stops'
 import { IStop, StopStatus } from '@/models/common'
@@ -18,7 +19,7 @@ import { colors } from '@/themeColors'
 
 const StyledIcon = styled(Icon)
 
-const StopsList = () => {
+const StopsList = ({ activeTrip }) => {
   const { navigate } = useNavigation()
   const [data, setData] = useState(PickupStops)
 
@@ -28,20 +29,18 @@ const StopsList = () => {
   }, [])
 
   const statusClasses: { [key: string]: string } = {
-    [StopStatus.pending]: 'border-neutral-300 bg-neutral-50',
-    [StopStatus.active]: ' border-neutral-300 bg-white ',
+    [StopStatus.scheduled]: 'border-neutral-300 bg-neutral-50',
     [StopStatus.completed]: 'border-neutral-300 bg-neutral-50 opacity-70',
   }
 
   const statusIcons: { [key: string]: string } = {
-    [StopStatus.pending]: 'radio-button-off',
-    [StopStatus.active]: 'radio-button-on',
+    [StopStatus.cancelled]: 'radio-button-off',
+    [StopStatus.scheduled]: 'radio-button-on',
     [StopStatus.completed]: 'checkmark-circle-2',
   }
 
   const statusIconsColors: { [key: string]: string } = {
-    [StopStatus.pending]: colors.grey,
-    [StopStatus.active]: colors.primary,
+    [StopStatus.scheduled]: colors.grey,
     [StopStatus.completed]: colors.success,
   }
 
@@ -52,7 +51,7 @@ const StopsList = () => {
           onPress={() =>
             navigate('stopDetail', {
               stopId: item.id,
-              stopTitle: item.title,
+              stopTitle: 'PH asd',
             })
           }
           className={`h-20  px-3 py-4 mx-2 border-2 flex-row items-center justify-between rounded-lg my-1 ${statusClasses[item.status]}`}>
@@ -62,7 +61,7 @@ const StopsList = () => {
             </Text>
             <View className="">
               <Text className="text-lg font-semibold text-neutral-800">
-                {item.title}
+                {/* {item.title} */}
               </Text>
               <View className="flex ">
                 <View className="items-center flex-row">
@@ -73,7 +72,7 @@ const StopsList = () => {
                   />
                   <Text className="text-sm !text-neutral-700">
                     {' '}
-                    {t('common.address')}: {item.address}
+                    {/* {t('common.address')}: {item.address} */}
                   </Text>
                 </View>
 
@@ -84,39 +83,41 @@ const StopsList = () => {
                     name="people"
                   />
                   <Text className="text-sm !text-neutral-700">
-                    {t('common.students')}: {item.students.length}
-                    {item.status === 'completed' && (
+                    {/* {t('common.students')}: {item?.passengers.length}
+                    {item.status === StopStatus.completed && (
                       <>
                         /
                         {
-                          item.students.filter(
-                            (student) => student.stopStatus === 'completed'
+                          item.passengers.filter(
+                            (student) => student.status === StopStatus.completed
                           ).length
                         }
                       </>
-                    )}
+                    )} */}
                   </Text>
                 </View>
               </View>
             </View>
           </View>
           <View className="h-20 items-center justify-center mr-2">
-            <StyledIcon
+            {/* <StyledIcon
               fill={statusIconsColors[item.status]}
               name={statusIcons[item.status]}
               className="h-6 w-6"
-            />
+            /> */}
           </View>
         </TouchableOpacity>
       </>
     )
   }
-
+  console.log('asdasd', activeTrip)
   return (
     <View className=" h-full pt-2">
       <View className="bg-midblue-50 border mb-3 flex-row items-center justify-between  border-neutral-200  px-2 h-16">
         <Text className="text-md font-semibold">
-          Ruta Costa del Este Ida Iniciada
+          Ruta {activeTrip?.route?.name}{' '}
+          {t(TripDirectionText[activeTrip?.route?.direction || 'going'])}{' '}
+          Iniciada
         </Text>
         <View className="flex-row  items-center justify-between">
           <TouchableOpacity className="flex-row  h-9 w-9 justify-center items-center border border-neutral-900 rounded ">
@@ -125,7 +126,7 @@ const StopsList = () => {
         </View>
       </View>
       <List
-        data={data}
+        data={activeTrip && activeTrip.stops ? activeTrip.stops : data}
         keyExtractor={(item) => String(item.id)}
         renderItem={renderItem as any}
       />

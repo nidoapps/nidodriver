@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import { Divider, Icon, List } from '@ui-kitten/components'
+import dayjs from 'dayjs'
 import { styled } from 'nativewind'
 import React, { useRef, useState } from 'react'
 import { View, Text } from 'react-native'
@@ -7,14 +8,21 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { useDriversContext } from '@/hooks/useDriversContext'
 import { colors } from '@/themeColors'
+import { formatDate, formatDateWithTime } from '@/utils/formatDate'
+
+const TripStatusText = {
+  Completed: 'Completado',
+  InProgress: 'En curso',
+  Scheduled: 'Programado',
+  Cancelled: 'Cancelado',
+}
 
 const StyledIcon = styled(Icon)
 
-const AssignedRoutesList = () => {
-  const {
-    state: { historyTrips },
-    dispatch,
-  } = useDriversContext()
+const AssignedRoutesList = ({ historyTrips }) => {
+  // const {
+  //   state: { historyTrips },
+  // } = useDriversContext()
 
   const [expanded, setExpanded] = useState(false)
   const currentIndex = useRef(null)
@@ -60,10 +68,13 @@ const AssignedRoutesList = () => {
           }}
           className="bg-white flex-row px-4 py-5 my-1 border border-neutral-200 justify-between items-center">
           <View className="flex  gap-y-1">
-            <Text className="text-2xl font-medium">{item.title}</Text>
-            <Text>Origen: {item.stops[0]?.title || ''}</Text>
-            <Text>Destino: {item?.school?.name}</Text>
+            <Text className="text-2xl font-medium">{item.route.name}</Text>
+            {/* <Text>Origen: {item.stops[0]?.title || ''}</Text>
+            <Text>Destino: {item?.school?.name}</Text> */}
             <Text>Paradas: {item.stops.length}</Text>
+            <Text>Inicio: {formatDateWithTime(item.createdAt)}</Text>
+            <Text>Fin: {formatDateWithTime(item.updatedAt)}</Text>
+            <Text>Estado: {TripStatusText[item?.status]}</Text>
           </View>
           <StyledIcon
             name={
@@ -81,13 +92,7 @@ const AssignedRoutesList = () => {
       </>
     )
   }
-  return (
-    <>
-      {historyTrips && historyTrips.length && (
-        <List data={historyTrips} renderItem={renderItem} />
-      )}
-    </>
-  )
+  return <List data={historyTrips} renderItem={renderItem} />
 }
 
 export default AssignedRoutesList

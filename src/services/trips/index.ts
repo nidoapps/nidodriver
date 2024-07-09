@@ -1,4 +1,4 @@
-import { get } from '../axios/axios'
+import { get, patch, put } from '../axios/axios'
 
 export const GetActiveTripByDriverId = async (driverId: string) => {
   try {
@@ -19,6 +19,65 @@ export const GetHistoryTripsByDriverId = async (
   try {
     const response = await get({
       servicePath: `trips/history/${driverId}/${date}/${direction}`,
+    })
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+export const ChangeTripStatus = async (tripId: string, status: string) => {
+  try {
+    const response = await patch({
+      servicePath: `trips/change-status`,
+      data: {
+        id: tripId,
+        status,
+      },
+    })
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+export const GetActiveTrip = async (tripId: string) => {
+  try {
+    const response = await get({
+      servicePath: `trips/${tripId}/get-status`,
+    })
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+export const ChangeStopStatus = async (stopId: string, status: string) => {
+  try {
+    const response = await put({
+      servicePath: `trip-stop/change-status`,
+      data: {
+        id: stopId,
+        status,
+      },
+    })
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+export const ChangePassengerStopStatus = async (
+  passengerId: number,
+  status: string
+) => {
+  try {
+    const response = await put({
+      servicePath: `trip-stop-passenger/change-status-by-driver`,
+      data: {
+        id: passengerId,
+        status,
+      },
     })
     return response
   } catch (error) {
