@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { useImmerReducer } from 'use-immer'
 
 import { useHandleAuthorization } from './auth/useHandleAuthorization'
+import { useHandleDriverData } from './driver/useHandleDriverData'
+import { useGetTrips } from './trip/useGetTrips'
 
 import { storage } from '@/App'
 import { AssignedTrips } from '@/mocks/stops'
@@ -10,9 +12,12 @@ import { combinedReducers } from '@/store/reducers'
 
 export const useDriversStore = () => {
   const initialState: DriversState = {
-    assignedTrips: AssignedTrips,
+    assignedTrips: undefined,
     isAuth: false,
     startedTrip: false,
+    driverData: undefined,
+    loadingHistoryTrips: false,
+    historyTrips: undefined,
   }
   const [state, dispatch] = useImmerReducer(combinedReducers, initialState)
 
@@ -26,6 +31,8 @@ export const useDriversStore = () => {
 
   const hooks = {
     ...useHandleAuthorization(dispatch),
+    ...useGetTrips(dispatch),
+    ...useHandleDriverData(dispatch),
   }
   return {
     state,

@@ -12,7 +12,7 @@ const StyledIcon = styled(Icon)
 
 const AssignedRoutesList = () => {
   const {
-    state: { assignedTrips },
+    state: { historyTrips },
     dispatch,
   } = useDriversContext()
 
@@ -61,8 +61,8 @@ const AssignedRoutesList = () => {
           className="bg-white flex-row px-4 py-5 my-1 border border-neutral-200 justify-between items-center">
           <View className="flex  gap-y-1">
             <Text className="text-2xl font-medium">{item.title}</Text>
-            <Text>Origen: {item.stops[0].title}</Text>
-            <Text>Destino: {item.stops[item.stops.length - 1].title}</Text>
+            <Text>Origen: {item.stops[0]?.title || ''}</Text>
+            <Text>Destino: {item?.school?.name}</Text>
             <Text>Paradas: {item.stops.length}</Text>
           </View>
           <StyledIcon
@@ -83,7 +83,9 @@ const AssignedRoutesList = () => {
   }
   return (
     <>
-      <List data={assignedTrips} renderItem={renderItem} />
+      {historyTrips && historyTrips.length && (
+        <List data={historyTrips} renderItem={renderItem} />
+      )}
     </>
   )
 }

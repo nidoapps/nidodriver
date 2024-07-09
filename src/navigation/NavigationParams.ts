@@ -3,9 +3,8 @@ export type RootStackParams = {
     type: AuthFlowType
     phoneNumber: number
     pinId: string
-    isRegistered: boolean
     phoneCountry: string
-    referralCode?: string
+    email?: string
   }
   changePassword: object
   splash: object

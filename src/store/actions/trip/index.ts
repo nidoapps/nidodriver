@@ -16,3 +16,15 @@ export const SET_ASSIGNED_TRIPS = 'SET_ASSIGNED_TRIPS'
 export const setAssignedTripsAction = (assignedTrips: any) => {
   return baseAction('SET_ASSIGNED_TRIPS', assignedTrips)
 }
+
+export const SET_HISTORY_TRIPS = 'SET_HISTORY_TRIPS'
+
+export const setHistoryTripsAction = (historyTrips: any) => {
+  return baseAction('SET_HISTORY_TRIPS', historyTrips)
+}
+
+export const SET_LOADING_HISTORY_TRIPS = 'SET_LOADING_HISTORY_TRIPS'
+
+export const setLoadingHistoryTripsAction = (loading: boolean) => {
+  return baseAction('SET_LOADING_HISTORY_TRIPS', loading)
+}

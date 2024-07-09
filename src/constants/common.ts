@@ -28,3 +28,13 @@ export enum SignInTypes {
   phoneNumber = 'phoneNumber',
   google = 'google',
 }
+
+export enum TripDirection {
+  going = 'going',
+  return = 'return',
+}
+
+export const TripDirectionText = {
+  [TripDirection.going]: 'common.going',
+  [TripDirection.return]: 'common.return',
+}

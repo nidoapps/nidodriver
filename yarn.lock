@@ -5585,6 +5585,14 @@ expo-asset@~9.0.2:
     invariant "^2.2.4"
     md5-file "^3.2.3"
 
+expo-build-properties@^0.12.3:
+  version "0.12.3"
+  resolved "https://registry.yarnpkg.com/expo-build-properties/-/expo-build-properties-0.12.3.tgz#48c2ef5f8c69ded1f28587405dac1099f4e61a3e"
+  integrity sha512-ihMKJyCHnKaiadI56UFYp2IdTxUhYa7e0ekHDfT+T3H2fk3jDYfh3n3wlUxFVeGyT7BE78tBTQ7QhMT6lluX2A==
+  dependencies:
+    ajv "^8.11.0"
+    semver "^7.6.0"
+
 expo-community-flipper@^48.0.1:
   version "48.0.1"
   resolved "https://registry.yarnpkg.com/expo-community-flipper/-/expo-community-flipper-48.0.1.tgz#38f8795e270aff9cf9231632b087bd367deb2374"
@@ -5642,12 +5650,23 @@ expo-manifests@~0.13.0:
     "@expo/config" "~8.5.0"
     expo-json-utils "~0.12.0"
 
-expo-modules-autolinking@1.10.3, expo-modules-autolinking@^1.10.3:
+expo-modules-autolinking@1.10.3:
   version "1.10.3"
   resolved "https://registry.yarnpkg.com/expo-modules-autolinking/-/expo-modules-autolinking-1.10.3.tgz#19f349884a90f3f27ec9d64e8f2fa6be609558c5"
   integrity sha512-pn4n2Dl4iRh/zUeiChjRIe1C7EqOw1qhccr85viQV7W6l5vgRpY0osE51ij5LKg/kJmGRcJfs12+PwbdTplbKw==
   dependencies:
     "@expo/config" "~8.5.0"
+    chalk "^4.1.0"
+    commander "^7.2.0"
+    fast-glob "^3.2.5"
+    find-up "^5.0.0"
+    fs-extra "^9.1.0"
+
+expo-modules-autolinking@^1.11.1:
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/expo-modules-autolinking/-/expo-modules-autolinking-1.11.1.tgz#4a867f727d9dfde07de8dde14b333a3cbf82ce3c"
+  integrity sha512-2dy3lTz76adOl7QUvbreMCrXyzUiF8lygI7iFJLjgIQIVH+43KnFWE5zBumpPbkiaq0f0uaFpN9U0RGQbnKiMw==
+  dependencies:
     chalk "^4.1.0"
     commander "^7.2.0"
     fast-glob "^3.2.5"

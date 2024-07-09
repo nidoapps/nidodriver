@@ -1,4 +1,4 @@
-import { post } from '../axios/axios'
+import { get, post } from '../axios/axios'
 import { ServicesTypes } from '../axios/axios.interface'
 
 export const SendOTP = async (phone: string) => {
@@ -119,6 +119,18 @@ export const GoogleLogin = async (
       if (res && res.access_token) {
         return { authToken: res.access_token, userId: res.userId }
       }
+    })
+    .catch((err) => {
+      console.log(JSON.stringify(err))
+    })
+}
+
+export const GetDriverProfileData = async (userId: number) => {
+  return await get({
+    servicePath: `drivers/${userId}/user`,
+  })
+    .then((res: any) => {
+      return res
     })
     .catch((err) => {
       console.log(JSON.stringify(err))

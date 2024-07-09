@@ -3,4 +3,7 @@ export interface DriversState {
   isAuth?: boolean
   startedTrip?: boolean
   loadingAuth?: boolean
+  driverData?: object
+  loadingHistoryTrips?: boolean
+  historyTrips?: object[]
 }
