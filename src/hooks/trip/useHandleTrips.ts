@@ -2,21 +2,25 @@ import {
   ChangePassengerStopStatus,
   ChangeStopStatus,
   ChangeTripStatus,
+  GetTripStopStatus,
 } from '@/services/trips'
 import { ActionType } from '@/store/actions/base-action'
-import { setActiveTripAction, setStartedTripAction } from '@/store/actions/trip'
+import {
+  setActiveTripAction,
+  setActiveTripStopDataAction,
+  setStartedTripAction,
+} from '@/store/actions/trip'
+import { setActiveTripStopData } from '@/store/reducers/trip'
 
 export const useHandleTrips = (dispatch: (action: ActionType) => void) => {
   const handleChangeTripStatus = async (tripId: string, status: string) => {
     dispatch(setActiveTripAction(null))
     dispatch(setStartedTripAction(null))
     try {
-      const response = await ChangeTripStatus(tripId, status)
+      await ChangeTripStatus(tripId, status)
       dispatch(setStartedTripAction(tripId))
-      return response
     } catch (error) {
       console.log('error', error)
-      return false
     }
   }
 
@@ -30,10 +34,27 @@ export const useHandleTrips = (dispatch: (action: ActionType) => void) => {
     }
   }
 
-  const handleChangePassengerStopStatus = async (passengerId, status) => {
+  const getTripStopData = async (tripStopId: string) => {
+    try {
+      const response = await GetTripStopStatus(tripStopId)
+      dispatch(setActiveTripStopDataAction(response))
+      return response
+    } catch (error) {
+      console.log('error', error)
+      return false
+    }
+  }
+
+  const handleChangePassengerStopStatus = async (
+    passengerId,
+    status,
+    tripStopId
+  ) => {
     try {
       const response = await ChangePassengerStopStatus(passengerId, status)
-      return response
+      if (response) {
+        await getTripStopData(tripStopId)
+      }
     } catch (error) {
       console.log('error', error)
       return false
@@ -44,5 +65,6 @@ export const useHandleTrips = (dispatch: (action: ActionType) => void) => {
     handleChangeTripStatus,
     handleChangeStopStatus,
     handleChangePassengerStopStatus,
+    getTripStopData,
   }
 }

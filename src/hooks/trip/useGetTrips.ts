@@ -1,7 +1,7 @@
 import { DriversState } from '@/models/state'
 import {
   GetActiveTrip,
-  GetActiveTripByDriverId,
+  GetAssignedTripsByDriverId,
   GetHistoryTripsByDriverId,
 } from '@/services/trips'
 import { ActionType } from '@/store/actions/base-action'
@@ -11,7 +11,6 @@ import {
   setHistoryTripsAction,
   setLoadingHistoryTripsAction,
 } from '@/store/actions/trip'
-import { setActiveTrip } from '@/store/reducers/trip'
 
 export const useGetTrips = (
   dispatch: (action: ActionType) => void,
@@ -19,12 +18,12 @@ export const useGetTrips = (
 ) => {
   const getTripsByDriverId = async (driverId: string) => {
     try {
-      const response = await GetActiveTripByDriverId(driverId)
-      if (response) {
-        dispatch(setAssignedTripsAction(response || []))
-      }
+      const response = await GetAssignedTripsByDriverId(driverId)
+      console.log('earar', response)
+      dispatch(setAssignedTripsAction(response || []))
     } catch (error) {
-      dispatch(setAssignedTripsAction([]))
+      console.log('error', error)
+      throw error
     }
   }
 
@@ -49,20 +48,15 @@ export const useGetTrips = (
     }
   }
 
-  const getActiveTrip = async (tripId: string) => {
+  const getActiveTrip = async () => {
     dispatch(setActiveTripAction(null))
 
     try {
-      const response = (await GetActiveTrip(
-        tripId,
-        state.driverData?.driverId || '',
-        'InProgress'
-      )) as any[]
-      dispatch(setActiveTripAction(response[0]))
-      return response
+      const response = await GetActiveTrip(state.driverData?.driverId)
+      dispatch(setActiveTripAction(response || {}))
     } catch (error) {
       console.log('error', error)
-      return false
+      throw error
     }
   }
 

@@ -6,6 +6,8 @@ export enum ColorSchema {
 export enum StudentStopStatus {
   completed = 'completed',
   absent = 'absent',
+  pickedUp = 'PickedUp',
+  cancelled = 'Cancelled',
 }
 
 export enum StopStatus {
@@ -15,9 +17,10 @@ export enum StopStatus {
 }
 
 export enum TripStatus {
-  notStarted = 'notStarted',
-  started = 'started',
-  completed = 'completed',
+  inProgress = 'InProgress',
+  completed = 'Completed',
+  scheduled = 'Scheduled',
+  cancelled = 'Cancelled',
 }
 
 export const MPBOX_TOKEN =

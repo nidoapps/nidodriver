@@ -20,7 +20,7 @@ import { colors } from '@/themeColors'
 
 const StyledIcon = styled(Icon)
 
-const StopsList = (aasd) => {
+const StopsList = () => {
   const { navigate } = useNavigation()
   const [data, setData] = useState(PickupStops)
   const {
@@ -28,10 +28,10 @@ const StopsList = (aasd) => {
     state: { startedTrip, activeTrip },
   } = useDriversContext()
   const pulseIconRef = React.useRef<Icon<Partial<ImageProps>>>()
-  React.useEffect(() => {
-    pulseIconRef?.current?.startAnimation()
-    getActiveTrip(startedTrip)
-  }, [])
+  // React.useEffect(() => {
+  //   // pulseIconRef?.current?.startAnimation()
+  //   getActiveTrip(startedTrip)
+  // }, [])
 
   const statusClasses: { [key: string]: string } = {
     [StopStatus.scheduled]: 'border-neutral-300 bg-neutral-50',
@@ -67,14 +67,13 @@ const StopsList = (aasd) => {
   }
 
   const renderItem = ({ item, index, ...rest }: any): React.ReactElement => {
-    console.log(calculateStatus(item, index))
     return (
       <>
         <TouchableOpacity
           onPress={() =>
             navigate('stopDetail', {
-              stopId: item.id,
-              stopTitle: 'PH asd',
+              stopId: item.tripStopId,
+              stopTitle: item?.routeStop?.schoolStop?.address || '',
             })
           }
           className={`h-20  px-3 py-4 mx-2 border-2 flex-row items-center justify-between rounded-lg my-1 ${statusClasses[calculateStatus(item, index)]}`}>
@@ -84,8 +83,7 @@ const StopsList = (aasd) => {
             </Text>
             <View className="">
               <Text className="text-lg font-semibold text-neutral-800">
-                {item?.passengers[0].passenger?.family?.familyStop[0]?.name ||
-                  item?.passengers[0].passenger?.family?.familyStop[1]?.name}
+                {item?.routeStop?.schoolStop?.address ?? ''}
               </Text>
               <View className="flex ">
                 {/* <View className="items-center flex-row">
@@ -133,10 +131,9 @@ const StopsList = (aasd) => {
       </>
     )
   }
-  // console.log('asdasd', activeTrip)
   return (
     <>
-      {activeTrip && (
+      {activeTrip && activeTrip.stops ? (
         <View className=" h-full pt-2">
           <View className="bg-midblue-50 border mb-3 flex-row items-center justify-between  border-neutral-200  px-2 h-16">
             <Text className="text-md font-semibold">
@@ -156,7 +153,7 @@ const StopsList = (aasd) => {
             renderItem={renderItem as any}
           />
         </View>
-      )}
+      ) : null}
     </>
   )
 }

@@ -31,18 +31,18 @@ const Home = () => {
   }, [driverData, assignedTrips])
 
   useEffect(() => {
-    if (startedTrip) getActiveTrip(startedTrip)
-  }, [startedTrip])
-  console.log('adasdasd', startedTrip, activeTrip)
+    getActiveTrip()
+  }, [driverData])
   return (
     <SafeAreaView className="flex  bg-neutral-50 justify-between">
       <View className="flex justify-center items-center">
         <Text className="font-semibold text-xl">Nido</Text>
       </View>
-      {startedTrip || (activeTrip && activeTrip?.status === 'InProgress') ? (
-        <StopsList activeTrip={activeTrip} />
+      {startedTrip ||
+      (activeTrip && activeTrip?.status === TripStatus.inProgress) ? (
+        <StopsList />
       ) : (
-        <NotStartedTrip />
+        <StopsList />
       )}
     </SafeAreaView>
   )

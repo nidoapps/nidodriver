@@ -28,3 +28,9 @@ export const SET_LOADING_HISTORY_TRIPS = 'SET_LOADING_HISTORY_TRIPS'
 export const setLoadingHistoryTripsAction = (loading: boolean) => {
   return baseAction('SET_LOADING_HISTORY_TRIPS', loading)
 }
+
+export const SET_ACTIVE_TRIP_STOP_DATA = 'SET_ACTIVE_TRIP_STOP_DATA'
+
+export const setActiveTripStopDataAction = (payload: any) => {
+  return baseAction('SET_ACTIVE_TRIP_STOP_DATA', payload)
+}

@@ -1,12 +1,13 @@
 import { get, patch, put } from '../axios/axios'
 
-export const GetActiveTripByDriverId = async (driverId: string) => {
+export const GetAssignedTripsByDriverId = async (driverId: string) => {
   try {
     const response = await get({
-      servicePath: `trips/active/${driverId}`,
+      servicePath: `trips/scheduled/${driverId}`,
     })
     return response
   } catch (error) {
+    console.log(error)
     throw error
   }
 }
@@ -18,7 +19,11 @@ export const GetHistoryTripsByDriverId = async (
 ) => {
   try {
     const response = await get({
-      servicePath: `trips/history/${driverId}/${date}/${direction}`,
+      servicePath: `trips/history/${driverId}?date=${date}&direction=${direction}`,
+      params: {
+        date,
+        direction,
+      },
     })
     return response
   } catch (error) {
@@ -41,16 +46,12 @@ export const ChangeTripStatus = async (tripId: string, status: string) => {
   }
 }
 
-export const GetActiveTrip = async (
-  tripId: string,
-  driverId: string,
-  status: string
-) => {
+export const GetActiveTrip = async (driverId: number) => {
   try {
-    const response = await get({
-      servicePath: `trips/${driverId}/info-of-passengers?tripId=${tripId}&status=${status}`,
-    })
-    return response
+    const response = (await get({
+      servicePath: `trips/active/${driverId}`,
+    })) as any[]
+    return response[0]
   } catch (error) {
     throw error
   }
@@ -82,6 +83,17 @@ export const ChangePassengerStopStatus = async (
         id: passengerId,
         status,
       },
+    })
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+export const GetTripStopStatus = async (tripStopId: string) => {
+  try {
+    const response = await get({
+      servicePath: `trip-stop/get-status/${tripStopId}`,
     })
     return response
   } catch (error) {

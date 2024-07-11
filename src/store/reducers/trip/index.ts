@@ -23,3 +23,10 @@ export const setLoadingHistoryTrips = (
 export const setActiveTrip = (state: DriversState, action: ActionType) => {
   state.activeTrip = action.payload
 }
+
+export const setActiveTripStopData = (
+  state: DriversState,
+  action: ActionType
+) => {
+  state.activeTripStopData = action.payload
+}

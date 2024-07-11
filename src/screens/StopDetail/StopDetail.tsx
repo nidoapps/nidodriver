@@ -8,7 +8,7 @@ import {
   Layout,
 } from '@ui-kitten/components'
 import { styled } from 'nativewind'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { SafeAreaView, View, Text, Linking } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
@@ -16,6 +16,7 @@ import MapTest from '@/components/MapTest/MapTest'
 import { ModalCallContacts } from '@/components/ModalCallContacts'
 import { ModalCheckinEstudent } from '@/components/ModalCheckinEstudent'
 import { StudentStopStatus } from '@/constants/common'
+import { useDriversContext } from '@/hooks/useDriversContext'
 import { PickupStops } from '@/mocks/stops'
 import { StopStatus } from '@/models/common'
 import { RootStackParams } from '@/navigation/NavigationParams'
@@ -28,20 +29,45 @@ interface StopDetailProps {
 }
 const StopDetail = ({ route }: StopDetailProps) => {
   const { stopId } = route.params || {}
-  const { students, holdTime, status } = PickupStops.find(
-    (stop) => stop.id === stopId
-  ) || { holdTime: 3 }
+  const {
+    state: { activeTrip, activeTripStopData },
+    hooks: { handleChangePassengerStopStatus, getTripStopData },
+  } = useDriversContext()
+  const { passengers, status, tripStopId } = activeTripStopData || {
+    passengers: [],
+    status: StopStatus.scheduled,
+  }
+  // activeTrip.stops.find((stop) => stop.tripStopId === stopId) || {
+  //   passengers: [],
+  //   status: StopStatus.scheduled,
+  // }
+  const holdTime = 2
   const [initiatedStop, setInitiatedStop] = React.useState(false)
   const [visible, setVisible] = React.useState(false)
   const [openModalContacts, setOpenModalContacts] = React.useState(false)
-  const [contactsData, setContactsData] = useState({
+  const [contactsData, setContactsData] = useState<{
+    student?: string
+    studentId?: number
+    contacts?: any[]
+  }>({
     student: '',
     contacts: [],
   })
 
+  useEffect(() => {
+    getTripStopData(stopId)
+  }, [stopId, contactsData.studentId])
+
   const [localStatus, setLocalStatus] = React.useState(status)
 
-  const elapsedTime = useIncrementalTimer(holdTime)
+  const elapsedTime = useIncrementalTimer(1)
+
+  const completedStop = useMemo(() => {
+    return (
+      passengers.filter((e) => e.status === StopStatus.completed).length ===
+      passengers.length
+    )
+  }, [activeTripStopData])
 
   const InitStop = () => (
     <TouchableOpacity
@@ -75,7 +101,7 @@ const StopDetail = ({ route }: StopDetailProps) => {
       </TouchableOpacity>
     ),
     [StopStatus.active]: InitStop(),
-    [StopStatus.pending]: InitStop(),
+    [StopStatus.scheduled]: InitStop(),
   }
 
   const TimerComponent = useCallback(() => {
@@ -96,12 +122,14 @@ const StopDetail = ({ route }: StopDetailProps) => {
 
   const renderItem = ({ item, index }: any): React.ReactElement => (
     <View className="px-4 py-6 flex-row justify-between items-center">
-      <Text className="text-base font-semibold">{item.name}</Text>
+      <Text className="text-base font-semibold">
+        {item?.passenger?.name} {item?.passenger?.lastName}
+      </Text>
       <View>{renderActions(item)}</View>
     </View>
   )
 
-  const renderActions = (student: any) => {
+  const renderActions = (item: any) => {
     return (
       <View className="flex flex-row gap-x-4">
         <Button
@@ -110,17 +138,24 @@ const StopDetail = ({ route }: StopDetailProps) => {
           onPress={() => {
             setOpenModalContacts(true)
             setContactsData({
-              student: student.name,
-              contacts: student.contacts,
+              student: item.passenger.name,
+              contacts: [
+                ...item.passenger.family.members,
+                ...item.passengerfamily.responsibles,
+              ] as any,
             })
           }}
         />
         <Button
-          status={`${localStatus === StudentStopStatus.completed ? 'success' : 'basic'}`}
+          status={`${item.status === StudentStopStatus.pickedUp ? 'success' : 'basic'}`}
           accessoryRight={<Icon name="checkmark" />}
           onPress={() => {
-            if (student.stopStatus !== StudentStopStatus.completed)
-              setVisible(true)
+            if (item.status !== StudentStopStatus.pickedUp)
+              setContactsData({
+                ...contactsData,
+                studentId: item.tripStopPassengerId,
+              })
+            setVisible(true)
           }}
         />
       </View>
@@ -169,7 +204,7 @@ const StopDetail = ({ route }: StopDetailProps) => {
         </View>
         <View className="h-3/4 bg-white">
           <List
-            data={students}
+            data={passengers}
             ItemSeparatorComponent={Divider}
             renderItem={renderItem}
           />
@@ -180,12 +215,21 @@ const StopDetail = ({ route }: StopDetailProps) => {
         <ModalCheckinEstudent
           open={visible}
           handleClose={() => setVisible(false)}
-          studentName="Juan Perez"
+          studentName={contactsData.student as string}
+          handleCheckin={() => {
+            // setLocalStatus(StudentStopStatus.pickedUp)
+            handleChangePassengerStopStatus(
+              contactsData.studentId,
+              StudentStopStatus.pickedUp,
+              tripStopId
+            )
+            setVisible(false)
+          }}
         />
       )}
       {openModalContacts && (
         <ModalCallContacts
-          contacts={contactsData.contacts}
+          contacts={contactsData.contacts as any[]}
           open={openModalContacts}
           handleClose={() => setOpenModalContacts(false)}
           studentName={contactsData.student}

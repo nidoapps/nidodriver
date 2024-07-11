@@ -2,6 +2,7 @@ import { setDriverData } from './driver'
 import { setIsAuth, setLoadingAuth } from './operations'
 import {
   setActiveTrip,
+  setActiveTripStopData,
   setAssignedTrips,
   setHistoryTrips,
   setLoadingHistoryTrips,
@@ -12,6 +13,7 @@ import { ActionType } from '../actions/base-action'
 import { SET_DRIVER_DATA } from '../actions/driver'
 import {
   SET_ACTIVE_TRIP,
+  SET_ACTIVE_TRIP_STOP_DATA,
   SET_ASSIGNED_TRIPS,
   SET_HISTORY_TRIPS,
   SET_LOADING_HISTORY_TRIPS,
@@ -31,6 +33,7 @@ const reducers: {
   [SET_HISTORY_TRIPS]: setHistoryTrips,
   [SET_LOADING_HISTORY_TRIPS]: setLoadingHistoryTrips,
   [SET_ACTIVE_TRIP]: setActiveTrip,
+  [SET_ACTIVE_TRIP_STOP_DATA]: setActiveTripStopData,
 }
 
 export const combinedReducers = (state: DriversState, action: ActionType) => {
