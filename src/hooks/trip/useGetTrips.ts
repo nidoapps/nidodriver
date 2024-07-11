@@ -1,3 +1,4 @@
+import { DriversState } from '@/models/state'
 import {
   GetActiveTrip,
   GetActiveTripByDriverId,
@@ -12,7 +13,10 @@ import {
 } from '@/store/actions/trip'
 import { setActiveTrip } from '@/store/reducers/trip'
 
-export const useGetTrips = (dispatch: (action: ActionType) => void) => {
+export const useGetTrips = (
+  dispatch: (action: ActionType) => void,
+  state: DriversState
+) => {
   const getTripsByDriverId = async (driverId: string) => {
     try {
       const response = await GetActiveTripByDriverId(driverId)
@@ -46,9 +50,15 @@ export const useGetTrips = (dispatch: (action: ActionType) => void) => {
   }
 
   const getActiveTrip = async (tripId: string) => {
+    dispatch(setActiveTripAction(null))
+
     try {
-      const response = await GetActiveTrip(tripId)
-      dispatch(setActiveTripAction(response))
+      const response = (await GetActiveTrip(
+        tripId,
+        state.driverData?.driverId || '',
+        'InProgress'
+      )) as any[]
+      dispatch(setActiveTripAction(response[0]))
       return response
     } catch (error) {
       console.log('error', error)

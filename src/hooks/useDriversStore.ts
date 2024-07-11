@@ -30,7 +30,7 @@ export const useDriversStore = () => {
 
   const hooks = {
     ...useHandleAuthorization(dispatch),
-    ...useGetTrips(dispatch),
+    ...useGetTrips(dispatch, state),
     ...useHandleDriverData(dispatch),
     ...useHandleTrips(dispatch),
   }

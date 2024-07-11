@@ -31,9 +31,9 @@ const Home = () => {
   }, [driverData, assignedTrips])
 
   useEffect(() => {
-    if (!activeTrip) getActiveTrip(startedTrip)
-  }, [startedTrip, activeTrip])
-
+    if (startedTrip) getActiveTrip(startedTrip)
+  }, [startedTrip])
+  console.log('adasdasd', startedTrip, activeTrip)
   return (
     <SafeAreaView className="flex  bg-neutral-50 justify-between">
       <View className="flex justify-center items-center">

@@ -28,7 +28,7 @@ export const GetHistoryTripsByDriverId = async (
 
 export const ChangeTripStatus = async (tripId: string, status: string) => {
   try {
-    const response = await patch({
+    const response = await put({
       servicePath: `trips/change-status`,
       data: {
         id: tripId,
@@ -41,10 +41,14 @@ export const ChangeTripStatus = async (tripId: string, status: string) => {
   }
 }
 
-export const GetActiveTrip = async (tripId: string) => {
+export const GetActiveTrip = async (
+  tripId: string,
+  driverId: string,
+  status: string
+) => {
   try {
     const response = await get({
-      servicePath: `trips/${tripId}/get-status`,
+      servicePath: `trips/${driverId}/info-of-passengers?tripId=${tripId}&status=${status}`,
     })
     return response
   } catch (error) {
