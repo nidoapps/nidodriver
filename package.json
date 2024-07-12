@@ -69,11 +69,13 @@
     "react-native-svg": "^9.4.0",
     "react-native-toast-message": "^2.2.0",
     "react-native-web": "~0.19.6",
+    "socket.io-client": "^4.7.5",
     "styled-components": "^6.1.8",
     "tailwindcss": "3.3.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.0.4",
     "use-immer": "^0.6.0",
+    "ws": "^8.18.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {

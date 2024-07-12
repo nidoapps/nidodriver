@@ -1,15 +1,8 @@
-import { RouteProp, useNavigation } from '@react-navigation/native'
-import {
-  Divider,
-  List,
-  ListItem,
-  Button,
-  Icon,
-  Layout,
-} from '@ui-kitten/components'
+import { RouteProp } from '@react-navigation/native'
+import { Divider, List, Button, Icon } from '@ui-kitten/components'
 import { styled } from 'nativewind'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { SafeAreaView, View, Text, Linking } from 'react-native'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { SafeAreaView, View, Text } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import MapTest from '@/components/MapTest/MapTest'
@@ -17,9 +10,10 @@ import { ModalCallContacts } from '@/components/ModalCallContacts'
 import { ModalCheckinEstudent } from '@/components/ModalCheckinEstudent'
 import { StudentStopStatus } from '@/constants/common'
 import { useDriversContext } from '@/hooks/useDriversContext'
-import { PickupStops } from '@/mocks/stops'
 import { StopStatus } from '@/models/common'
 import { RootStackParams } from '@/navigation/NavigationParams'
+import { setActiveTripStopDataAction } from '@/store/actions/trip'
+import { setActiveTripStopData } from '@/store/reducers/trip'
 import { colors } from '@/themeColors'
 import useIncrementalTimer from '@/utils/useIncrementalTimer'
 
@@ -30,13 +24,16 @@ interface StopDetailProps {
 const StopDetail = ({ route }: StopDetailProps) => {
   const { stopId } = route.params || {}
   const {
-    state: { activeTrip, activeTripStopData },
+    dispatch,
+    state: { activeTripStopData },
     hooks: { handleChangePassengerStopStatus, getTripStopData },
   } = useDriversContext()
+
   const { passengers, status, tripStopId } = activeTripStopData || {
     passengers: [],
     status: StopStatus.scheduled,
   }
+
   // activeTrip.stops.find((stop) => stop.tripStopId === stopId) || {
   //   passengers: [],
   //   status: StopStatus.scheduled,
@@ -53,10 +50,76 @@ const StopDetail = ({ route }: StopDetailProps) => {
     student: '',
     contacts: [],
   })
+  const wsRef = useRef(null)
 
   useEffect(() => {
     getTripStopData(stopId)
   }, [stopId, contactsData.studentId])
+
+  useEffect(() => {
+    const ws = new WebSocket('ws://localhost:8000/trip-stop/get-status')
+
+    ws.onopen = () => {
+      console.log('WebSocket connection opened')
+      ws.send(
+        JSON.stringify({
+          event: 'subscribe',
+          data: 'tripStop',
+        })
+      )
+    }
+
+    ws.onmessage = (event) => {
+      try {
+        const response = JSON.parse(event.data)
+        wsRef.current = ws
+        // console.log('Received message:', response)
+        // if (response) {
+        //   ws.send(
+        //     JSON.stringify({
+        //       event: 'get',
+        //       data: tripStopId || stopId,
+        //     })
+        //   )
+        // }
+        if (response.data && response.event === 'get') {
+          // console.log('Received data:', response.data)
+          dispatch(setActiveTripStopDataAction(response.data))
+        } else {
+          console.log('Unknown event or missing data in response:', response)
+        }
+      } catch (error) {
+        console.log('Error processing WebSocket message:', error)
+      }
+    }
+
+    ws.onclose = () => {
+      console.log('WebSocket connection closed')
+    }
+
+    ws.onerror = (error) => {
+      console.error('WebSocket connection error:', error)
+    }
+    return () => {
+      ws.close()
+    }
+  }, [])
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (wsRef.current) {
+        wsRef.current.send(
+          JSON.stringify({
+            event: 'get',
+            channel: 'tripStop',
+            data: tripStopId || stopId,
+          })
+        )
+      }
+    }, 5000)
+
+    return () => clearInterval(intervalId)
+  }, [tripStopId, stopId])
 
   const [localStatus, setLocalStatus] = React.useState(status)
 
@@ -68,7 +131,6 @@ const StopDetail = ({ route }: StopDetailProps) => {
       passengers.length
     )
   }, [activeTripStopData])
-
   const InitStop = () => (
     <TouchableOpacity
       disabled={!status}
@@ -121,7 +183,9 @@ const StopDetail = ({ route }: StopDetailProps) => {
   }, [initiatedStop, elapsedTime])
 
   const renderItem = ({ item, index }: any): React.ReactElement => (
-    <View className="px-4 py-6 flex-row justify-between items-center">
+    <View
+      key={index}
+      className="px-4 py-6 flex-row justify-between items-center">
       <Text className="text-base font-semibold">
         {item?.passenger?.name} {item?.passenger?.lastName}
       </Text>
@@ -207,6 +271,7 @@ const StopDetail = ({ route }: StopDetailProps) => {
             data={passengers}
             ItemSeparatorComponent={Divider}
             renderItem={renderItem}
+            keyExtractor={(i) => Math.random().toString()}
           />
         </View>
         <MapTest />

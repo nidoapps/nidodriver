@@ -70,6 +70,7 @@ const StopsList = () => {
     return (
       <>
         <TouchableOpacity
+          key={index}
           onPress={() =>
             navigate('stopDetail', {
               stopId: item.tripStopId,
@@ -149,7 +150,7 @@ const StopsList = () => {
           </View>
           <List
             data={activeTrip && activeTrip.stops ? activeTrip.stops : data}
-            keyExtractor={(item) => String(item.id + Math.random())}
+            keyExtractor={(item) => String(Math.random())}
             renderItem={renderItem as any}
           />
         </View>
