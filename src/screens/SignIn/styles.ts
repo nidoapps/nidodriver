@@ -4,7 +4,7 @@ import { colors } from '@/themeColors'
 
 export const styles = StyleSheet.create({
   input: {
-    marginVertical: 15,
+    marginVertical: 10,
   },
   linkContainer: {
     marginVertical: 10,

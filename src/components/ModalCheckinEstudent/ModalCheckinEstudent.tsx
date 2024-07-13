@@ -8,12 +8,14 @@ interface ModalCheckinEstudentProps {
   handleClose: () => void
   open: boolean
   studentName: string
+  handleCheckin: () => void
 }
 
 const ModalCheckinEstudent = ({
   handleClose,
   open,
   studentName = '',
+  handleCheckin,
 }: ModalCheckinEstudentProps) => {
   return (
     <Modal open={open} handleClose={handleClose}>
@@ -21,7 +23,7 @@ const ModalCheckinEstudent = ({
         <Text className="text-xl font-semibold">Checkin de Estudiante</Text>
         <Text className="text-lg">{studentName}</Text>
         <View className=" flex-col p-0 items-center justify-center gap-y-3">
-          <Button size="giant" status="success" onPress={handleClose}>
+          <Button size="giant" status="success" onPress={handleCheckin}>
             <Text className="text-xl">Marcar como recogido</Text>
           </Button>
           <Button appearance="ghost" onPress={handleClose}>

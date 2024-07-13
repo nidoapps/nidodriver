@@ -5,6 +5,7 @@ import { Text } from 'react-native'
 
 import { RootStackParams } from './NavigationParams'
 
+import { storage } from '@/App'
 import BackButton from '@/components/BackButton/BackButton'
 import { ModalCheckinEstudent } from '@/components/ModalCheckinEstudent'
 import { TabsNavigator } from '@/components/TabsNavigator'
@@ -26,12 +27,17 @@ const MainNavigation = () => {
   const {
     state: { isAuth },
   } = useDriversContext()
-  let initialRoute = 'signIn'
 
-  if (isAuth) {
-    initialRoute = 'home'
+  let initialRoute = 'default'
+
+  const authToken = storage.getString('authToken')
+  const userId = storage.getString('userId')
+
+  if (authToken && userId) {
+    initialRoute = 'main'
+  } else {
+    initialRoute = 'signIn'
   }
-
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -49,85 +55,74 @@ const MainNavigation = () => {
           ),
         })}>
         <Stack.Screen
+          name="signIn"
+          component={SignIn}
+          initialParams={{ arrowDark: true }}
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
           name="main"
           component={TabsNavigator}
           options={{
             headerShown: false,
           }}
         />
-        {!isAuth ? (
-          <>
-            <Stack.Screen
-              name="signIn"
-              component={SignIn}
-              initialParams={{ arrowDark: true }}
-              options={{
-                headerShown: false,
-              }}
-            />
-          </>
-        ) : null}
+        <Stack.Screen
+          name="stopDetail"
+          component={StopDetail}
+          initialParams={{ arrowDark: true }}
+          options={({ route: { params: paramsStack } }) => ({
+            headerShown: true,
+            headerTransparent: false,
+            headerTitle: () => {
+              const { stopId, stopTitle } = paramsStack
+              return <Text className="text-md font-semibold"> {stopTitle}</Text>
+            },
+            gestureEnabled: true,
+          })}
+        />
+        <Stack.Screen
+          name="students"
+          component={Students}
+          initialParams={{ arrowDark: false }}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="routes"
+          component={Routes}
+          initialParams={{ arrowDark: false }}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="profile"
+          component={EditDriverProfileScreen}
+          initialParams={{ arrowDark: false }}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="studentDetail"
+          component={StudentDetail}
+          initialParams={{ arrowDark: true }}
+          options={({ route: { params: paramsStack } }) => ({
+            headerShown: true,
+            headerTransparent: false,
+            headerTitle: () => {
+              const { stopId, stopTitle } = paramsStack
+              return <Text className="text-md font-semibold"> {stopTitle}</Text>
+            },
+            gestureEnabled: true,
+          })}
+        />
 
-        {isAuth ? (
-          <>
-            <Stack.Screen
-              name="stopDetail"
-              component={StopDetail}
-              initialParams={{ arrowDark: true }}
-              options={({ route: { params: paramsStack } }) => ({
-                headerShown: true,
-                headerTransparent: false,
-                headerTitle: () => {
-                  const { stopId, stopTitle } = paramsStack
-                  return (
-                    <Text className="text-md font-semibold"> {stopTitle}</Text>
-                  )
-                },
-                gestureEnabled: true,
-              })}
-            />
-            <Stack.Screen
-              name="students"
-              component={Students}
-              initialParams={{ arrowDark: false }}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="routes"
-              component={Routes}
-              initialParams={{ arrowDark: false }}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="profile"
-              component={EditDriverProfileScreen}
-              initialParams={{ arrowDark: false }}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="studentDetail"
-              component={StudentDetail}
-              initialParams={{ arrowDark: true }}
-              options={({ route: { params: paramsStack } }) => ({
-                headerShown: true,
-                headerTransparent: false,
-                headerTitle: () => {
-                  const { stopId, stopTitle } = paramsStack
-                  return (
-                    <Text className="text-md font-semibold"> {stopTitle}</Text>
-                  )
-                },
-                gestureEnabled: true,
-              })}
-            />
-          </>
-        ) : null}
         <Stack.Screen
           name="validateOtpCode"
           component={ValidateOtpCode}

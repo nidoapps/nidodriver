@@ -12,6 +12,16 @@ export const es = {
     address: 'Dirección',
     students: 'Estudiantes',
     student: 'Estudiante',
+    phoneNumber: 'Número de teléfono',
+    excellent: '¡Excelente!',
+    origin: 'Origen',
+    destination: 'Destino',
+    stops: 'Paradas',
+    name: 'Nombre',
+    lastName: 'Apellido',
+    direction: 'Sentido',
+    going: 'De ida',
+    return: 'De regreso',
   },
   signIn: {
     signIn: 'Iniciar sesión',
@@ -20,6 +30,13 @@ export const es = {
     forgotPassword: '¿Olvidaste tu contraseña?',
     orSignInWith: 'O ingresa con',
     dontHaveAccount: '¿No tienes cuenta aún?',
-    otpCodeWasSent: 'Un código de 4 dígitos fue enviado a',
+    otpCodeWasSent: 'Un código de 6 dígitos fue enviado a',
+    incorrectPhone: 'Número de teléfono con formato incorrecto',
+    incorrectEmail: 'Email incorrecto',
+    errors: {
+      email: 'Email no encontrado, verificalo e intenta nuevamente',
+      phone:
+        'Número de teléfono no encontrado, verificalo e intenta nuevamente',
+    },
   },
 }

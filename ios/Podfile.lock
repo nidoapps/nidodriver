@@ -6,6 +6,7 @@ PODS:
   - AppAuth/ExternalUserAgent (1.7.5):
     - AppAuth/Core
   - boost (1.83.0)
+  - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
   - EASClient (0.11.2):
     - ExpoModulesCore
@@ -41,7 +42,7 @@ PODS:
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
   - EXStructuredHeaders (3.7.2)
-  - EXUpdates (0.24.12):
+  - EXUpdates (0.24.13):
     - EASClient
     - EXManifests
     - ExpoModulesCore
@@ -61,6 +62,62 @@ PODS:
     - React-Core (= 0.73.6)
     - React-jsi (= 0.73.6)
     - ReactCommon/turbomodule/core (= 0.73.6)
+  - Flipper (0.201.0):
+    - Flipper-Folly (~> 2.6)
+  - Flipper-Boost-iOSX (1.76.0.1.11)
+  - Flipper-DoubleConversion (3.2.0.1)
+  - Flipper-Fmt (7.1.7)
+  - Flipper-Folly (2.6.10):
+    - Flipper-Boost-iOSX
+    - Flipper-DoubleConversion
+    - Flipper-Fmt (= 7.1.7)
+    - Flipper-Glog
+    - libevent (~> 2.1.12)
+    - OpenSSL-Universal (= 1.1.1100)
+  - Flipper-Glog (0.5.0.5)
+  - Flipper-PeerTalk (0.0.4)
+  - FlipperKit (0.201.0):
+    - FlipperKit/Core (= 0.201.0)
+  - FlipperKit/Core (0.201.0):
+    - Flipper (~> 0.201.0)
+    - FlipperKit/CppBridge
+    - FlipperKit/FBCxxFollyDynamicConvert
+    - FlipperKit/FBDefines
+    - FlipperKit/FKPortForwarding
+    - SocketRocket (~> 0.6.0)
+  - FlipperKit/CppBridge (0.201.0):
+    - Flipper (~> 0.201.0)
+  - FlipperKit/FBCxxFollyDynamicConvert (0.201.0):
+    - Flipper-Folly (~> 2.6)
+  - FlipperKit/FBDefines (0.201.0)
+  - FlipperKit/FKPortForwarding (0.201.0):
+    - CocoaAsyncSocket (~> 7.6)
+    - Flipper-PeerTalk (~> 0.0.4)
+  - FlipperKit/FlipperKitHighlightOverlay (0.201.0)
+  - FlipperKit/FlipperKitLayoutHelpers (0.201.0):
+    - FlipperKit/Core
+    - FlipperKit/FlipperKitHighlightOverlay
+    - FlipperKit/FlipperKitLayoutTextSearchable
+  - FlipperKit/FlipperKitLayoutIOSDescriptors (0.201.0):
+    - FlipperKit/Core
+    - FlipperKit/FlipperKitHighlightOverlay
+    - FlipperKit/FlipperKitLayoutHelpers
+  - FlipperKit/FlipperKitLayoutPlugin (0.201.0):
+    - FlipperKit/Core
+    - FlipperKit/FlipperKitHighlightOverlay
+    - FlipperKit/FlipperKitLayoutHelpers
+    - FlipperKit/FlipperKitLayoutIOSDescriptors
+    - FlipperKit/FlipperKitLayoutTextSearchable
+  - FlipperKit/FlipperKitLayoutTextSearchable (0.201.0)
+  - FlipperKit/FlipperKitNetworkPlugin (0.201.0):
+    - FlipperKit/Core
+  - FlipperKit/FlipperKitReactPlugin (0.201.0):
+    - FlipperKit/Core
+  - FlipperKit/FlipperKitUserDefaultsPlugin (0.201.0):
+    - FlipperKit/Core
+  - FlipperKit/SKIOSNetworkPlugin (0.201.0):
+    - FlipperKit/Core
+    - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
   - GoogleSignIn (7.0.0):
@@ -82,6 +139,9 @@ PODS:
     - MapboxCommon (= 24.3.1)
     - MapboxCoreMaps (= 11.3.0)
     - Turf (= 2.8.0)
+  - MMKV (1.3.5):
+    - MMKVCore (~> 1.3.5)
+  - MMKVCore (1.3.5)
   - OneSignalXCFramework (5.1.6):
     - OneSignalXCFramework/OneSignalComplete (= 5.1.6)
   - OneSignalXCFramework/OneSignal (5.1.6):
@@ -123,6 +183,7 @@ PODS:
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
+  - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2022.05.16.00):
     - boost
     - DoubleConversion
@@ -150,7 +211,7 @@ PODS:
     - FBLazyVector (= 0.73.6)
     - RCTRequired (= 0.73.6)
     - React-Core (= 0.73.6)
-  - ReachabilitySwift (5.2.2)
+  - ReachabilitySwift (5.2.3)
   - React (0.73.6):
     - React-Core (= 0.73.6)
     - React-Core/DevSupport (= 0.73.6)
@@ -999,6 +1060,11 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
+  - react-native-mmkv (2.12.2):
+    - glog
+    - MMKV (>= 1.3.3)
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - react-native-onesignal (5.1.3):
     - OneSignalXCFramework (= 5.1.6)
     - React (< 1.0.0, >= 0.13.0)
@@ -1227,10 +1293,31 @@ DEPENDENCIES:
   - EXUpdatesInterface (from `../node_modules/expo-updates-interface/ios`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
   - FBReactNativeSpec (from `../node_modules/react-native/React/FBReactNativeSpec`)
+  - Flipper (= 0.201.0)
+  - Flipper-Boost-iOSX (= 1.76.0.1.11)
+  - Flipper-DoubleConversion (= 3.2.0.1)
+  - Flipper-Fmt (= 7.1.7)
+  - Flipper-Folly (= 2.6.10)
+  - Flipper-Glog (= 0.5.0.5)
+  - Flipper-PeerTalk (= 0.0.4)
+  - FlipperKit (= 0.201.0)
+  - FlipperKit/Core (= 0.201.0)
+  - FlipperKit/CppBridge (= 0.201.0)
+  - FlipperKit/FBCxxFollyDynamicConvert (= 0.201.0)
+  - FlipperKit/FBDefines (= 0.201.0)
+  - FlipperKit/FKPortForwarding (= 0.201.0)
+  - FlipperKit/FlipperKitHighlightOverlay (= 0.201.0)
+  - FlipperKit/FlipperKitLayoutPlugin (= 0.201.0)
+  - FlipperKit/FlipperKitLayoutTextSearchable (= 0.201.0)
+  - FlipperKit/FlipperKitNetworkPlugin (= 0.201.0)
+  - FlipperKit/FlipperKitReactPlugin (= 0.201.0)
+  - FlipperKit/FlipperKitUserDefaultsPlugin (= 0.201.0)
+  - FlipperKit/SKIOSNetworkPlugin (= 0.201.0)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - libevent (~> 2.1.12)
   - OneSignalXCFramework (< 6.0, >= 5.0.0)
+  - OpenSSL-Universal (= 1.1.1100)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCT-Folly/Fabric (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
@@ -1239,6 +1326,7 @@ DEPENDENCIES:
   - React-callinvoker (from `../node_modules/react-native/ReactCommon/callinvoker`)
   - React-Codegen (from `build/generated/ios`)
   - React-Core (from `../node_modules/react-native/`)
+  - React-Core/DevSupport (from `../node_modules/react-native/`)
   - React-Core/RCTWebSocket (from `../node_modules/react-native/`)
   - React-CoreModules (from `../node_modules/react-native/React/CoreModules`)
   - React-cxxreact (from `../node_modules/react-native/ReactCommon/cxxreact`)
@@ -1255,6 +1343,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
+  - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
@@ -1288,6 +1377,15 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AppAuth
+    - CocoaAsyncSocket
+    - Flipper
+    - Flipper-Boost-iOSX
+    - Flipper-DoubleConversion
+    - Flipper-Fmt
+    - Flipper-Folly
+    - Flipper-Glog
+    - Flipper-PeerTalk
+    - FlipperKit
     - fmt
     - GoogleSignIn
     - GTMAppAuth
@@ -1296,7 +1394,10 @@ SPEC REPOS:
     - MapboxCommon
     - MapboxCoreMaps
     - MapboxMaps
+    - MMKV
+    - MMKVCore
     - OneSignalXCFramework
+    - OpenSSL-Universal
     - ReachabilitySwift
     - SocketRocket
     - sqlite3
@@ -1390,6 +1491,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   react-native-geolocation:
     :path: "../node_modules/@react-native-community/geolocation"
+  react-native-mmkv:
+    :path: "../node_modules/react-native-mmkv"
   react-native-onesignal:
     :path: "../node_modules/react-native-onesignal"
   react-native-safe-area-context:
@@ -1452,6 +1555,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
+  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: fea03f2699887d960129cc54bba7e52542b6f953
   EASClient: a42ee8bf36c93b3128352faf2ae49405ab4f80bd
   EXConstants: 988aa430ca0f76b43cd46b66e7fae3287f9cc2fc
@@ -1466,10 +1570,18 @@ SPEC CHECKSUMS:
   ExpoModulesCore: 4a8928a228569301ac4fc4a1e846713e05754d05
   EXSplashScreen: 5538a51beec451bf1fcf5198e3062790e2534df3
   EXStructuredHeaders: 5b0f47259db047dc1fdfa84752e292c2bfa68ecd
-  EXUpdates: 17e26679a93e626b0ae3ebbff966cd7021413a0a
+  EXUpdates: 4aa99ef9610e0d6fbf80d7f2b3f169b527f24a1d
   EXUpdatesInterface: 3e444e2093e25b7ca0999a7d8c16e8392dee70c3
   FBLazyVector: f64d1e2ea739b4d8f7e4740cde18089cd97fe864
   FBReactNativeSpec: 9f2b8b243131565335437dba74923a8d3015e780
+  Flipper: c7a0093234c4bdd456e363f2f19b2e4b27652d44
+  Flipper-Boost-iOSX: fd1e2b8cbef7e662a122412d7ac5f5bea715403c
+  Flipper-DoubleConversion: 2dc99b02f658daf147069aad9dbd29d8feb06d30
+  Flipper-Fmt: 60cbdd92fc254826e61d669a5d87ef7015396a9b
+  Flipper-Folly: 584845625005ff068a6ebf41f857f468decd26b3
+  Flipper-Glog: 70c50ce58ddaf67dc35180db05f191692570f446
+  Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
+  FlipperKit: 37525a5d056ef9b93d1578e04bc3ea1de940094f
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
@@ -1480,11 +1592,14 @@ SPEC CHECKSUMS:
   MapboxCommon: e6d0d15f1e34278e21bae28bdc548d378757b51e
   MapboxCoreMaps: 0e3eab0bd5787e833d48261fa1d01f356d6c4ad8
   MapboxMaps: 5aba2ba70a85d08e0ea00ad011ca3d2965e69a59
+  MMKV: 506311d0494023c2f7e0b62cc1f31b7370fa3cfb
+  MMKVCore: 9e2e5fd529b64a9fe15f1a7afb3d73b2e27b4db9
   OneSignalXCFramework: f6533cc1f7a5ddded80ee5fe183901a99ad46f4f
+  OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 7169b2b1c44399c76a47b5deaaba715eeeb476c0
   RCTRequired: ca1d7414aba0b27efcfa2ccd37637edb1ab77d96
   RCTTypeSafety: 678e344fb976ff98343ca61dc62e151f3a042292
-  ReachabilitySwift: 2128f3a8c9107e1ad33574c6e58e8285d460b149
+  ReachabilitySwift: 7f151ff156cea1481a8411701195ac6a984f4979
   React: e296bcebb489deaad87326067204eb74145934ab
   React-callinvoker: d0b7015973fa6ccb592bb0363f6bc2164238ab8c
   React-Codegen: f034a5de6f28e15e8d95d171df17e581d5309268
@@ -1504,6 +1619,7 @@ SPEC CHECKSUMS:
   React-logger: 3eb80a977f0d9669468ef641a5e1fabbc50a09ec
   React-Mapbuffer: 84ea43c6c6232049135b1550b8c60b2faac19fab
   react-native-geolocation: ed9e1d132f576b9a4a503af46f9704413ea0dec1
+  react-native-mmkv: 1fdc81aa70c1aba09370718e6a63a09cbbbac8d2
   react-native-onesignal: 2db3d8baa6ae3adc637cde65d1373c6f8b138e78
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
   React-nativeconfig: b4d4e9901d4cabb57be63053fd2aa6086eb3c85f
@@ -1537,6 +1653,6 @@ SPEC CHECKSUMS:
   Turf: aa2ede4298009639d10db36aba1a7ebaad072a5e
   Yoga: 805bf71192903b20fc14babe48080582fee65a80
 
-PODFILE CHECKSUM: fb5d9d787a76b15011130aaac3554865c334fc24
+PODFILE CHECKSUM: 93bea083a8a966f0e8192a95d75e0c4d5e0d68d7
 
 COCOAPODS: 1.15.2

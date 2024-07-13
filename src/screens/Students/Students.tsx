@@ -1,3 +1,4 @@
+import { useFocusEffect } from '@react-navigation/native'
 import { Divider, Icon, List, Button, Input } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React, { useCallback, useRef, useState } from 'react'
@@ -5,6 +6,7 @@ import { View, Text } from 'react-native'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { useDriversContext } from '@/hooks/useDriversContext'
 import { t } from '@/locales/i18n'
 import { PickupStops } from '@/mocks/stops'
 import { colors } from '@/themeColors'
@@ -19,18 +21,29 @@ const StudentsList = [
 ]
 
 const Students = () => {
+  const {
+    hooks: { getPassengersInfo },
+    state: { driverData, passengersInfo },
+  } = useDriversContext()
   const [expanded, setExpanded] = useState(false)
-  const [studentsData, setStudentsData] = useState(StudentsList)
+  const [studentsData, setStudentsData] = useState(passengersInfo)
   const currentIndex = useRef(null)
 
+  useFocusEffect(
+    useCallback(() => {
+      getPassengersInfo(driverData?.driverId)
+    }, [driverData])
+  )
   const StutendActions = ({ item }) => (
     <View className=" py-2 pb-4  justify-center bg-neutral-50">
       <Text className="text-base pl-6 mb-2 font-medium">Contactos:</Text>
       <List
-        data={item.contacts}
+        data={item?.family?.members}
         renderItem={({ item }) => (
           <View className="flex-row justify-between px-6 gap-y-2 py-3 bg-neutral-50 items-center">
-            <Text className="text-base">{item.name}</Text>
+            <Text className="text-base">
+              {item?.name} {item?.lastName}
+            </Text>
             <Button
               size="medium"
               status="basic"
@@ -51,11 +64,15 @@ const Students = () => {
         }}>
         <View className="flex-row px-4 py-6 items-center justify-between">
           <View className="flex-row items-center">
-            <StudentIcon name={String(item.name || '')} />
+            <StudentIcon
+              name={String(`${item?.name} ${item?.lastName}` || '')}
+            />
             <View className="flex">
-              <Text className="text-lg font-semibold">{item.name}</Text>
+              <Text className="text-lg font-semibold">
+                {item?.name} {item?.lastName}
+              </Text>
               <Text className="text-base font-light leading-4">
-                {item.address}
+                {item.family?.familyStop?.map((stop) => !!stop.name)}
               </Text>
             </View>
           </View>
@@ -87,15 +104,21 @@ const Students = () => {
   const handleSearchStudent = useCallback(
     (value) => {
       if (value) {
-        const filteredData = studentsData.filter((student) =>
-          student.name.toLocaleLowerCase().includes(value.toLocaleLowerCase())
+        const filteredData = passengersInfo.filter(
+          (student) =>
+            student.name
+              .toLocaleLowerCase()
+              .includes(value.toLocaleLowerCase()) ||
+            student.lastName
+              .toLocaleLowerCase()
+              .includes(value.toLocaleLowerCase())
         )
         setStudentsData(filteredData)
       } else {
-        setStudentsData(StudentsList)
+        setStudentsData(passengersInfo)
       }
     },
-    [studentsData]
+    [passengersInfo]
   )
 
   return (
@@ -117,7 +140,7 @@ const Students = () => {
         />
       </View>
       <List
-        data={studentsData}
+        data={passengersInfo || []}
         ItemSeparatorComponent={Divider}
         renderItem={renderItem}
       />

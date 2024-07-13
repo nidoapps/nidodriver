@@ -1,5 +1,12 @@
 export interface DriversState {
-  assignedTrips: object[]
+  assignedTrips?: object[]
   isAuth?: boolean
   startedTrip?: boolean
+  loadingAuth?: boolean
+  driverData?: any
+  loadingHistoryTrips?: boolean
+  historyTrips?: any[]
+  activeTrip?: any
+  activeTripStopData?: any
+  passengersInfo?: any
 }

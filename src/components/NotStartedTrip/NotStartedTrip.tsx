@@ -1,4 +1,4 @@
-import { Card } from '@ui-kitten/components'
+import { Card, List } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React from 'react'
 import { View, Text, Animated, Image } from 'react-native'
@@ -11,21 +11,20 @@ import {
 } from 'react-native-gesture-handler'
 
 import NidoLogoBlue from '@/assets/images/nido-logo-blue.png'
+import { TripDirection, TripDirectionText } from '@/constants/common'
 import { useDriversContext } from '@/hooks/useDriversContext'
-import { setStartedTripAction } from '@/store/actions'
+import { t } from '@/locales/i18n'
+import { setStartedTripAction } from '@/store/actions/trip'
 import { colors } from '@/themeColors'
 
 const StyledRectButton = styled(RectButton)
 const StyledIcon = styled(Icon)
 
-const NotStartedTrip = () => {
+const NotStartedTrip = ({ assignedTrips }) => {
   const {
-    state: { assignedTrips },
+    hooks: { handleChangeTripStatus },
     dispatch,
   } = useDriversContext()
-
-  const iconRef = React.useRef()
-  const infiniteAnimationIconRef: React.RefObject<Icon> = React.createRef()
 
   const renderLeftActions = (progress, dragX) => {
     // const trans = dragX.interpolate({
@@ -53,44 +52,57 @@ const NotStartedTrip = () => {
     )
   }
 
+  const renderItem = ({ item, index }) => {
+    return (
+      <TouchableOpacity key={index}>
+        <Swipeable
+          key={index}
+          dragOffsetFromLeftEdge={index === 0 ? 0 : Number.MAX_VALUE}
+          renderLeftActions={renderLeftActions}
+          onSwipeableOpen={(direction: 'left' | 'right') => {
+            if (direction === 'left') {
+              return handleChangeTripStatus(item.tripId, 'InProgress')
+            }
+          }}>
+          <View
+            className={`bg-white flex-row px-4 py-5 my-1 border border-neutral-200 justify-between items-center ${index && 'opacity-60'}`}>
+            <View className="flex  gap-y-1">
+              <Text className="text-2xl font-medium">
+                {item?.route?.name || ''}
+              </Text>
+              <Text>
+                {t('common.direction')}:{' '}
+                {t(`${TripDirectionText[item.route.direction]}`)}
+              </Text>
+              {/* <Text>Origen: {trip.stops[0].title}</Text> */}
+              <Text>
+                Destino:{' '}
+                {item?.route?.direction === TripDirection.going
+                  ? item?.school?.name
+                  : item.stops[item.stops.length - 1]?.name}{' '}
+              </Text>
+              <Text>Paradas: {item.stops.length}</Text>
+            </View>
+            <StyledIcon
+              name="arrowhead-right-outline"
+              className="w-12 h-12"
+              fill={index ? colors.darkGrey2 : colors.primary}
+            />
+          </View>
+        </Swipeable>
+      </TouchableOpacity>
+    )
+  }
+
   return (
     <View className="flex justify-between">
       <View className="h-1/3 bg-neutral-100 items-center justify-center">
         <Image source={NidoLogoBlue} className="h-20 w-20" resizeMode="cover" />
         <Text className="text-2xl font-semibold"> Rutas asignadas</Text>
       </View>
-      <ScrollView>
-        {assignedTrips.map((trip, index) => {
-          return (
-            <TouchableOpacity key={index}>
-              <Swipeable
-                key={index}
-                dragOffsetFromLeftEdge={index === 0 ? 0 : Number.MAX_VALUE}
-                renderLeftActions={renderLeftActions}
-                onSwipeableOpen={(direction: 'left' | 'right') => {
-                  if (direction === 'left') dispatch(setStartedTripAction(true))
-                }}>
-                <View
-                  className={`bg-white flex-row px-4 py-5 my-1 border border-neutral-200 justify-between items-center ${index && 'opacity-60'}`}>
-                  <View className="flex  gap-y-1">
-                    <Text className="text-2xl font-medium">{trip.title}</Text>
-                    <Text>Origen: {trip.stops[0].title}</Text>
-                    <Text>
-                      Destino: {trip.stops[trip.stops.length - 1].title}
-                    </Text>
-                    <Text>Paradas: {trip.stops.length}</Text>
-                  </View>
-                  <StyledIcon
-                    name="arrowhead-right-outline"
-                    className="w-12 h-12"
-                    fill={index ? colors.darkGrey2 : colors.primary}
-                  />
-                </View>
-              </Swipeable>
-            </TouchableOpacity>
-          )
-        })}
-      </ScrollView>
+      <View className="h-2/3">
+        <List data={assignedTrips || []} renderItem={renderItem} />
+      </View>
     </View>
   )
 }

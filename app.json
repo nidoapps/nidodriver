@@ -2,7 +2,7 @@
   "expo": {
     "name": "Nido Driver",
     "slug": "nido-driver",
-    "version": "1.0.2",
+    "version": "0.1.2",
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "userInterfaceStyle": "light",
@@ -70,9 +70,18 @@
           "RNMapboxMapsVersion": "11.3.0",
           "RNMapboxMapsDownloadToken": "sk.eyJ1IjoiZGF2aWRlZ2QiLCJhIjoiY2x2bzh1OHZzMDR5aDJxcGNlc3h3ZmN4ayJ9.8HVAsLx_Trs2UiyJ2ftE5Q"
         }
+      ],
+      ["expo-community-flipper"],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "flipper": true
+          }
+        }
       ]
     ],
-    "runtimeVersion": "1.0.2",
+    "runtimeVersion": "0.1.2",
     "updates": {
       "url": "https://u.expo.dev/7ac4a4b9-0d96-409f-adcf-5d9349ec5ced"
     }

@@ -3,9 +3,14 @@ export function isValidEmail(email: string) {
   return regex.test(email)
 }
 
-export function isValidPhone(phone: string) {
-  const regex = /^(6|7|8)[0-9]{7}$/
-  return regex.test(phone)
+export const RegExpByCountry: { [key: string]: RegExp } = {
+  '+507': /^(6|7|8)[0-9]{7}$/,
+  '+57': /^[0-9]{10}$/,
+  '+1': /^[0-9]{10}$/,
+}
+export function isValidPhone(phone: string, countryCode: string) {
+  const regex = RegExpByCountry[countryCode]
+  if (phone && regex) return regex.test(phone)
 }
 
 export function getInitials(fullName: string) {
