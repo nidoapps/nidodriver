@@ -3,6 +3,7 @@ import {
   GetActiveTrip,
   GetAssignedTripsByDriverId,
   GetHistoryTripsByDriverId,
+  GetPassengersInfoByDriver,
 } from '@/services/trips'
 import { ActionType } from '@/store/actions/base-action'
 import {
@@ -10,16 +11,16 @@ import {
   setAssignedTripsAction,
   setHistoryTripsAction,
   setLoadingHistoryTripsAction,
+  setPassengersInfoAction,
 } from '@/store/actions/trip'
 
 export const useGetTrips = (
   dispatch: (action: ActionType) => void,
-  state: DriversState
+  state?: DriversState
 ) => {
   const getTripsByDriverId = async (driverId: string) => {
     try {
       const response = await GetAssignedTripsByDriverId(driverId)
-      console.log('earar', response)
       dispatch(setAssignedTripsAction(response || []))
     } catch (error) {
       console.log('error', error)
@@ -60,5 +61,21 @@ export const useGetTrips = (
     }
   }
 
-  return { getTripsByDriverId, getHistoryTripsByDriverId, getActiveTrip }
+  const getPassengersInfo = async (driverId: number) => {
+    try {
+      const response = await GetPassengersInfoByDriver(driverId)
+      dispatch(setPassengersInfoAction(response))
+      return response
+    } catch (error) {
+      console.log('error', error)
+      throw error
+    }
+  }
+
+  return {
+    getTripsByDriverId,
+    getHistoryTripsByDriverId,
+    getActiveTrip,
+    getPassengersInfo,
+  }
 }

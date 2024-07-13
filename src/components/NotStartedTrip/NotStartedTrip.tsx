@@ -26,9 +26,6 @@ const NotStartedTrip = ({ assignedTrips }) => {
     dispatch,
   } = useDriversContext()
 
-  const iconRef = React.useRef()
-  const infiniteAnimationIconRef: React.RefObject<Icon> = React.createRef()
-
   const renderLeftActions = (progress, dragX) => {
     // const trans = dragX.interpolate({
     //   inputRange: [0, 0, 50, 51],

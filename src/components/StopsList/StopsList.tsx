@@ -1,21 +1,14 @@
 import { useNavigation } from '@react-navigation/native'
-import { Icon, List, ListItem } from '@ui-kitten/components'
+import { Icon, List } from '@ui-kitten/components'
 import { styled } from 'nativewind'
-import React, { useState } from 'react'
-import { TouchableOpacity, View, Text, ImageProps } from 'react-native'
-import DraggableFlatList, {
-  RenderItemParams,
-  ScaleDecorator,
-} from 'react-native-draggable-flatlist'
-import { SafeAreaView } from 'react-native-safe-area-context'
-
-import MapTest from '../MapTest/MapTest'
+import React, { useEffect, useState } from 'react'
+import { TouchableOpacity, View, Text } from 'react-native'
 
 import { TripDirectionText } from '@/constants/common'
 import { useDriversContext } from '@/hooks/useDriversContext'
 import { t } from '@/locales/i18n'
 import { PickupStops } from '@/mocks/stops'
-import { IStop, StopStatus } from '@/models/common'
+import { StopStatus } from '@/models/common'
 import { colors } from '@/themeColors'
 
 const StyledIcon = styled(Icon)
@@ -25,12 +18,12 @@ const StopsList = () => {
   const [data, setData] = useState(PickupStops)
   const {
     hooks: { getActiveTrip },
-    state: { startedTrip, activeTrip },
+    state: { activeTrip },
   } = useDriversContext()
-  const pulseIconRef = React.useRef<Icon<Partial<ImageProps>>>()
-  // React.useEffect(() => {
-  //   // pulseIconRef?.current?.startAnimation()
-  //   getActiveTrip(startedTrip)
+  // const pulseIconRef = React.useRef<Icon<Partial<ImageProps>>>()
+
+  // useEffect(() => {
+  //   getActiveTrip()
   // }, [])
 
   const statusClasses: { [key: string]: string } = {

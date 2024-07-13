@@ -1,5 +1,7 @@
 import { OneSignal } from 'react-native-onesignal'
 
+import { UpdateDriverProfile } from './../../services/auth/index'
+
 import { GetDriverProfileData } from '@/services/auth'
 import { ActionType } from '@/store/actions/base-action'
 import { setDriverDataAction } from '@/store/actions/driver'
@@ -17,5 +19,17 @@ export const useHandleDriverData = (dispatch: (action: ActionType) => void) => {
     }
   }
 
-  return { getDriverProfileData }
+  const updateDriverProfileData = async (driverId: number, data: any) => {
+    try {
+      const response = await UpdateDriverProfile(driverId, data)
+      dispatch(setDriverDataAction(response))
+
+      return response
+    } catch (error) {
+      console.log('error', error)
+      return false
+    }
+  }
+
+  return { getDriverProfileData, updateDriverProfileData }
 }

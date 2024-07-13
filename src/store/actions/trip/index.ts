@@ -34,3 +34,9 @@ export const SET_ACTIVE_TRIP_STOP_DATA = 'SET_ACTIVE_TRIP_STOP_DATA'
 export const setActiveTripStopDataAction = (payload: any) => {
   return baseAction('SET_ACTIVE_TRIP_STOP_DATA', payload)
 }
+
+export const SET_PASSENGERS_INFO = 'SET_PASSENGERS_INFO'
+
+export const setPassengersInfoAction = (payload: any) => {
+  return baseAction('SET_PASSENGERS_INFO', payload)
+}

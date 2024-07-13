@@ -1,4 +1,4 @@
-import { RouteProp } from '@react-navigation/native'
+import { RouteProp, useNavigation } from '@react-navigation/native'
 import { Divider, List, Button, Icon } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -16,7 +16,6 @@ import { setActiveTripStopDataAction } from '@/store/actions/trip'
 import { setActiveTripStopData } from '@/store/reducers/trip'
 import { colors } from '@/themeColors'
 import useIncrementalTimer from '@/utils/useIncrementalTimer'
-
 const StyledIcon = styled(Icon)
 interface StopDetailProps {
   route: RouteProp<RootStackParams, 'stopDetail'>
@@ -26,9 +25,13 @@ const StopDetail = ({ route }: StopDetailProps) => {
   const {
     dispatch,
     state: { activeTripStopData },
-    hooks: { handleChangePassengerStopStatus, getTripStopData },
+    hooks: {
+      handleChangePassengerStopStatus,
+      getTripStopData,
+      handleChangeStopStatus,
+    },
   } = useDriversContext()
-
+  const { navigate } = useNavigation()
   const { passengers, status, tripStopId } = activeTripStopData || {
     passengers: [],
     status: StopStatus.scheduled,
@@ -38,10 +41,12 @@ const StopDetail = ({ route }: StopDetailProps) => {
   //   passengers: [],
   //   status: StopStatus.scheduled,
   // }
-  const holdTime = 2
-  const [initiatedStop, setInitiatedStop] = React.useState(false)
-  const [visible, setVisible] = React.useState(false)
-  const [openModalContacts, setOpenModalContacts] = React.useState(false)
+  const holdTime = 1
+  const [initiatedStop, setInitiatedStop] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const [openModalContacts, setOpenModalContacts] = useState(false)
+  const [localStatus, setLocalStatus] = useState(status)
+  let elapsedTime = useIncrementalTimer(holdTime)
   const [contactsData, setContactsData] = useState<{
     student?: string
     studentId?: number
@@ -51,7 +56,6 @@ const StopDetail = ({ route }: StopDetailProps) => {
     contacts: [],
   })
   const wsRef = useRef(null)
-
   useEffect(() => {
     getTripStopData(stopId)
   }, [stopId, contactsData.studentId])
@@ -102,6 +106,7 @@ const StopDetail = ({ route }: StopDetailProps) => {
     }
     return () => {
       ws.close()
+      elapsedTime = '00:00'
     }
   }, [])
 
@@ -121,20 +126,27 @@ const StopDetail = ({ route }: StopDetailProps) => {
     return () => clearInterval(intervalId)
   }, [tripStopId, stopId])
 
-  const [localStatus, setLocalStatus] = React.useState(status)
-
-  const elapsedTime = useIncrementalTimer(1)
-
   const completedStop = useMemo(() => {
     return (
       passengers.filter((e) => e.status === StopStatus.completed).length ===
       passengers.length
     )
   }, [activeTripStopData])
+
+  const handleCompleteStop = useCallback(() => {
+    handleChangeStopStatus(stopId ?? tripStopId, StopStatus.completed)
+    setLocalStatus(StopStatus.completed)
+    setInitiatedStop(false)
+
+    setTimeout(() => {
+      navigate('main')
+    }, 4000)
+  }, [handleChangeStopStatus, tripStopId, stopId])
+
   const InitStop = () => (
     <TouchableOpacity
       disabled={!status}
-      className="p-2 items-center justify-center"
+      className="p-2 items-center justify-end h-3/4"
       onPress={() => setInitiatedStop(true)}>
       <StyledIcon
         name="play-circle"
@@ -204,13 +216,16 @@ const StopDetail = ({ route }: StopDetailProps) => {
             setContactsData({
               student: item.passenger.name,
               contacts: [
-                ...item.passenger.family.members,
-                ...item.passengerfamily.responsibles,
+                ...item.passenger?.family?.members,
+                ...item.passenger?.family?.responsibles,
               ] as any,
             })
           }}
         />
         <Button
+          disabled={
+            item.status === StudentStopStatus.completed || !initiatedStop
+          }
           status={`${item.status === StudentStopStatus.pickedUp ? 'success' : 'basic'}`}
           accessoryRight={<Icon name="checkmark" />}
           onPress={() => {
@@ -228,43 +243,49 @@ const StopDetail = ({ route }: StopDetailProps) => {
   return (
     <SafeAreaView className="bg-white h-screen">
       <View>
-        <View className="h-1/4 bg-neutral-100 items-center justify-center ">
-          {!initiatedStop ? (
-            <>{StopActionsByStatus[localStatus]}</>
-          ) : (
-            <TouchableOpacity
-              className="p-2 items-center justify-center"
-              onPress={() => {
-                setLocalStatus(StopStatus.completed)
-                setInitiatedStop(false)
-              }}>
-              <StyledIcon
-                name={
-                  initiatedStop && elapsedTime <= `${holdTime}:00`
-                    ? 'checkmark-circle'
-                    : 'checkmark-circle'
-                }
-                fill={
-                  initiatedStop && elapsedTime <= `${holdTime}:00`
-                    ? colors.darkGrey2
-                    : colors.primary
-                }
-                className="h-20 w-20 mb-2"
-              />
-              <View
-                className={`p-3  rounded ${
-                  initiatedStop && elapsedTime <= `${holdTime}:00`
-                    ? 'bg-neutral-400'
-                    : 'bg-midblue-500'
-                }`}>
+        <View className="flex h-1/4 justify-between bg-neutral-100">
+          <View className="  items-center justify-center h-3/4 ">
+            {!initiatedStop ? (
+              <>{StopActionsByStatus[status || localStatus]}</>
+            ) : (
+              <TouchableOpacity
+                className="p-2 items-center justify-center "
+                onPress={() => {
+                  setLocalStatus(StopStatus.completed)
+                  setInitiatedStop(false)
+                }}>
+                <StyledIcon
+                  name={
+                    initiatedStop && elapsedTime <= `${holdTime}:00`
+                      ? 'checkmark-circle'
+                      : 'checkmark-circle'
+                  }
+                  fill={
+                    initiatedStop && elapsedTime <= `${holdTime}:00`
+                      ? colors.darkGrey2
+                      : colors.primary
+                  }
+                  className="h-20 w-20 mb-2"
+                />
+              </TouchableOpacity>
+            )}
+            {TimerComponent()}
+          </View>
+          {initiatedStop && (
+            <View
+              className={`w-full py-6 items-center ${
+                initiatedStop && elapsedTime <= `${holdTime}:00`
+                  ? 'bg-neutral-400'
+                  : 'bg-midblue-500'
+              }`}>
+              <TouchableOpacity onPress={() => handleCompleteStop()}>
                 <Text
-                  className={`text-lg font-semibold text-white ${initiatedStop && elapsedTime <= `${holdTime}:00` ? 'text-neutral-200' : 'text-white'}`}>
+                  className={`text-xl font-semibold text-white ${initiatedStop && elapsedTime <= `${holdTime}:00` ? 'text-neutral-200' : 'text-white'}`}>
                   Completar Parada
                 </Text>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            </View>
           )}
-          {TimerComponent()}
         </View>
         <View className="h-3/4 bg-white">
           <List

@@ -1,3 +1,4 @@
+import { useFocusEffect } from '@react-navigation/native'
 import { Icon } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React, { useEffect } from 'react'
@@ -30,9 +31,19 @@ const Home = () => {
     if (driverData && !assignedTrips) getTripsByDriverId(driverData.driverId)
   }, [driverData, assignedTrips])
 
-  useEffect(() => {
-    getActiveTrip()
-  }, [driverData])
+  useFocusEffect(
+    React.useCallback(() => {
+      getTripsByDriverId(driverData?.driverId)
+      getActiveTrip()
+    }, [driverData])
+  )
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getActiveTrip()
+    }, [])
+  )
+
   return (
     <SafeAreaView className="flex  bg-neutral-50 justify-between">
       <View className="flex justify-center items-center">
@@ -42,7 +53,7 @@ const Home = () => {
       (activeTrip && activeTrip?.status === TripStatus.inProgress) ? (
         <StopsList />
       ) : (
-        <StopsList />
+        <NotStartedTrip assignedTrips={assignedTrips || []} />
       )}
     </SafeAreaView>
   )

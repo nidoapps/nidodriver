@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import {
   Container,
   Form,
@@ -8,19 +8,22 @@ import {
   Button,
 } from '@ui-kitten/components'
 import { Formik } from 'formik'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { ScrollView, View, Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
 import * as yup from 'yup'
 
-const initialValues = {
-  name: 'Ninfa Rodriguez',
-  phone: '66778899',
-  schoolPlate: 'YH83787',
-  licensePlate: 'JKL765656',
-  schoolName: 'Colegio AIP',
-}
+import { storage } from '@/App'
+import { useDriversContext } from '@/hooks/useDriversContext'
+
+// const initialValues = {
+//   name: '',
+//   lastName: '',
+//   phone: '66778899',
+//   licenseNumber: 'JKL765656',
+//   documentNumber: 'Colegio AIP',
+// }
 
 const validationSchema = yup.object().shape({
   name: yup.string().required('El nombre es obligatorio'),
@@ -30,48 +33,78 @@ const validationSchema = yup.object().shape({
 })
 
 const EditDriverProfileScreen = () => {
-  const [driverData, setDriverData] = useState(initialValues)
+  const {
+    state: { driverData },
+    hooks: { getDriverProfileData, updateDriverProfileData },
+  } = useDriversContext()
+  const [driverInfo, setDriverInfo] = useState(driverData)
   const navigation = useNavigation()
 
-  const handleUpdateProfile = async (values) => {
-    try {
-      // Implement API call to update driver profile with `values`
-      Toast.show({
-        type: 'success',
-        text1: 'Perfil del conductor actualizado con éxito',
-      })
-      navigation.goBack()
-    } catch (error) {
-      console.error('Error updating driver profile:', error)
-      Toast.show({
-        type: 'error',
-        text1: 'Error al actualizar el perfil del conductor',
-      })
-    }
-  }
+  useFocusEffect(
+    React.useCallback(() => {
+      if (!driverData) getDriverProfileData(storage.getString('userId'))
+    }, [driverData])
+  )
+
+  const handleUpdateProfile = useCallback(
+    async (values) => {
+      try {
+        await updateDriverProfileData(values.driverId, values)
+        Toast.show({
+          type: 'success',
+          text1: 'Perfil del conductor actualizado con éxito',
+        })
+        // navigation.goBack()
+      } catch (error) {
+        console.error('Error updating driver profile:', error)
+        Toast.show({
+          type: 'error',
+          text1: 'Error al actualizar el perfil del conductor',
+        })
+      }
+    },
+    [driverData]
+  )
 
   return (
     <SafeAreaView>
       <View className="px-4 py-6 gap-y-6">
         <Text className="my-8 text-xl font-semibold">Editar perfil</Text>
         <Input
-          defaultValue={initialValues.name}
+          defaultValue={driverInfo?.user?.name}
           onChangeText={(value) =>
-            setDriverData({ ...driverData, name: value })
+            setDriverInfo({
+              ...driverData,
+              user: { ...driverInfo.user, name: value },
+            })
           }
           placeholder="Ingrese el nombre del conductor"
-          label="Nombre y Apellido"
+          label="Nombre"
+        />
+        <Input
+          defaultValue={driverInfo?.user?.lastName}
+          onChangeText={(value) =>
+            setDriverInfo({
+              ...driverData,
+              user: { ...driverInfo.user, lastName: value },
+            })
+          }
+          placeholder="Ingrese el apellido del conductor"
+          label=" Apellido"
         />
 
         <Input
-          defaultValue={initialValues.phone.replace(
+          defaultValue={driverInfo?.user?.phone?.replace(
             /(\d{1})(\d{3})(\d{4})/,
             '$1$2-$3'
           )}
           onChangeText={(value) =>
-            setDriverData({
+            setDriverInfo({
               ...driverData,
-              phone: value.replace(/(\d{1})(\d{3})(\d{4})/, '$1$2-$3'),
+              user: {
+                ...driverInfo.user,
+                phone: value.replace(/(\d{1})(\d{3})(\d{4})/, '$1$2-$3'),
+              },
             })
           }
           placeholder="Ingrese el teléfono del conductor"
@@ -79,28 +112,28 @@ const EditDriverProfileScreen = () => {
           maxLength={8}
           label="Teléfono"
         />
-        <Input
-          defaultValue={initialValues.schoolName}
+        {/* <Input
+          defaultValue={driverInfo.schoolName}
           onChangeText={(value) =>
-            setDriverData({ ...driverData, phone: value })
+            setDriverInfo({ ...driverData, phone: value })
           }
           placeholder="Ingrese el Nombre del colegio"
           label="Colegio"
-        />
+        /> */}
 
         <Input
-          defaultValue={initialValues.schoolPlate}
+          defaultValue={driverInfo?.documentNumber}
           onChangeText={(value) =>
-            setDriverData({ ...driverData, schoolPlate: value })
+            setDriverInfo({ ...driverData, documentNumber: value })
           }
-          placeholder="Ingrese la placa escolar"
-          label="Placa escolar"
+          placeholder="Ingrese el documento"
+          label="Número de documento"
         />
 
         <Input
-          defaultValue={initialValues.licensePlate}
+          defaultValue={driverInfo?.licenseNumber}
           onChangeText={(value) =>
-            setDriverData({ ...driverData, licensePlate: value })
+            setDriverInfo({ ...driverData, licenseNumber: value })
           }
           placeholder="Ingrese la placa del vehículo"
           label="Placa del vehículo"
@@ -109,7 +142,7 @@ const EditDriverProfileScreen = () => {
         <Button
           status="primary"
           onPress={() => {
-            handleUpdateProfile(driverData)
+            handleUpdateProfile(driverInfo)
           }}>
           Actualizar Perfil
         </Button>

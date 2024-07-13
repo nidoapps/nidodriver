@@ -7,5 +7,6 @@ export interface DriversState {
   loadingHistoryTrips?: boolean
   historyTrips?: any[]
   activeTrip?: any
-  activeTripStopData: any
+  activeTripStopData?: any
+  passengersInfo?: any
 }

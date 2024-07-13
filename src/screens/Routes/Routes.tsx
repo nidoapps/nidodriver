@@ -21,8 +21,8 @@ const Routes = () => {
 
   useEffect(() => {
     getHistoryTripsByDriverId(
-      driverData.driverId,
-      `${selectedDate.toISOString().split('T')[0]}T00:00:00.000Z`,
+      driverData?.driverId,
+      `${selectedDate.toISOString().split('T')[0]}`,
       selectedTab === 0 ? TripDirection.going : TripDirection.return
     )
   }, [selectedDate, selectedTab])

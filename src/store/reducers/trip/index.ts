@@ -30,3 +30,7 @@ export const setActiveTripStopData = (
 ) => {
   state.activeTripStopData = action.payload
 }
+
+export const setPassengersInfo = (state: DriversState, action: ActionType) => {
+  state.passengersInfo = action.payload
+}

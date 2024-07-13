@@ -19,7 +19,7 @@ export const GetHistoryTripsByDriverId = async (
 ) => {
   try {
     const response = await get({
-      servicePath: `trips/history/${driverId}?date=${date}&direction=${direction}`,
+      servicePath: `trips/history/${driverId}`,
       params: {
         date,
         direction,
@@ -94,6 +94,17 @@ export const GetTripStopStatus = async (tripStopId: string) => {
   try {
     const response = await get({
       servicePath: `trip-stop/get-status/${tripStopId}`,
+    })
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+export const GetPassengersInfoByDriver = async (driverId: number) => {
+  try {
+    const response = await get({
+      servicePath: `trips/${driverId}/info-of-passengers/`,
     })
     return response
   } catch (error) {

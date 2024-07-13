@@ -1,3 +1,5 @@
+import { useGetTrips } from './useGetTrips'
+
 import {
   ChangePassengerStopStatus,
   ChangeStopStatus,
@@ -13,11 +15,13 @@ import {
 import { setActiveTripStopData } from '@/store/reducers/trip'
 
 export const useHandleTrips = (dispatch: (action: ActionType) => void) => {
+  const { getActiveTrip } = useGetTrips(dispatch)
   const handleChangeTripStatus = async (tripId: string, status: string) => {
     dispatch(setActiveTripAction(null))
     dispatch(setStartedTripAction(null))
     try {
       await ChangeTripStatus(tripId, status)
+      await getActiveTrip()
       dispatch(setStartedTripAction(tripId))
     } catch (error) {
       console.log('error', error)
