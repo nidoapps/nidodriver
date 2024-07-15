@@ -1,5 +1,9 @@
-import { RouteProp, useNavigation } from '@react-navigation/native'
-import { Divider, List, Button, Icon } from '@ui-kitten/components'
+import {
+  RouteProp,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native'
+import { Divider, List, Button, Icon, Spinner } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { SafeAreaView, View, Text } from 'react-native'
@@ -15,8 +19,10 @@ import { RootStackParams } from '@/navigation/NavigationParams'
 import { setActiveTripStopDataAction } from '@/store/actions/trip'
 import { setActiveTripStopData } from '@/store/reducers/trip'
 import { colors } from '@/themeColors'
+import { formatDateWithTime } from '@/utils/formatDate'
 import useIncrementalTimer from '@/utils/useIncrementalTimer'
 const StyledIcon = styled(Icon)
+const StyledButton = styled(Button)
 interface StopDetailProps {
   route: RouteProp<RootStackParams, 'stopDetail'>
 }
@@ -24,7 +30,7 @@ const StopDetail = ({ route }: StopDetailProps) => {
   const { stopId } = route.params || {}
   const {
     dispatch,
-    state: { activeTripStopData },
+    state: { activeTripStopData, loadingActiveStopData },
     hooks: {
       handleChangePassengerStopStatus,
       getTripStopData,
@@ -36,16 +42,13 @@ const StopDetail = ({ route }: StopDetailProps) => {
     passengers: [],
     status: StopStatus.scheduled,
   }
-
-  // activeTrip.stops.find((stop) => stop.tripStopId === stopId) || {
-  //   passengers: [],
-  //   status: StopStatus.scheduled,
-  // }
   const holdTime = 1
-  const [initiatedStop, setInitiatedStop] = useState(false)
+  const [localStatus, setLocalStatus] = useState(status)
+  const [initiatedStop, setInitiatedStop] = useState(
+    false || status === StopStatus.inProgress
+  )
   const [visible, setVisible] = useState(false)
   const [openModalContacts, setOpenModalContacts] = useState(false)
-  const [localStatus, setLocalStatus] = useState(status)
   let elapsedTime = useIncrementalTimer(holdTime)
   const [contactsData, setContactsData] = useState<{
     student?: string
@@ -56,9 +59,16 @@ const StopDetail = ({ route }: StopDetailProps) => {
     contacts: [],
   })
   const wsRef = useRef(null)
-  useEffect(() => {
-    getTripStopData(stopId)
-  }, [stopId, contactsData.studentId])
+
+  useFocusEffect(
+    useCallback(() => {
+      getTripStopData(stopId)
+    }, [stopId, route, localStatus])
+  )
+
+  // useEffect(() => {
+  //   getTripStopData(stopId)
+  // }, [stopId, contactsData.studentId])
 
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:8000/trip-stop/get-status')
@@ -77,7 +87,7 @@ const StopDetail = ({ route }: StopDetailProps) => {
       try {
         const response = JSON.parse(event.data)
         wsRef.current = ws
-        // console.log('Received message:', response)
+        console.log('Received message:', response)
         // if (response) {
         //   ws.send(
         //     JSON.stringify({
@@ -86,7 +96,7 @@ const StopDetail = ({ route }: StopDetailProps) => {
         //     })
         //   )
         // }
-        if (response.data && response.event === 'get') {
+        if (response.data) {
           // console.log('Received data:', response.data)
           dispatch(setActiveTripStopDataAction(response.data))
         } else {
@@ -126,12 +136,18 @@ const StopDetail = ({ route }: StopDetailProps) => {
     return () => clearInterval(intervalId)
   }, [tripStopId, stopId])
 
-  const completedStop = useMemo(() => {
-    return (
-      passengers.filter((e) => e.status === StopStatus.completed).length ===
-      passengers.length
-    )
-  }, [activeTripStopData])
+  // const completedStop = useMemo(() => {
+  //   return (
+  //     passengers.filter((e) => e.status === StopStatus.completed).length ===
+  //     passengers.length
+  //   )
+  // }, [activeTripStopData])
+
+  const handleInitiateStop = useCallback(() => {
+    handleChangeStopStatus(stopId ?? tripStopId, StopStatus.inProgress)
+    setLocalStatus(StopStatus.inProgress)
+    setInitiatedStop(true)
+  }, [])
 
   const handleCompleteStop = useCallback(() => {
     handleChangeStopStatus(stopId ?? tripStopId, StopStatus.completed)
@@ -147,7 +163,7 @@ const StopDetail = ({ route }: StopDetailProps) => {
     <TouchableOpacity
       disabled={!status}
       className="p-2 items-center justify-end h-3/4"
-      onPress={() => setInitiatedStop(true)}>
+      onPress={() => handleInitiateStop()}>
       <StyledIcon
         name="play-circle"
         fill={colors.primary}
@@ -157,42 +173,108 @@ const StopDetail = ({ route }: StopDetailProps) => {
     </TouchableOpacity>
   )
 
-  const StopActionsByStatus = {
-    [StopStatus.completed]: (
-      <TouchableOpacity className="p-2 items-center justify-center" disabled>
+  const InProgressStop = () => (
+    <View className="w-full h-full items-center justify-between">
+      <TouchableOpacity
+        className=" items-center  pt-6 justify-center "
+        onPress={() => {
+          setLocalStatus(StopStatus.completed)
+          setInitiatedStop(false)
+        }}>
         <StyledIcon
-          name="checkmark-circle-2"
-          fill={colors.success}
-          className="h-20 w-20"
+          name={
+            initiatedStop && elapsedTime <= `${holdTime}:00`
+              ? 'checkmark-circle'
+              : 'checkmark-circle'
+          }
+          fill={
+            initiatedStop && elapsedTime <= `${holdTime}:00`
+              ? colors.darkGrey2
+              : colors.primary
+          }
+          className="h-20 w-20 mb-2"
         />
-        <Text className="text-lg font-semibold">Parada completada</Text>
-        <Text className="text-base">
-          Parada iniciada el 15/05/2024 a las 7:32am
-        </Text>
-        <Text className="text-base">
-          Parada completada el 15/05/2024 a las 7:35am
-        </Text>
       </TouchableOpacity>
-    ),
-    [StopStatus.active]: InitStop(),
+
+      <View
+        className={`mx-auto shadow rounded-xl bg-white justify-center h-16 w-32 items-center  px-4 my-2 ${elapsedTime >= `${holdTime}:00` && '!text-red-600'}`}>
+        <Text
+          className={`font-bold text-emerald-600 text-3xl ${elapsedTime >= `${holdTime}:00` && 'text-error'} `}>
+          {elapsedTime}
+        </Text>
+      </View>
+
+      <View
+        className={`w-full py-6 items-center ${
+          initiatedStop && elapsedTime <= `${holdTime}:00`
+            ? 'bg-neutral-400'
+            : 'bg-midblue-500'
+        }`}>
+        <TouchableOpacity onPress={() => handleCompleteStop()}>
+          <Text
+            className={`text-xl font-semibold text-white ${initiatedStop && elapsedTime <= `${holdTime}:00` ? 'text-neutral-200' : 'text-white'}`}>
+            Completar Parada
+          </Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
+
+  const CancelledStop = () => (
+    <View className=" items-center justify-center h-full">
+      <StyledIcon
+        name="close-circle"
+        fill={colors.error}
+        className="h-20 w-20 mb-8"
+      />
+      <Text className="text-xl font-semibold">Parada cancelada</Text>
+      <Text className="text-base">
+        Parada cancelada el {formatDateWithTime(activeTripStopData?.canceledAt)}
+      </Text>
+    </View>
+  )
+
+  const CompletedStop = () => (
+    <View className=" items-center justify-center h-full">
+      <StyledIcon
+        name="checkmark-circle-2"
+        fill={colors.success}
+        className="h-20 w-20 mb-8"
+      />
+      <Text className="text-xl font-semibold">Parada completada</Text>
+      <Text className="text-base">
+        Parada iniciada el {formatDateWithTime(activeTripStopData?.startedAt)}
+      </Text>
+      <Text className="text-base">
+        Parada completada el{' '}
+        {formatDateWithTime(activeTripStopData?.completedAt)}
+      </Text>
+    </View>
+  )
+
+  const StopActionsByStatus: { [key in StopStatus]: React.ReactElement } = {
+    [StopStatus.completed]: CompletedStop(),
+    [StopStatus.inProgress]: InProgressStop(),
     [StopStatus.scheduled]: InitStop(),
+    [StopStatus.cancelled]: CancelledStop(),
+    [StopStatus.skipped]: CancelledStop(),
   }
 
-  const TimerComponent = useCallback(() => {
-    return (
-      <>
-        {initiatedStop ? (
-          <View
-            className={`mx-auto shadow rounded-xl bg-white justify-center h-16 w-32 items-center  px-4 my-2 ${elapsedTime >= `${holdTime}:00` && '!text-red-600'}`}>
-            <Text
-              className={`font-bold text-emerald-600 text-3xl ${elapsedTime >= `${holdTime}:00` && 'text-error'} `}>
-              {elapsedTime}
-            </Text>
-          </View>
-        ) : null}
-      </>
-    )
-  }, [initiatedStop, elapsedTime])
+  // const TimerComponent = useCallback(() => {
+  //   return (
+  //     <>
+  //       {initiatedStop ? (
+  //         <View
+  //           className={`mx-auto shadow rounded-xl bg-white justify-center h-16 w-32 items-center  px-4 my-2 ${elapsedTime >= `${holdTime}:00` && '!text-red-600'}`}>
+  //           <Text
+  //             className={`font-bold text-emerald-600 text-3xl ${elapsedTime >= `${holdTime}:00` && 'text-error'} `}>
+  //             {elapsedTime}
+  //           </Text>
+  //         </View>
+  //       ) : null}
+  //     </>
+  //   )
+  // }, [initiatedStop, elapsedTime])
 
   const renderItem = ({ item, index }: any): React.ReactElement => (
     <View
@@ -215,19 +297,35 @@ const StopDetail = ({ route }: StopDetailProps) => {
             setOpenModalContacts(true)
             setContactsData({
               student: item.passenger.name,
-              contacts: [
-                ...item.passenger?.family?.members,
-                ...item.passenger?.family?.responsibles,
-              ] as any,
+              contacts:
+                ([
+                  ...item.passenger?.family?.members,
+                  ...item.passenger?.family?.responsibles,
+                ] as any) || [],
             })
           }}
         />
-        <Button
+        <StyledButton
           disabled={
-            item.status === StudentStopStatus.completed || !initiatedStop
+            item.status !== StudentStopStatus.scheduled ||
+            status !== StopStatus.inProgress
           }
+          className={`${
+            (item.status === StudentStopStatus.pickedUp ||
+              status === StopStatus.completed) &&
+            '!bg-success '
+          } `}
           status={`${item.status === StudentStopStatus.pickedUp ? 'success' : 'basic'}`}
-          accessoryRight={<Icon name="checkmark" />}
+          accessoryRight={
+            <StyledIcon
+              name="checkmark"
+              fill={
+                (item.status === StudentStopStatus.pickedUp ||
+                  status === StopStatus.completed) &&
+                colors.white
+              }
+            />
+          }
           onPress={() => {
             if (item.status !== StudentStopStatus.pickedUp)
               setContactsData({
@@ -242,61 +340,35 @@ const StopDetail = ({ route }: StopDetailProps) => {
   }
   return (
     <SafeAreaView className="bg-white h-screen">
-      <View>
-        <View className="flex h-1/4 justify-between bg-neutral-100">
-          <View className="  items-center justify-center h-3/4 ">
-            {!initiatedStop ? (
-              <>{StopActionsByStatus[status || localStatus]}</>
-            ) : (
-              <TouchableOpacity
-                className="p-2 items-center justify-center "
-                onPress={() => {
-                  setLocalStatus(StopStatus.completed)
-                  setInitiatedStop(false)
-                }}>
-                <StyledIcon
-                  name={
-                    initiatedStop && elapsedTime <= `${holdTime}:00`
-                      ? 'checkmark-circle'
-                      : 'checkmark-circle'
-                  }
-                  fill={
-                    initiatedStop && elapsedTime <= `${holdTime}:00`
-                      ? colors.darkGrey2
-                      : colors.primary
-                  }
-                  className="h-20 w-20 mb-2"
-                />
-              </TouchableOpacity>
-            )}
-            {TimerComponent()}
+      <>
+        {loadingActiveStopData ? (
+          <View className="flex-1 justify-center items-center ">
+            <Spinner status="primary" />
           </View>
-          {initiatedStop && (
-            <View
-              className={`w-full py-6 items-center ${
-                initiatedStop && elapsedTime <= `${holdTime}:00`
-                  ? 'bg-neutral-400'
-                  : 'bg-midblue-500'
-              }`}>
-              <TouchableOpacity onPress={() => handleCompleteStop()}>
-                <Text
-                  className={`text-xl font-semibold text-white ${initiatedStop && elapsedTime <= `${holdTime}:00` ? 'text-neutral-200' : 'text-white'}`}>
-                  Completar Parada
-                </Text>
-              </TouchableOpacity>
+        ) : (
+          <View>
+            <View className="flex h-1/3  bg-neutral-100">
+              {StopActionsByStatus[status as StopStatus]}
             </View>
-          )}
-        </View>
-        <View className="h-3/4 bg-white">
-          <List
-            data={passengers}
-            ItemSeparatorComponent={Divider}
-            renderItem={renderItem}
-            keyExtractor={(i) => Math.random().toString()}
-          />
-        </View>
-        <MapTest />
-      </View>
+            <View className="h-2/3 bg-white">
+              <List
+                data={passengers || []}
+                ItemSeparatorComponent={Divider}
+                renderItem={
+                  passengers
+                    ? renderItem
+                    : () => (
+                        <>
+                          <Spinner status="primary" />
+                        </>
+                      )
+                }
+                keyExtractor={(i) => Math.random().toString()}
+              />
+            </View>
+          </View>
+        )}
+      </>
       {visible && (
         <ModalCheckinEstudent
           open={visible}

@@ -29,11 +29,11 @@ const StopsList = () => {
   const statusClasses: { [key: string]: string } = {
     [StopStatus.scheduled]: 'border-neutral-300 bg-neutral-50',
     [StopStatus.completed]: 'border-neutral-300 bg-neutral-50 opacity-80',
-    [StopStatus.active]: 'border-2 border-midblue-400 bg-primary-50',
+    [StopStatus.inProgress]: 'border-2 border-midblue-400 bg-primary-50',
   }
 
   const statusIcons: { [key: string]: string } = {
-    [StopStatus.active]: 'radio-button-on',
+    [StopStatus.inProgress]: 'radio-button-on',
     [StopStatus.scheduled]: 'radio-button-off',
     [StopStatus.completed]: 'checkmark-circle-2',
   }
@@ -42,7 +42,7 @@ const StopsList = () => {
     [StopStatus.scheduled]: colors.grey,
     [StopStatus.cancelled]: colors.error,
     [StopStatus.completed]: colors.success,
-    [StopStatus.active]: colors.primary,
+    [StopStatus.inProgress]: colors.primary,
   }
 
   const calculateStatus = (item, index) => {

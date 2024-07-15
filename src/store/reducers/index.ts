@@ -5,6 +5,7 @@ import {
   setActiveTripStopData,
   setAssignedTrips,
   setHistoryTrips,
+  setLoadingActiveStopData,
   setLoadingHistoryTrips,
   setPassengersInfo,
   setStartedTrip,
@@ -17,6 +18,7 @@ import {
   SET_ACTIVE_TRIP_STOP_DATA,
   SET_ASSIGNED_TRIPS,
   SET_HISTORY_TRIPS,
+  SET_LOADING_ACTIVE_STOP_DATA,
   SET_LOADING_HISTORY_TRIPS,
   SET_PASSENGERS_INFO,
   SET_STARTED_TRIP,
@@ -37,6 +39,7 @@ const reducers: {
   [SET_ACTIVE_TRIP]: setActiveTrip,
   [SET_ACTIVE_TRIP_STOP_DATA]: setActiveTripStopData,
   [SET_PASSENGERS_INFO]: setPassengersInfo,
+  [SET_LOADING_ACTIVE_STOP_DATA]: setLoadingActiveStopData,
 }
 
 export const combinedReducers = (state: DriversState, action: ActionType) => {

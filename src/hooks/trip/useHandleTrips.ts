@@ -10,6 +10,7 @@ import { ActionType } from '@/store/actions/base-action'
 import {
   setActiveTripAction,
   setActiveTripStopDataAction,
+  setLoadingActiveStopDataAction,
   setStartedTripAction,
 } from '@/store/actions/trip'
 import { setActiveTripStopData } from '@/store/reducers/trip'
@@ -39,6 +40,8 @@ export const useHandleTrips = (dispatch: (action: ActionType) => void) => {
   }
 
   const getTripStopData = async (tripStopId: string) => {
+    dispatch(setLoadingActiveStopDataAction(true))
+    dispatch(setActiveTripStopDataAction(null))
     try {
       const response = await GetTripStopStatus(tripStopId)
       dispatch(setActiveTripStopDataAction(response))
@@ -46,6 +49,8 @@ export const useHandleTrips = (dispatch: (action: ActionType) => void) => {
     } catch (error) {
       console.log('error', error)
       return false
+    } finally {
+      dispatch(setLoadingActiveStopDataAction(false))
     }
   }
 

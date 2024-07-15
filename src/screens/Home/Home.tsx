@@ -34,14 +34,13 @@ const Home = () => {
   useFocusEffect(
     React.useCallback(() => {
       getTripsByDriverId(driverData?.driverId)
-      getActiveTrip()
     }, [driverData])
   )
 
   useFocusEffect(
     React.useCallback(() => {
       getActiveTrip()
-    }, [])
+    }, [driverData])
   )
 
   return (

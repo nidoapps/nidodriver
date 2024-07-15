@@ -34,3 +34,10 @@ export const setActiveTripStopData = (
 export const setPassengersInfo = (state: DriversState, action: ActionType) => {
   state.passengersInfo = action.payload
 }
+
+export const setLoadingActiveStopData = (
+  state: DriversState,
+  action: ActionType
+) => {
+  state.loadingActiveStopData = action.payload
+}

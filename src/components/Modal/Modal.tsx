@@ -35,7 +35,18 @@ const Modal = ({ children, maxHeight = 60, open, handleClose }: ModalProps) => {
             shadowOpacity: 0.4,
             shadowRadius: 3,
           }}>
-          <>{children}</>
+          <>
+            <TouchableOpacity
+              onPress={handleClose}
+              className="  justify-end   items-end pr-2">
+              <Icon
+                name="close-outline"
+                fill={colors.black}
+                style={{ width: 24, height: 24 }}
+              />
+            </TouchableOpacity>
+            {children}
+          </>
         </StyledBottomSheet>
       )}
     </>

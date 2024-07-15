@@ -4,10 +4,9 @@ export enum ColorSchema {
 }
 
 export enum StudentStopStatus {
-  completed = 'completed',
-  absent = 'absent',
   pickedUp = 'PickedUp',
   cancelled = 'Cancelled',
+  scheduled = 'Scheduled',
 }
 
 export enum StopStatus {
