@@ -49,11 +49,12 @@ export const useGetTrips = (
     }
   }
 
-  const getActiveTrip = async () => {
+  const getActiveTrip = async (driverId?: number) => {
     dispatch(setActiveTripAction(null))
-
     try {
-      const response = await GetActiveTrip(state.driverData?.driverId)
+      const response = await GetActiveTrip(
+        driverId || state?.driverData?.driverId
+      )
       dispatch(setActiveTripAction(response || {}))
     } catch (error) {
       console.log('error', error)

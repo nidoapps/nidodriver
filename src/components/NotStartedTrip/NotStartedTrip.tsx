@@ -20,7 +20,7 @@ import { colors } from '@/themeColors'
 const StyledRectButton = styled(RectButton)
 const StyledIcon = styled(Icon)
 
-const NotStartedTrip = ({ assignedTrips }) => {
+const NotStartedTrip = ({ assignedTrips, driverId }) => {
   const {
     hooks: { handleChangeTripStatus },
     dispatch,
@@ -61,7 +61,7 @@ const NotStartedTrip = ({ assignedTrips }) => {
           renderLeftActions={renderLeftActions}
           onSwipeableOpen={(direction: 'left' | 'right') => {
             if (direction === 'left') {
-              return handleChangeTripStatus(item.tripId, 'InProgress')
+              return handleChangeTripStatus(item.tripId, 'InProgress', driverId)
             }
           }}>
           <View

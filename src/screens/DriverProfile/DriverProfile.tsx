@@ -8,8 +8,8 @@ import {
   Button,
 } from '@ui-kitten/components'
 import { Formik } from 'formik'
-import React, { useCallback, useState } from 'react'
-import { ScrollView, View, Text } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { ScrollView, View, Text, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Toast from 'react-native-toast-message'
 import * as yup from 'yup'
@@ -35,16 +35,26 @@ const validationSchema = yup.object().shape({
 const EditDriverProfileScreen = () => {
   const {
     state: { driverData },
-    hooks: { getDriverProfileData, updateDriverProfileData },
+    hooks: { getDriverProfileData, updateDriverProfileData, handleSignOut },
   } = useDriversContext()
   const [driverInfo, setDriverInfo] = useState(driverData)
   const navigation = useNavigation()
 
   useFocusEffect(
     React.useCallback(() => {
-      if (!driverData) getDriverProfileData(storage.getString('userId'))
-    }, [driverData])
+      getDriverProfileData(driverData?.userId || storage.getString('userId'))
+    }, [])
   )
+  // useEffect(() => {
+  //   getDriverProfileData(driverData?.userId || storage.getString('userId'))
+  // }, [])
+
+  const handleLogOut = async () => {
+    await handleSignOut()
+    setTimeout(() => {
+      navigation.navigate('signIn')
+    }, 250)
+  }
 
   const handleUpdateProfile = useCallback(
     async (values) => {
@@ -146,6 +156,11 @@ const EditDriverProfileScreen = () => {
           }}>
           Actualizar Perfil
         </Button>
+        <View className="w-full my-8">
+          <TouchableOpacity onPress={() => handleLogOut()}>
+            <Text>Cerrar sesion</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   )

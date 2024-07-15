@@ -14,7 +14,7 @@ import { setDriverDataAction } from '@/store/actions/driver'
 export const useHandleAuthorization = (
   dispatch: (action: ActionType) => void
 ) => {
-  // const { getUserProfileData } = useHandleDriverData(dispatch)
+  const { getDriverProfileData } = useHandleDriverData(dispatch)
 
   const handleCompleteLogin = async (
     response: any,
@@ -25,7 +25,7 @@ export const useHandleAuthorization = (
     if (response.authToken && response.userId) {
       storage.set('authToken', response.authToken)
       storage.set('userId', response.userId.toString())
-      // const userData = await getUserProfileData(response.userId)
+      await getDriverProfileData(response.userId)
 
       return completeLoginAction('main')
     }
@@ -73,7 +73,7 @@ export const useHandleAuthorization = (
       if (userInfo && userInfo.user) {
         await GoogleLogin(userInfo.user.email, String(userInfo.user.name)).then(
           (response) => {
-            if (response && response.authToken && response.authToken)
+            if (response && response.authToken)
               handleCompleteLogin(response, completeLoginAction)
           }
         )
@@ -95,7 +95,9 @@ export const useHandleAuthorization = (
     storage.set('authToken', '')
     storage.set('userId', '')
 
-    dispatch(setIsAuthAction(null))
+    dispatch(setLoadingAuthAction(false))
+    dispatch(setIsAuthAction(false))
+    dispatch(setDriverDataAction(null))
   }
 
   return {

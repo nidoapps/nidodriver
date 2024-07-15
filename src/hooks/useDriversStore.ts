@@ -17,6 +17,7 @@ export const useDriversStore = () => {
     isAuth: false,
     driverData: undefined,
     loadingHistoryTrips: false,
+    loadingActiveStopData: false,
   }
   const [state, dispatch] = useImmerReducer(combinedReducers, initialState)
 

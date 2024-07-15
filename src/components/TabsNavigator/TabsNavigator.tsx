@@ -56,19 +56,23 @@ const TabsNavigator = () => {
   // );
   return (
     <Navigator tabBar={(props) => <BottomTabBar {...props} />}>
-      <Screen options={{ headerShown: false }} name="home" component={Home} />
       <Screen
-        options={{ headerShown: false }}
+        options={{ headerShown: false, title: '1' }}
+        name="home"
+        component={Home}
+      />
+      <Screen
+        options={{ headerShown: false, title: '2' }}
         name="routes"
         component={Routes}
       />
       <Screen
-        options={{ headerShown: false }}
+        options={{ headerShown: false, title: '3' }}
         name="students"
         component={Students}
       />
       <Screen
-        options={{ headerShown: false }}
+        options={{ headerShown: false, title: '4' }}
         name="profile"
         component={EditDriverProfileScreen}
       />

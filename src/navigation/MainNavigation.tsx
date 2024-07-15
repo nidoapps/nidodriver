@@ -1,7 +1,7 @@
 import { RouteProp, NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
-import { Text } from 'react-native'
+import { Text, Animated } from 'react-native'
 
 import { RootStackParams } from './NavigationParams'
 
@@ -20,7 +20,8 @@ import { Students } from '@/screens/Students'
 import { ValidateOtpCode } from '@/screens/ValidateOtpCode'
 
 const Stack = createStackNavigator()
-
+const av = new Animated.Value(0)
+av.addListener(() => {})
 type ScreenRouteProp = RouteProp<RootStackParams, 'main'>
 
 const MainNavigation = () => {
@@ -68,6 +69,7 @@ const MainNavigation = () => {
           component={TabsNavigator}
           options={{
             headerShown: false,
+            title: '',
           }}
         />
         <Stack.Screen
@@ -77,9 +79,15 @@ const MainNavigation = () => {
           options={({ route: { params: paramsStack } }) => ({
             headerShown: true,
             headerTransparent: false,
+            title: '2',
             headerTitle: () => {
               const { stopId, stopTitle } = paramsStack
-              return <Text className="text-md font-semibold"> {stopTitle}</Text>
+              return (
+                <Text className="text-md font-semibold">
+                  {' '}
+                  {stopTitle || ''}
+                </Text>
+              )
             },
             gestureEnabled: true,
           })}

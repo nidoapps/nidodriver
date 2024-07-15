@@ -1,10 +1,9 @@
 export enum StopStatus {
-  pending = 'pending',
-  active = 'active',
+  inProgress = 'InProgress',
   completed = 'Completed',
-  scheduled = 'Scheduled',
   cancelled = 'Cancelled',
   skipped = 'Skipped',
+  scheduled = 'Scheduled',
 }
 
 export interface IStudent {

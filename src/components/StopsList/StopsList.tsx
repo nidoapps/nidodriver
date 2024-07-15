@@ -4,7 +4,7 @@ import { styled } from 'nativewind'
 import React, { useEffect, useState } from 'react'
 import { TouchableOpacity, View, Text } from 'react-native'
 
-import { TripDirectionText } from '@/constants/common'
+import { StudentStopStatus, TripDirectionText } from '@/constants/common'
 import { useDriversContext } from '@/hooks/useDriversContext'
 import { t } from '@/locales/i18n'
 import { PickupStops } from '@/mocks/stops'
@@ -29,11 +29,11 @@ const StopsList = () => {
   const statusClasses: { [key: string]: string } = {
     [StopStatus.scheduled]: 'border-neutral-300 bg-neutral-50',
     [StopStatus.completed]: 'border-neutral-300 bg-neutral-50 opacity-80',
-    [StopStatus.active]: 'border-2 border-midblue-400 bg-primary-50',
+    [StopStatus.inProgress]: 'border-2 border-midblue-400 bg-primary-50',
   }
 
   const statusIcons: { [key: string]: string } = {
-    [StopStatus.active]: 'radio-button-on',
+    [StopStatus.inProgress]: 'radio-button-on',
     [StopStatus.scheduled]: 'radio-button-off',
     [StopStatus.completed]: 'checkmark-circle-2',
   }
@@ -42,7 +42,7 @@ const StopsList = () => {
     [StopStatus.scheduled]: colors.grey,
     [StopStatus.cancelled]: colors.error,
     [StopStatus.completed]: colors.success,
-    [StopStatus.active]: colors.primary,
+    [StopStatus.inProgress]: colors.primary,
   }
 
   const calculateStatus = (item, index) => {
@@ -52,7 +52,7 @@ const StopsList = () => {
         activeTrip?.stops[index - 1].status === StopStatus.completed) ||
       (index === 0 && item.status === StopStatus.scheduled)
     ) {
-      return StopStatus.active
+      return StopStatus.inProgress
     } else if (item.status === StopStatus.scheduled) {
       return StopStatus.scheduled
     }
@@ -99,13 +99,13 @@ const StopsList = () => {
                     name="people"
                   />
                   <Text className="text-sm !text-neutral-700">
-                    {t('common.students')}:
+                    {t('common.students')}:{' '}
                     {
-                      item.passengers.filter(
-                        ({ status }) => status === StopStatus.completed
+                      item?.passengers?.filter(
+                        ({ status }) => status === StudentStopStatus.pickedUp
                       ).length
                     }{' '}
-                    / {item.passengers.length}
+                    / {item?.passengers?.length}
                   </Text>
                 </View>
               </View>

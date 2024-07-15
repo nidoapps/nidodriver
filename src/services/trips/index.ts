@@ -58,6 +58,7 @@ export const GetActiveTrip = async (driverId: number) => {
 }
 
 export const ChangeStopStatus = async (stopId: string, status: string) => {
+  console.log('STATUS', status)
   try {
     const response = await put({
       servicePath: `trip-stop/change-status`,
@@ -104,7 +105,7 @@ export const GetTripStopStatus = async (tripStopId: string) => {
 export const GetPassengersInfoByDriver = async (driverId: number) => {
   try {
     const response = await get({
-      servicePath: `trips/${driverId}/info-of-passengers/`,
+      servicePath: `trips/passengers/driver/${driverId}`,
     })
     return response
   } catch (error) {

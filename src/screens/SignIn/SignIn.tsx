@@ -5,7 +5,8 @@ import {
 import { useNavigation } from '@react-navigation/native'
 import { Button, Input, Spinner, Text } from '@ui-kitten/components'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Dimensions, View, Image } from 'react-native'
+import { Dimensions, View, Image, Keyboard, ScrollView } from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 import { styles } from './styles'
 
@@ -69,6 +70,13 @@ const SignIn = () => {
     }
   }, [countryCode, navigate, phoneNumber, signInType, email])
 
+  useEffect(() => {
+    if (!email) {
+      setShowSignInError('')
+      Keyboard.dismiss()
+    }
+  }, [email])
+
   const SignInType: { [key: string]: React.ReactElement } = {
     [SignInTypes.phoneNumber]: (
       <PhoneNumberInput
@@ -82,27 +90,28 @@ const SignIn = () => {
       />
     ),
     [SignInTypes.email]: (
-      <View className="mb-4">
-        <Input
-          style={styles.input}
-          placeholder="Correo electrónico"
-          label={t('common.email')}
-          size="large"
-          onChangeText={(value) => setEmail(value.toLowerCase())}
-          status={email && !isValidEmail(email) ? 'danger' : 'basic'}
-          caption={() => (
-            <>
-              {(email && !isValidEmail(email)) || showSignInError ? (
-                <Text category="c1" status="danger">
-                  {showSignInError
-                    ? t(AuthErrorsMessages[showSignInError])
-                    : t('signIn.incorrectEmail')}
-                </Text>
-              ) : null}
-            </>
-          )}
-        />
-      </View>
+      <Input
+        onBlur={() => Keyboard.dismiss()}
+        style={styles.input}
+        placeholder="Correo electrónico"
+        label={t('common.email')}
+        size="large"
+        onChangeText={(value) => {
+          setEmail(value.toLowerCase())
+        }}
+        status={email && !isValidEmail(email) ? 'danger' : 'basic'}
+        caption={() => (
+          <>
+            {(email && !isValidEmail(email)) || showSignInError ? (
+              <Text category="c1" status="danger">
+                {showSignInError
+                  ? t(AuthErrorsMessages[showSignInError])
+                  : t('signIn.incorrectEmail')}
+              </Text>
+            ) : null}
+          </>
+        )}
+      />
     ),
   }
 
@@ -133,45 +142,47 @@ const SignIn = () => {
 
   return (
     <View className="bg-white flex-1">
-      <View className="h-1/4 bg-midblue-500 justify-center items-center pt-12">
-        <Image
-          source={NidoLogoWhite}
-          className="w-36 h-32 justify-center mx-auto mb-4"
-        />
-      </View>
-      <View className="px-8 mt-8 h-3/4">
-        <Text category="h3">{t('signIn.signIn')}</Text>
-        <View className="my-2">{SignInType[signInType]}</View>
-        <Button
-          accessoryRight={
-            loadingAuth && (
-              <View className="mr-2">
-                <Spinner size="small" status="basic" />
-              </View>
-            )
-          }
-          size="large"
-          disabled={!enableContinue || loadingAuth}
-          onPress={() => handleContinueSignIn()}>
-          <Text category="h2">{t('common.continue')}</Text>
-        </Button>
-
-        <View className="items-center my-6">
-          <Text category="s1">{t('signIn.orSignInWith')}</Text>
-        </View>
-        {SecondarySigninType[signInType]}
-        <View className=" w-full justify-center items-center mx-auto my-6 px-8">
-          <GoogleSigninButton
-            size={GoogleSigninButton.Size.Wide}
-            color={GoogleSigninButton.Color.Light}
-            onPress={() => handleGoogleSignIn(navigate)}
-            style={{
-              width: Dimensions.get('window').width - 60,
-              height: 48,
-            }}
+      <ScrollView scrollEnabled={false} keyboardDismissMode="interactive">
+        <View className="h-1/3 bg-midblue-500 justify-center items-center pt-12">
+          <Image
+            source={NidoLogoWhite}
+            className="w-36 h-32 justify-center mx-auto mb-4"
           />
         </View>
-      </View>
+        <View className="px-8 mt-8 h-3/4">
+          <Text category="h3">{t('signIn.signIn')}</Text>
+          <View className="my-2">{SignInType[signInType]}</View>
+          <Button
+            accessoryRight={
+              loadingAuth && (
+                <View className="mr-2">
+                  <Spinner size="small" status="basic" />
+                </View>
+              )
+            }
+            size="large"
+            disabled={!enableContinue || loadingAuth}
+            onPress={() => handleContinueSignIn()}>
+            <Text category="h2">{t('common.continue')}</Text>
+          </Button>
+
+          <View className="items-center my-6">
+            <Text category="s1">{t('signIn.orSignInWith')}</Text>
+          </View>
+          {SecondarySigninType[signInType]}
+          <View className=" w-full justify-center items-center mx-auto my-6 px-8">
+            <GoogleSigninButton
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Light}
+              onPress={() => handleGoogleSignIn(navigate)}
+              style={{
+                width: Dimensions.get('window').width - 60,
+                height: 48,
+              }}
+            />
+          </View>
+        </View>
+      </ScrollView>
     </View>
   )
 }

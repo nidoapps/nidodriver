@@ -10,25 +10,32 @@ import { ActionType } from '@/store/actions/base-action'
 import {
   setActiveTripAction,
   setActiveTripStopDataAction,
+  setLoadingActiveStopDataAction,
   setStartedTripAction,
 } from '@/store/actions/trip'
 import { setActiveTripStopData } from '@/store/reducers/trip'
 
 export const useHandleTrips = (dispatch: (action: ActionType) => void) => {
   const { getActiveTrip } = useGetTrips(dispatch)
-  const handleChangeTripStatus = async (tripId: string, status: string) => {
+
+  const handleChangeTripStatus = async (
+    tripId: string,
+    status: string,
+    driverId?: number
+  ) => {
     dispatch(setActiveTripAction(null))
     dispatch(setStartedTripAction(null))
     try {
       await ChangeTripStatus(tripId, status)
-      await getActiveTrip()
-      dispatch(setStartedTripAction(tripId))
+      await getActiveTrip(driverId)
+      return dispatch(setStartedTripAction(tripId))
     } catch (error) {
       console.log('error', error)
     }
   }
 
   const handleChangeStopStatus = async (stopId: string, status: string) => {
+    console.log('STOPP', stopId, status)
     try {
       const response = await ChangeStopStatus(stopId, status)
       return response
@@ -39,6 +46,8 @@ export const useHandleTrips = (dispatch: (action: ActionType) => void) => {
   }
 
   const getTripStopData = async (tripStopId: string) => {
+    dispatch(setLoadingActiveStopDataAction(true))
+    dispatch(setActiveTripStopDataAction(null))
     try {
       const response = await GetTripStopStatus(tripStopId)
       dispatch(setActiveTripStopDataAction(response))
@@ -46,6 +55,8 @@ export const useHandleTrips = (dispatch: (action: ActionType) => void) => {
     } catch (error) {
       console.log('error', error)
       return false
+    } finally {
+      dispatch(setLoadingActiveStopDataAction(false))
     }
   }
 

@@ -33,7 +33,10 @@ const AssignedRoutesList = ({ historyTrips }) => {
       {item.stops.map((stop, i) => (
         <TouchableOpacity
           onPress={() =>
-            navigate('stopDetail', { stopId: stop.id, stopTitle: stop.title })
+            navigate('stopDetail', {
+              stopId: stop.tripStopId,
+              stopTitle: stop?.routeStop?.schoolStop?.address || '',
+            })
           }
           key={i}
           className="flex-row items-center justify-between gap-x-2 my-1">
@@ -44,8 +47,10 @@ const AssignedRoutesList = ({ historyTrips }) => {
               className="w-6 h-6"
             />
             <View className="ml-2">
-              <Text className=" text-lg">{stop.title}</Text>
-              <Text>{stop.address}</Text>
+              <Text className=" text-lg">
+                {stop?.routeStop?.schoolStop?.address}
+              </Text>
+              <Text>{stop?.routeStop?.schoolStop?.address}</Text>
             </View>
           </View>
           <StyledIcon

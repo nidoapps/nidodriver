@@ -104,12 +104,15 @@ const Students = () => {
   const handleSearchStudent = useCallback(
     (value) => {
       if (value) {
-        const filteredData = passengersInfo.filter(
+        const filteredData = passengersInfo?.filter(
           (student) =>
             student.name
               .toLocaleLowerCase()
               .includes(value.toLocaleLowerCase()) ||
             student.lastName
+              .toLocaleLowerCase()
+              .includes(value.toLocaleLowerCase()) ||
+            `${student.name} ${student.lastName}`
               .toLocaleLowerCase()
               .includes(value.toLocaleLowerCase())
         )
@@ -140,7 +143,7 @@ const Students = () => {
         />
       </View>
       <List
-        data={passengersInfo || []}
+        data={studentsData || passengersInfo || []}
         ItemSeparatorComponent={Divider}
         renderItem={renderItem}
       />

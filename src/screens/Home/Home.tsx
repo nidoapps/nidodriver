@@ -34,14 +34,13 @@ const Home = () => {
   useFocusEffect(
     React.useCallback(() => {
       getTripsByDriverId(driverData?.driverId)
-      getActiveTrip()
     }, [driverData])
   )
 
   useFocusEffect(
     React.useCallback(() => {
       getActiveTrip()
-    }, [])
+    }, [driverData])
   )
 
   return (
@@ -53,7 +52,10 @@ const Home = () => {
       (activeTrip && activeTrip?.status === TripStatus.inProgress) ? (
         <StopsList />
       ) : (
-        <NotStartedTrip assignedTrips={assignedTrips || []} />
+        <NotStartedTrip
+          assignedTrips={assignedTrips || []}
+          driverId={driverData?.driverId}
+        />
       )}
     </SafeAreaView>
   )

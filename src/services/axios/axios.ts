@@ -11,8 +11,7 @@ import { IGET, IPATCH, IPOST, IPUT, ServicesTypes } from './axios.interface'
 
 import { storage } from '@/App'
 
-const API_URL =
-  'http://localhost:8000/' || 'https://nidoapp-a3672380868e.herokuapp.com/'
+const API_URL = 'https://nidoapp-a3672380868e.herokuapp.com/'
 
 axiosRetry(axios, {
   retries: 3,
