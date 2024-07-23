@@ -7,7 +7,6 @@ import { useGetTrips } from './trip/useGetTrips'
 import { useHandleTrips } from './trip/useHandleTrips'
 
 import { storage } from '@/App'
-import { AssignedTrips } from '@/mocks/stops'
 import { DriversState } from '@/models/state'
 import { combinedReducers } from '@/store/reducers'
 
@@ -17,7 +16,7 @@ export const useDriversStore = () => {
     isAuth: false,
     driverData: undefined,
     loadingHistoryTrips: false,
-    loadingActiveStopData: false,
+    startedTrip: false,
   }
   const [state, dispatch] = useImmerReducer(combinedReducers, initialState)
 

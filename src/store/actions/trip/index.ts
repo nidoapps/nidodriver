@@ -50,5 +50,5 @@ export const setLoadingActiveStopDataAction = (payload: any) => {
 export const SET_COMPLETED_TRIP = 'SET_COMPLETED_TRIP'
 
 export const setCompletedTripAction = (payload: any) => {
-  return baseAction('SET_COMPLETED_TRIP', payload)
+  return baseAction(SET_COMPLETED_TRIP, payload)
 }

@@ -7,12 +7,16 @@ export enum StudentStopStatus {
   pickedUp = 'PickedUp',
   cancelled = 'Cancelled',
   scheduled = 'Scheduled',
+  dropped = 'Dropped',
+  arrived = 'Arrived',
 }
 
 export enum StopStatus {
-  pending = 'pending',
-  active = 'active',
-  completed = 'completed',
+  inProgress = 'InProgress',
+  completed = 'Completed',
+  scheduled = 'Scheduled',
+  cancelled = 'Cancelled',
+  dropped = 'Dropped',
 }
 
 export enum TripStatus {

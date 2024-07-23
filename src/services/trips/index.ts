@@ -57,7 +57,6 @@ export const GetActiveTrip = async (driverId: number) => {
 }
 
 export const ChangeStopStatus = async (stopId: string, status: string) => {
-  console.log('STATUS', status)
   try {
     const response = await put({
       servicePath: `trip-stop/change-status`,
@@ -81,7 +80,6 @@ export const ChangePassengerStopStatus = async (
       servicePath: `trip-stop-passenger/change-status-by-driver`,
       data: {
         id: passengerId,
-        status,
       },
     })
     return response

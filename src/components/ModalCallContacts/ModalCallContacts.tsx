@@ -32,7 +32,9 @@ const ModalCallContacts = ({
             <TouchableOpacity
               className="py-2 gap-y-2"
               key={i}
-              onPress={() => Linking.openURL(`tel://${item.cellphone}`)}>
+              onPress={() =>
+                Linking.openURL(`tel://${item?.cellphone || item?.phone}`)
+              }>
               <View className="flex-row justify-between items-center">
                 <Text className="text-lg">
                   {item.name} {item.lastName}

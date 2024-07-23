@@ -7,10 +7,6 @@ const useIncrementalTimer = (minutes: number) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setSeconds((prevSeconds) => {
-        // if (prevSeconds >= totalSeconds - 1) {
-        //   clearInterval(interval)
-        //   return totalSeconds
-        // }
         return prevSeconds + 1
       })
     }, 1000)
@@ -28,3 +24,32 @@ const useIncrementalTimer = (minutes: number) => {
 }
 
 export default useIncrementalTimer
+
+// const getIncrementalTimer = (minutes) => {
+//   const totalSeconds = minutes * 60
+//   let seconds = 0
+//   let intervalId
+
+//   const startTimer = () => {
+//     intervalId = setInterval(() => {
+//       seconds++
+//     }, 1000)
+//   }
+
+//   const stopTimer = () => {
+//     clearInterval(intervalId)
+//   }
+
+//   const formatTime = (seconds: number) => {
+//     const minutes = Math.floor(seconds / 60)
+//     const remainingSeconds = seconds % 60
+//     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
+//   }
+
+//   // Iniciar el timer cuando se llame a la función
+//   startTimer()
+
+//   return formatTime(seconds)
+// }
+
+// export default getIncrementalTimer

@@ -73,7 +73,7 @@ const callService = <T>(call: AxiosRequestConfig): Promise<T> => {
       return response.data
     } catch (error) {
       const response = error.response ? error.response : error
-      throw new Error({
+      throw error({
         ...response,
         statusCode: (response && response.status) || 404,
       })

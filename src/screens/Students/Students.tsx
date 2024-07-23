@@ -2,7 +2,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import { Divider, Icon, List, Button, Input } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React, { useCallback, useRef, useState } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Linking } from 'react-native'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -48,6 +48,9 @@ const Students = () => {
               size="medium"
               status="basic"
               accessoryLeft={<StyledIcon name="phone-call" />}
+              onPress={() =>
+                Linking.openURL(`tel://${item?.cellphone || item?.phone}`)
+              }
             />
           </View>
         )}

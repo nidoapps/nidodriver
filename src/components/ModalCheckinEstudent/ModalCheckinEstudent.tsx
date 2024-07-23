@@ -20,14 +20,18 @@ const ModalCheckinEstudent = ({
   return (
     <Modal open={open} handleClose={handleClose}>
       <View className="p-6 items-center justify-between gap-y-4">
-        <Text className="text-xl font-semibold">Checkin de Estudiante</Text>
+        <Text className="text-xl font-semibold">Recoger Estudiante</Text>
         <Text className="text-lg">{studentName}</Text>
-        <View className=" flex-col p-0 items-center justify-center gap-y-3">
-          <Button size="giant" status="success" onPress={handleCheckin}>
-            <Text className="text-xl">Marcar como recogido</Text>
+        <View className=" flex-col p-0 items-center justify-center gap-y-5">
+          <Button
+            size="giant"
+            appearance="filled"
+            status="success"
+            onPress={handleCheckin}>
+            <Text className="text-xl">Marcar estudiante como recogido</Text>
           </Button>
-          <Button appearance="ghost" onPress={handleClose}>
-            <Text className="text-xl">Cancelar</Text>
+          <Button appearance="ghost" size="giant" onPress={handleClose}>
+            <Text>Cancelar</Text>
           </Button>
         </View>
       </View>

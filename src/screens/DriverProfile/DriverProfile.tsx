@@ -16,16 +16,13 @@ const EditDriverProfileScreen = () => {
     hooks: { getDriverProfileData, updateDriverProfileData, handleSignOut },
   } = useDriversContext()
   const [driverInfo, setDriverInfo] = useState(driverData)
+  const [showUpdatedSuccess, setShowUpdatedSuccess] = useState(false)
+  const [showUpdatedError, setShowUpdatedError] = useState(false)
   const navigation = useNavigation()
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getDriverProfileData(driverData?.userId || storage.getString('userId'))
-    }, [])
-  )
-  // useEffect(() => {
-  //   getDriverProfileData(driverData?.userId || storage.getString('userId'))
-  // }, [])
+  useEffect(() => {
+    getDriverProfileData(driverData?.userId || storage.getString('userId'))
+  }, [])
 
   const handleLogOut = async () => {
     await handleSignOut()
@@ -37,15 +34,20 @@ const EditDriverProfileScreen = () => {
   const handleUpdateProfile = useCallback(
     async (values) => {
       try {
-        await updateDriverProfileData(values.driverId, values)
-
-        // navigation.goBack()
+        const response = await updateDriverProfileData(values.driverId, values)
+        if (response) {
+          setShowUpdatedSuccess(true)
+        } else {
+          setShowUpdatedError(true)
+        }
       } catch (error) {
         console.error('Error updating driver profile:', error)
-        Toast.show({
-          type: 'error',
-          text1: 'Error al actualizar el perfil del conductor',
-        })
+        setShowUpdatedError(true)
+      } finally {
+        setTimeout(() => {
+          setShowUpdatedSuccess(false)
+          setShowUpdatedError(false)
+        }, 4000)
       }
     },
     [driverData]
@@ -131,11 +133,26 @@ const EditDriverProfileScreen = () => {
           }}>
           Actualizar Perfil
         </Button>
-        <View className="w-full my-8">
+
+        <View className="w-full mb-0 bottom-0 items-center">
           <TouchableOpacity onPress={() => handleLogOut()}>
-            <Text>Cerrar sesion</Text>
+            <Text>Cerrar sesión</Text>
           </TouchableOpacity>
         </View>
+        {showUpdatedSuccess && (
+          <View className="p-3 border border-success bg-success justify-center items-center w-full rounded-md">
+            <Text className="text-lg text-white">
+              Perfil actualizado correctamente
+            </Text>
+          </View>
+        )}
+        {showUpdatedError && (
+          <View className="p-3 border border-error bg-error-100 justify-center items-center w-full rounded-md">
+            <Text className="text-lg text-white">
+              Error al actualizar perfil
+            </Text>
+          </View>
+        )}
       </View>
     </SafeAreaView>
   )

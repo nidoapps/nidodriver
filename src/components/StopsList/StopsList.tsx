@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { Icon, List } from '@ui-kitten/components'
 import { styled } from 'nativewind'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { TouchableOpacity, View, Text, Animated } from 'react-native'
 import { RectButton, Swipeable } from 'react-native-gesture-handler'
 
@@ -84,6 +84,17 @@ const StopsList = () => {
     )
   }
 
+  const showCompleteRoute =
+    useMemo(() => {
+      return (
+        activeTrip?.stops?.filter(
+          (stop) =>
+            stop.status === StopStatus.completed ||
+            stop.status === StopStatus.cancelled
+        )?.length === activeTrip?.stops?.length || false
+      )
+    }, [activeTrip]) || false
+
   const renderItem = ({ item, index, ...rest }: any): React.ReactElement => {
     return (
       <>
@@ -92,7 +103,7 @@ const StopsList = () => {
           onPress={() =>
             navigate('stopDetail', {
               stopId: item.tripStopId,
-              stopTitle: item?.routeStop?.schoolStop?.address || '',
+              stopTitle: item?.routeStop.schoolStop?.address || '',
             })
           }
           className={`h-20  px-3 py-4 mx-2 border-2 flex-row items-center justify-between rounded-lg my-1 ${statusClasses[calculateStatus(item, index)]}`}>
@@ -105,18 +116,6 @@ const StopsList = () => {
                 {item?.routeStop?.schoolStop?.address ?? ''}
               </Text>
               <View className="flex ">
-                {/* <View className="items-center flex-row">
-                  <StyledIcon
-                    fill={colors.light.darkGrey2}
-                    className="h-4 w-4 fill-neutral-300 "
-                    name="pin"
-                  />
-                  <Text className="text-sm !text-neutral-700">
-                    {' '}
-                    {t('common.address')}: {item.address}
-                  </Text>
-                </View> */}
-
                 <View className="items-center flex-row">
                   <StyledIcon
                     fill={colors.light.darkGrey2}
@@ -127,7 +126,9 @@ const StopsList = () => {
                     {t('common.students')}:{' '}
                     {
                       item?.passengers?.filter(
-                        ({ status }) => status === StudentStopStatus.pickedUp
+                        ({ status }) =>
+                          status === StudentStopStatus.pickedUp ||
+                          status === StudentStopStatus.arrived
                       ).length
                     }{' '}
                     / {item?.passengers?.length}
@@ -176,30 +177,32 @@ const StopsList = () => {
                 renderItem={renderItem as any}
               />
             </View>
-            <View>
-              <TouchableOpacity className="">
-                <Swipeable
-                  dragOffsetFromLeftEdge={0}
-                  renderLeftActions={renderLeftActions}
-                  onSwipeableOpen={(direction: 'left' | 'right') => {
-                    if (direction === 'left') {
-                      return handleCompleteTrip()
-                    }
-                  }}>
-                  <View className="flex flex-row  items-center    w-full h-20 px-4 justify-between bg-teal-500 ">
-                    <View />
-                    <Text className="text-2xl text-white font-semibold">
-                      Completar ruta
-                    </Text>
-                    <StyledIcon
-                      name="arrowhead-right-outline"
-                      className="w-10 h-10"
-                      fill={colors.white}
-                    />
-                  </View>
-                </Swipeable>
-              </TouchableOpacity>
-            </View>
+            {showCompleteRoute && (
+              <View>
+                <TouchableOpacity className="">
+                  <Swipeable
+                    dragOffsetFromLeftEdge={0}
+                    renderLeftActions={renderLeftActions}
+                    onSwipeableOpen={(direction: 'left' | 'right') => {
+                      if (direction === 'left') {
+                        return handleCompleteTrip()
+                      }
+                    }}>
+                    <View className="flex flex-row  items-center    w-full h-20 px-4 justify-between bg-teal-500 ">
+                      <View />
+                      <Text className="text-2xl text-white font-semibold">
+                        Completar ruta
+                      </Text>
+                      <StyledIcon
+                        name="arrowhead-right-outline"
+                        className="w-10 h-10"
+                        fill={colors.white}
+                      />
+                    </View>
+                  </Swipeable>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         </>
       ) : null}

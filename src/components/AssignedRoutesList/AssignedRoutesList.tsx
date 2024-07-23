@@ -35,7 +35,7 @@ const AssignedRoutesList = ({ historyTrips }) => {
           onPress={() =>
             navigate('stopDetail', {
               stopId: stop.tripStopId,
-              stopTitle: stop?.routeStop?.schoolStop?.address || '',
+              stopTitle: stop?.schoolStop?.address || '',
             })
           }
           key={i}

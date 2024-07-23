@@ -20,7 +20,9 @@ export const useGetTrips = (
 ) => {
   const getTripsByDriverId = async (driverId: string) => {
     try {
-      const response = await GetAssignedTripsByDriverId(driverId)
+      const response = await GetAssignedTripsByDriverId(
+        driverId || state?.driverData?.driverId
+      )
       dispatch(setAssignedTripsAction(response || []))
     } catch (error) {
       console.log('error', error)
