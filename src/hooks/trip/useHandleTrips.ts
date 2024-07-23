@@ -33,14 +33,13 @@ export const useHandleTrips = (
     dispatch(setStartedTripAction(null))
     const response = await ChangeTripStatus(tripId, status)
     if (response && response.status === TripStatus.completed) {
+      dispatch(setCompletedTripAction(response))
+      await getTripsByDriverId(driverId || state.driverData?.driverId)
       dispatch(setActiveTripAction(null))
       dispatch(setStartedTripAction(null))
-      await getTripsByDriverId(driverId || state.driverData?.driverId)
-      dispatch(setCompletedTripAction(response))
       return response
     } else {
-      await getActiveTrip(driverId)
-
+      await getActiveTrip(state?.driverData?.driverId || driverId)
       return dispatch(setStartedTripAction(tripId))
     }
   }
@@ -63,7 +62,6 @@ export const useHandleTrips = (
       dispatch(setActiveTripStopDataAction(response))
       return response
     } catch (error) {
-      console.log('error', error)
       return false
     } finally {
       dispatch(setLoadingActiveStopDataAction(false))

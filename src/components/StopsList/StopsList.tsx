@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import { Icon, List } from '@ui-kitten/components'
 import { styled } from 'nativewind'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { TouchableOpacity, View, Text, Animated } from 'react-native'
 import { RectButton, Swipeable } from 'react-native-gesture-handler'
 
@@ -83,6 +83,17 @@ const StopsList = () => {
       </StyledRectButton>
     )
   }
+
+  const showCompleteRoute =
+    useMemo(() => {
+      return (
+        activeTrip?.stops?.filter(
+          (stop) =>
+            stop.status === StopStatus.completed ||
+            stop.status === StopStatus.cancelled
+        )?.length === activeTrip?.stops?.length || false
+      )
+    }, [activeTrip]) || false
 
   const renderItem = ({ item, index, ...rest }: any): React.ReactElement => {
     return (
@@ -176,30 +187,32 @@ const StopsList = () => {
                 renderItem={renderItem as any}
               />
             </View>
-            <View>
-              <TouchableOpacity className="">
-                <Swipeable
-                  dragOffsetFromLeftEdge={0}
-                  renderLeftActions={renderLeftActions}
-                  onSwipeableOpen={(direction: 'left' | 'right') => {
-                    if (direction === 'left') {
-                      return handleCompleteTrip()
-                    }
-                  }}>
-                  <View className="flex flex-row  items-center    w-full h-20 px-4 justify-between bg-teal-500 ">
-                    <View />
-                    <Text className="text-2xl text-white font-semibold">
-                      Completar ruta
-                    </Text>
-                    <StyledIcon
-                      name="arrowhead-right-outline"
-                      className="w-10 h-10"
-                      fill={colors.white}
-                    />
-                  </View>
-                </Swipeable>
-              </TouchableOpacity>
-            </View>
+            {showCompleteRoute && (
+              <View>
+                <TouchableOpacity className="">
+                  <Swipeable
+                    dragOffsetFromLeftEdge={0}
+                    renderLeftActions={renderLeftActions}
+                    onSwipeableOpen={(direction: 'left' | 'right') => {
+                      if (direction === 'left') {
+                        return handleCompleteTrip()
+                      }
+                    }}>
+                    <View className="flex flex-row  items-center    w-full h-20 px-4 justify-between bg-teal-500 ">
+                      <View />
+                      <Text className="text-2xl text-white font-semibold">
+                        Completar ruta
+                      </Text>
+                      <StyledIcon
+                        name="arrowhead-right-outline"
+                        className="w-10 h-10"
+                        fill={colors.white}
+                      />
+                    </View>
+                  </Swipeable>
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         </>
       ) : null}

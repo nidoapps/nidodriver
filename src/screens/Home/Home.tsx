@@ -2,7 +2,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import { Icon } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React, { useEffect } from 'react'
-import { SafeAreaView, Text, View, Image } from 'react-native'
+import { SafeAreaView, Text, View } from 'react-native'
 
 import { storage } from '@/App'
 import { ModalCompletedTrip } from '@/components/ModalCompletedTrip'
@@ -11,8 +11,6 @@ import { StopsList } from '@/components/StopsList'
 import { TripStatus } from '@/constants/common'
 import { useDriversContext } from '@/hooks/useDriversContext'
 import { setCompletedTripAction } from '@/store/actions/trip'
-
-const StyledIcon = styled(Icon)
 
 const Home = () => {
   const {
@@ -27,17 +25,9 @@ const Home = () => {
     hooks: { getTripsByDriverId, getDriverProfileData, getActiveTrip },
   } = useDriversContext()
 
-  const [showCompletedTripModal, setShowCompletedTripModal] =
-    React.useState(!!completedTrip)
-
   useEffect(() => {
-    if (!driverData) getDriverProfileData(storage.getString('userId'))
-  }, [driverData])
-
-  useEffect(() => {
-    if (driverData) getTripsByDriverId(driverData?.driverId)
-  }, [driverData])
-
+    getDriverProfileData(storage.getString('userId'))
+  }, [])
   useFocusEffect(
     React.useCallback(() => {
       getTripsByDriverId(driverData?.driverId)
@@ -46,10 +36,10 @@ const Home = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      getActiveTrip()
-    }, [])
+      getActiveTrip(driverData?.driverId)
+    }, [driverData])
   )
-  console.log('asdasdasd', completedTrip)
+
   return (
     <SafeAreaView className="flex  bg-neutral-50 justify-between">
       <View className="flex justify-center items-center">
@@ -65,12 +55,11 @@ const Home = () => {
         />
       )}
       <ModalCompletedTrip
-        open={showCompletedTripModal}
+        open={!!completedTrip}
         handleClose={() => {
-          setShowCompletedTripModal(false)
           dispatch(setCompletedTripAction(null))
         }}
-        completedTrip={{}}
+        completedTrip={completedTrip}
       />
     </SafeAreaView>
   )

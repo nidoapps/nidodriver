@@ -294,7 +294,6 @@ const StopDetail = ({ route }: StopDetailProps) => {
   )
 
   const renderActions = (item: any) => {
-    console.log('items', activeTripStopData.status, initiatedStop)
     return (
       <View className="flex flex-row gap-x-4">
         <Button

@@ -9,6 +9,5 @@ export interface DriversState {
   activeTrip?: any
   activeTripStopData?: any
   passengersInfo?: any
-  loadingActiveStopData?: boolean
-  completedTrip?: object
+  completedTrip?: any
 }
