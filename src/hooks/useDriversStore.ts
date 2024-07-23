@@ -33,7 +33,7 @@ export const useDriversStore = () => {
     ...useHandleAuthorization(dispatch),
     ...useGetTrips(dispatch, state),
     ...useHandleDriverData(dispatch),
-    ...useHandleTrips(dispatch),
+    ...useHandleTrips(dispatch, state),
   }
   return {
     state,

@@ -46,3 +46,9 @@ export const SET_LOADING_ACTIVE_STOP_DATA = 'SET_LOADING_ACTIVE_STOP_DATA'
 export const setLoadingActiveStopDataAction = (payload: any) => {
   return baseAction('SET_LOADING_ACTIVE_STOP_DATA', payload)
 }
+
+export const SET_COMPLETED_TRIP = 'SET_COMPLETED_TRIP'
+
+export const setCompletedTripAction = (payload: any) => {
+  return baseAction('SET_COMPLETED_TRIP', payload)
+}

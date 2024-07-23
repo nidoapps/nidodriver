@@ -41,3 +41,7 @@ export const setLoadingActiveStopData = (
 ) => {
   state.loadingActiveStopData = action.payload
 }
+
+export const setCompletedTrip = (state: DriversState, action: ActionType) => {
+  state.completedTrip = action.payload
+}

@@ -8,7 +8,6 @@ export const GetAssignedTripsByDriverId = async (driverId: string) => {
     return response
   } catch (error) {
     console.log(error)
-    throw error
   }
 }
 
@@ -42,7 +41,7 @@ export const ChangeTripStatus = async (tripId: string, status: string) => {
     })
     return response
   } catch (error) {
-    throw error
+    console.log(error)
   }
 }
 

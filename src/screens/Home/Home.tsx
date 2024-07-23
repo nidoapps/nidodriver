@@ -5,31 +5,38 @@ import React, { useEffect } from 'react'
 import { SafeAreaView, Text, View, Image } from 'react-native'
 
 import { storage } from '@/App'
+import { ModalCompletedTrip } from '@/components/ModalCompletedTrip'
 import { NotStartedTrip } from '@/components/NotStartedTrip'
 import { StopsList } from '@/components/StopsList'
 import { TripStatus } from '@/constants/common'
 import { useDriversContext } from '@/hooks/useDriversContext'
+import { setCompletedTripAction } from '@/store/actions/trip'
 
 const StyledIcon = styled(Icon)
 
 const Home = () => {
   const {
-    state: { startedTrip, assignedTrips, driverData, activeTrip },
+    dispatch,
+    state: {
+      startedTrip,
+      assignedTrips,
+      driverData,
+      activeTrip,
+      completedTrip,
+    },
     hooks: { getTripsByDriverId, getDriverProfileData, getActiveTrip },
   } = useDriversContext()
 
-  // const RenderHomeByTripState = {
-  //   [TripStatus.notStarted]: <NotStartedTrip />,
-  //   [TripStatus.started]: <StopsList />,
-  // }
+  const [showCompletedTripModal, setShowCompletedTripModal] =
+    React.useState(!!completedTrip)
 
   useEffect(() => {
     if (!driverData) getDriverProfileData(storage.getString('userId'))
   }, [driverData])
 
   useEffect(() => {
-    if (driverData && !assignedTrips) getTripsByDriverId(driverData.driverId)
-  }, [driverData, assignedTrips])
+    if (driverData) getTripsByDriverId(driverData?.driverId)
+  }, [driverData])
 
   useFocusEffect(
     React.useCallback(() => {
@@ -40,9 +47,9 @@ const Home = () => {
   useFocusEffect(
     React.useCallback(() => {
       getActiveTrip()
-    }, [driverData])
+    }, [])
   )
-
+  console.log('asdasdasd', completedTrip)
   return (
     <SafeAreaView className="flex  bg-neutral-50 justify-between">
       <View className="flex justify-center items-center">
@@ -57,6 +64,14 @@ const Home = () => {
           driverId={driverData?.driverId}
         />
       )}
+      <ModalCompletedTrip
+        open={showCompletedTripModal}
+        handleClose={() => {
+          setShowCompletedTripModal(false)
+          dispatch(setCompletedTripAction(null))
+        }}
+        completedTrip={{}}
+      />
     </SafeAreaView>
   )
 }

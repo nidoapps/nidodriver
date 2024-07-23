@@ -1,5 +1,7 @@
 import { useGetTrips } from './useGetTrips'
 
+import { TripStatus } from '@/constants/common'
+import { DriversState } from '@/models/state'
 import {
   ChangePassengerStopStatus,
   ChangeStopStatus,
@@ -10,13 +12,17 @@ import { ActionType } from '@/store/actions/base-action'
 import {
   setActiveTripAction,
   setActiveTripStopDataAction,
+  setCompletedTripAction,
   setLoadingActiveStopDataAction,
   setStartedTripAction,
 } from '@/store/actions/trip'
 import { setActiveTripStopData } from '@/store/reducers/trip'
 
-export const useHandleTrips = (dispatch: (action: ActionType) => void) => {
-  const { getActiveTrip } = useGetTrips(dispatch)
+export const useHandleTrips = (
+  dispatch: (action: ActionType) => void,
+  state: DriversState
+) => {
+  const { getActiveTrip, getTripsByDriverId } = useGetTrips(dispatch)
 
   const handleChangeTripStatus = async (
     tripId: string,
@@ -25,17 +31,21 @@ export const useHandleTrips = (dispatch: (action: ActionType) => void) => {
   ) => {
     dispatch(setActiveTripAction(null))
     dispatch(setStartedTripAction(null))
-    try {
-      await ChangeTripStatus(tripId, status)
+    const response = await ChangeTripStatus(tripId, status)
+    if (response && response.status === TripStatus.completed) {
+      dispatch(setActiveTripAction(null))
+      dispatch(setStartedTripAction(null))
+      await getTripsByDriverId(driverId || state.driverData?.driverId)
+      dispatch(setCompletedTripAction(response))
+      return response
+    } else {
       await getActiveTrip(driverId)
+
       return dispatch(setStartedTripAction(tripId))
-    } catch (error) {
-      console.log('error', error)
     }
   }
 
   const handleChangeStopStatus = async (stopId: string, status: string) => {
-    console.log('STOPP', stopId, status)
     try {
       const response = await ChangeStopStatus(stopId, status)
       return response

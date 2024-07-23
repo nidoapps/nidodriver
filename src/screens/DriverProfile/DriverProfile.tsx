@@ -1,12 +1,5 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
-import {
-  Container,
-  Form,
-  Label,
-  Input,
-  PickerField,
-  Button,
-} from '@ui-kitten/components'
+import { Input, Button } from '@ui-kitten/components'
 import { Formik } from 'formik'
 import React, { useCallback, useEffect, useState } from 'react'
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native'
@@ -16,21 +9,6 @@ import * as yup from 'yup'
 
 import { storage } from '@/App'
 import { useDriversContext } from '@/hooks/useDriversContext'
-
-// const initialValues = {
-//   name: '',
-//   lastName: '',
-//   phone: '66778899',
-//   licenseNumber: 'JKL765656',
-//   documentNumber: 'Colegio AIP',
-// }
-
-const validationSchema = yup.object().shape({
-  name: yup.string().required('El nombre es obligatorio'),
-  phone: yup.string().required('El teléfono es obligatorio'),
-  busId: yup.string().required('El ID del bus es obligatorio'),
-  licensePlate: yup.string().required('La placa del vehículo es obligatoria'),
-})
 
 const EditDriverProfileScreen = () => {
   const {
@@ -60,10 +38,7 @@ const EditDriverProfileScreen = () => {
     async (values) => {
       try {
         await updateDriverProfileData(values.driverId, values)
-        Toast.show({
-          type: 'success',
-          text1: 'Perfil del conductor actualizado con éxito',
-        })
+
         // navigation.goBack()
       } catch (error) {
         console.error('Error updating driver profile:', error)

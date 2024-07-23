@@ -1,10 +1,15 @@
 import { useNavigation } from '@react-navigation/native'
 import { Icon, List } from '@ui-kitten/components'
 import { styled } from 'nativewind'
-import React, { useEffect, useState } from 'react'
-import { TouchableOpacity, View, Text } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { TouchableOpacity, View, Text, Animated } from 'react-native'
+import { RectButton, Swipeable } from 'react-native-gesture-handler'
 
-import { StudentStopStatus, TripDirectionText } from '@/constants/common'
+import {
+  StudentStopStatus,
+  TripDirectionText,
+  TripStatus,
+} from '@/constants/common'
 import { useDriversContext } from '@/hooks/useDriversContext'
 import { t } from '@/locales/i18n'
 import { PickupStops } from '@/mocks/stops'
@@ -12,12 +17,13 @@ import { StopStatus } from '@/models/common'
 import { colors } from '@/themeColors'
 
 const StyledIcon = styled(Icon)
+const StyledRectButton = styled(RectButton)
 
 const StopsList = () => {
   const { navigate } = useNavigation()
   const [data, setData] = useState(PickupStops)
   const {
-    hooks: { getActiveTrip },
+    hooks: { handleChangeTripStatus },
     state: { activeTrip },
   } = useDriversContext()
   // const pulseIconRef = React.useRef<Icon<Partial<ImageProps>>>()
@@ -57,6 +63,25 @@ const StopsList = () => {
       return StopStatus.scheduled
     }
     return StopStatus.completed
+  }
+
+  const handleCompleteTrip = useCallback(async () => {
+    await handleChangeTripStatus(activeTrip?.tripId || '', TripStatus.completed)
+  }, [activeTrip])
+
+  const renderLeftActions = (progress: any, dragX: any) => {
+    return (
+      <StyledRectButton
+        className="bg-green-500 justify-center items-center flex h-20 w-full "
+        // style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+      >
+        <>
+          <Animated.Text className="!text-white text-2xl font-semibold ">
+            Completando Ruta
+          </Animated.Text>
+        </>
+      </StyledRectButton>
+    )
   }
 
   const renderItem = ({ item, index, ...rest }: any): React.ReactElement => {
@@ -128,25 +153,55 @@ const StopsList = () => {
   return (
     <>
       {activeTrip && activeTrip.stops ? (
-        <View className=" h-full pt-2">
-          <View className="bg-midblue-50 border mb-3 flex-row items-center justify-between  border-neutral-200  px-2 h-16">
-            <Text className="text-md font-semibold">
-              Ruta {activeTrip?.route?.name}{' '}
-              {t(TripDirectionText[activeTrip?.route?.direction || 'going'])}{' '}
-              Iniciada
-            </Text>
-            <View className="flex-row  items-center justify-between">
-              <TouchableOpacity className="flex-row  h-9 w-9 justify-center items-center border border-neutral-900 rounded ">
-                <StyledIcon name="alert-circle" className="h-5 w-5 " />
+        <>
+          <View className=" flex h-full pb-14  justify-between pt-2">
+            <View className="">
+              <View className="bg-midblue-50 border mb-3 flex-row items-center justify-between  border-neutral-200  px-2 h-16">
+                <Text className="text-md font-semibold">
+                  Ruta {activeTrip?.route?.name}{' '}
+                  {t(
+                    TripDirectionText[activeTrip?.route?.direction || 'going']
+                  )}{' '}
+                  Iniciada
+                </Text>
+                <View className="flex-row  items-center justify-between">
+                  <TouchableOpacity className="flex-row  h-9 w-9 justify-center items-center border border-neutral-900 rounded ">
+                    <StyledIcon name="alert-circle" className="h-5 w-5 " />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <List
+                data={activeTrip && activeTrip.stops ? activeTrip.stops : data}
+                keyExtractor={(item) => String(Math.random())}
+                renderItem={renderItem as any}
+              />
+            </View>
+            <View>
+              <TouchableOpacity className="">
+                <Swipeable
+                  dragOffsetFromLeftEdge={0}
+                  renderLeftActions={renderLeftActions}
+                  onSwipeableOpen={(direction: 'left' | 'right') => {
+                    if (direction === 'left') {
+                      return handleCompleteTrip()
+                    }
+                  }}>
+                  <View className="flex flex-row  items-center    w-full h-20 px-4 justify-between bg-teal-500 ">
+                    <View />
+                    <Text className="text-2xl text-white font-semibold">
+                      Completar ruta
+                    </Text>
+                    <StyledIcon
+                      name="arrowhead-right-outline"
+                      className="w-10 h-10"
+                      fill={colors.white}
+                    />
+                  </View>
+                </Swipeable>
               </TouchableOpacity>
             </View>
           </View>
-          <List
-            data={activeTrip && activeTrip.stops ? activeTrip.stops : data}
-            keyExtractor={(item) => String(Math.random())}
-            renderItem={renderItem as any}
-          />
-        </View>
+        </>
       ) : null}
     </>
   )

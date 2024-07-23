@@ -10,4 +10,5 @@ export interface DriversState {
   activeTripStopData?: any
   passengersInfo?: any
   loadingActiveStopData?: boolean
+  completedTrip?: object
 }

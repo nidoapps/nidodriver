@@ -5,16 +5,14 @@ import { View, Text, Animated, Image } from 'react-native'
 import { Icon } from 'react-native-eva-icons'
 import {
   RectButton,
-  ScrollView,
   Swipeable,
   TouchableOpacity,
 } from 'react-native-gesture-handler'
 
 import NidoLogoBlue from '@/assets/images/nido-logo-blue.png'
-import { TripDirection, TripDirectionText } from '@/constants/common'
+import { TripDirectionText } from '@/constants/common'
 import { useDriversContext } from '@/hooks/useDriversContext'
 import { t } from '@/locales/i18n'
-import { setStartedTripAction } from '@/store/actions/trip'
 import { colors } from '@/themeColors'
 
 const StyledRectButton = styled(RectButton)
@@ -37,14 +35,7 @@ const NotStartedTrip = ({ assignedTrips, driverId }) => {
         // style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
       >
         <>
-          <Animated.Text
-            className="!text-white text-xl font-semibold "
-            // style={[
-            //   {
-            //     transform: [{ translateX: trans }],
-            //   },
-            // ]}
-          >
+          <Animated.Text className="!text-white text-xl font-semibold ">
             Iniciando Ruta
           </Animated.Text>
         </>
@@ -75,12 +66,12 @@ const NotStartedTrip = ({ assignedTrips, driverId }) => {
                 {t(`${TripDirectionText[item.route.direction]}`)}
               </Text>
               {/* <Text>Origen: {trip.stops[0].title}</Text> */}
-              <Text>
+              {/* <Text>
                 Destino:{' '}
                 {item?.route?.direction === TripDirection.going
                   ? item?.school?.name
                   : item.stops[item.stops.length - 1]?.name}{' '}
-              </Text>
+              </Text> */}
               <Text>Paradas: {item.stops.length}</Text>
             </View>
             <StyledIcon
@@ -101,7 +92,15 @@ const NotStartedTrip = ({ assignedTrips, driverId }) => {
         <Text className="text-2xl font-semibold"> Rutas asignadas</Text>
       </View>
       <View className="h-2/3">
-        <List data={assignedTrips || []} renderItem={renderItem} />
+        {assignedTrips && assignedTrips.length ? (
+          <List data={assignedTrips || []} renderItem={renderItem} />
+        ) : (
+          <View className="flex items-center justify-center h-full">
+            <Text className="text-xl font-semibold">
+              No hay rutas asignadas
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   )
