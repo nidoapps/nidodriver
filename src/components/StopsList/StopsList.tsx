@@ -103,16 +103,16 @@ const StopsList = () => {
           onPress={() =>
             navigate('stopDetail', {
               stopId: item.tripStopId,
-              stopTitle: item?.routeStop.schoolStop?.address || '',
+              stopTitle: item?.routeStop?.schoolStop?.address || '',
             })
           }
-          className={`h-20  px-3 py-4 mx-2 border-2 flex-row items-center justify-between rounded-lg my-1 ${statusClasses[calculateStatus(item, index)]}`}>
-          <View className=" flex-row items-center justify-center mr-2 gap-x-2">
-            <Text className="font-semibold text-lg text-neutral-800">
+          className={`  px-3 py-1 mx-2 border-2 flex-row items-center justify-between rounded-lg my-1 ${statusClasses[calculateStatus(item, index)]}`}>
+          <View className=" flex-row items-center gap-x-2 ">
+            <Text className="font-bold text-lg text-neutral-800 mr-1">
               {index + 1}
             </Text>
-            <View className="">
-              <Text className="text-lg font-semibold text-neutral-800">
+            <View className="break-words overflow-scroll w-5/6">
+              <Text className="text-lg font-semibold text-neutral-800 leading-5">
                 {item?.routeStop?.schoolStop?.address ?? ''}
               </Text>
               <View className="flex ">
@@ -165,11 +165,11 @@ const StopsList = () => {
                   )}{' '}
                   Iniciada
                 </Text>
-                <View className="flex-row  items-center justify-between">
+                {/* <View className="flex-row  items-center justify-between">
                   <TouchableOpacity className="flex-row  h-9 w-9 justify-center items-center border border-neutral-900 rounded ">
                     <StyledIcon name="alert-circle" className="h-5 w-5 " />
                   </TouchableOpacity>
-                </View>
+                </View> */}
               </View>
               <List
                 data={activeTrip && activeTrip.stops ? activeTrip.stops : data}

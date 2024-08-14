@@ -1,6 +1,7 @@
 import {
   GoogleSignin,
   GoogleSigninButton,
+  statusCodes,
 } from '@react-native-google-signin/google-signin'
 import { useNavigation } from '@react-navigation/native'
 import { Button, Input, Spinner, Text } from '@ui-kitten/components'
@@ -39,22 +40,18 @@ const SignIn = () => {
     })
   }, [])
 
-  // const handleEmailSignin = useCallback(async () => {
-  //   try {
-  //     await handleEmailLogin(email, navigate)
-  //   } catch (error) {
-  //     console.log('Error:', error)
-  //   }
-  // }, [email])
-
   const handleContinueSignIn = useCallback(async () => {
     if (signInType === SignInTypes.phoneNumber) {
+      setShowSignInError('')
       const response = await SendOTP(`${countryCode}${phoneNumber}`)
-      if (response) setShowSignInError('')
-      return navigate('validateOtpCode', {
-        phoneNumber: `${countryCode}${phoneNumber}` as string,
-        type: SignInTypes.phoneNumber,
-      })
+      if (response && response.sendedOtp) {
+        return navigate('validateOtpCode', {
+          phoneNumber: `${countryCode}${phoneNumber}` as string,
+          type: SignInTypes.phoneNumber,
+        })
+      } else if (response && response.err) {
+        setShowSignInError('phone')
+      }
     } else {
       const response = await SendOTPEmail(email)
       if (response && response.sendedOtp) {
@@ -69,6 +66,14 @@ const SignIn = () => {
       }
     }
   }, [countryCode, navigate, phoneNumber, signInType, email])
+
+  const handleGoogleLogIn = useCallback(async () => {
+    try {
+      await handleGoogleSignIn(navigate, setShowSignInError)
+    } catch (error) {
+      setShowSignInError(error)
+    }
+  }, [])
 
   useEffect(() => {
     if (!email) {
@@ -85,7 +90,9 @@ const SignIn = () => {
         setCountryCode={setCountryCode}
         setPhoneNumber={setPhoneNumber}
         showSignInError={
-          showSignInError ? t(AuthErrorsMessages[showSignInError || '']) : ''
+          showSignInError && showSignInError === 'phone'
+            ? t(AuthErrorsMessages[showSignInError || ''])
+            : ''
         }
       />
     ),
@@ -174,13 +181,24 @@ const SignIn = () => {
             <GoogleSigninButton
               size={GoogleSigninButton.Size.Wide}
               color={GoogleSigninButton.Color.Light}
-              onPress={() => handleGoogleSignIn(navigate)}
+              onPress={() => handleGoogleLogIn()}
               style={{
                 width: Dimensions.get('window').width - 60,
                 height: 48,
               }}
             />
           </View>
+          {showSignInError &&
+          showSignInError.includes(
+            'email' ||
+              statusCodes.SIGN_IN_CANCELLED ||
+              statusCodes.IN_PROGRESS ||
+              statusCodes.PLAY_SERVICES_NOT_AVAILABLE
+          ) ? (
+            <Text status="danger">
+              {t(AuthErrorsMessages[showSignInError || 'email'])}
+            </Text>
+          ) : null}
         </View>
       </ScrollView>
     </View>

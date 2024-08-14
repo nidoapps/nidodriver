@@ -1,5 +1,5 @@
 import BottomSheet from '@gorhom/bottom-sheet'
-import { Icon } from '@ui-kitten/components'
+import { Button, Icon } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React from 'react'
 import { View, Text } from 'react-native'
@@ -31,20 +31,23 @@ const Modal = ({ children, maxHeight = 60, open, handleClose }: ModalProps) => {
           style={{
             elevation: 20,
             shadowColor: colors.black,
-            shadowOffset: { width: 10, height: 40 },
+            shadowOffset: { width: 10, height: 50 },
             shadowOpacity: 0.4,
             shadowRadius: 3,
           }}>
           <>
-            <TouchableOpacity
-              onPress={handleClose}
-              className="  justify-end   items-end pr-2">
-              <Icon
-                name="close-outline"
-                fill={colors.black}
-                style={{ width: 24, height: 24 }}
-              />
-            </TouchableOpacity>
+            <View className="flex justify-end items-end m-0 p-0">
+              <TouchableOpacity
+                onPress={handleClose}
+                className="  h-12 w-12 justify-center items-center">
+                <Icon
+                  name="close-outline"
+                  fill={colors.black}
+                  style={{ width: 30, height: 30 }}
+                />
+              </TouchableOpacity>
+            </View>
+
             {children}
           </>
         </StyledBottomSheet>

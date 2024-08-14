@@ -12,6 +12,9 @@ import { IGET, IPATCH, IPOST, IPUT, ServicesTypes } from './axios.interface'
 import { storage } from '@/App'
 
 const API_URL = 'https://nidoapp-a3672380868e.herokuapp.com/'
+const publicToken =
+  process.env.EXPO_PUBLIC_AUTH_TOKEN ??
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzI0Njc3NzgxLCJleHAiOjE4MTEwNzc3ODF9.P4FGIHIWA0Mdc2uhYOMqLp6AxdFy0pED_sKeAzp5rwI'
 
 axiosRetry(axios, {
   retries: 3,
@@ -28,6 +31,7 @@ axios.defaults.headers = {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': '*',
+    Authorization: `Bearer ${publicToken}`,
   },
   get: {},
   post: {},
@@ -60,12 +64,11 @@ const serviceType = (
 
 const callService = <T>(call: AxiosRequestConfig): Promise<T> => {
   return (async (): Promise<T> => {
-    const authToken =
-      storage.getString('authToken') || process.env.EXPO_PUBLIC_AUTH_TOKEN
+    const authToken = storage.getString('authToken')
     if (authToken) {
       call.headers = {
         ...call.headers,
-        Authorization: `Bearer ${authToken}`,
+        Authorization: `Bearer ${authToken ?? publicToken}`,
       }
     }
     try {

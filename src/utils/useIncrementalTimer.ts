@@ -23,33 +23,49 @@ const useIncrementalTimer = (minutes: number) => {
   return formatTime(seconds)
 }
 
-export default useIncrementalTimer
+// export default useIncrementalTimer
 
-// const getIncrementalTimer = (minutes) => {
-//   const totalSeconds = minutes * 60
-//   let seconds = 0
-//   let intervalId
+const getIncrementalTimer = (minutes) => {
+  const totalSeconds = minutes * 60
+  let seconds = 0
+  let intervalId = null
 
-//   const startTimer = () => {
-//     intervalId = setInterval(() => {
-//       seconds++
-//     }, 1000)
-//   }
+  // Función para formatear el tiempo en formato MM:SS
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
 
-//   const stopTimer = () => {
-//     clearInterval(intervalId)
-//   }
+  // Iniciar el temporizador
+  const start = () => {
+    if (intervalId) return // Evita iniciar si ya está corriendo
+    intervalId = setInterval(() => {
+      seconds += 1
+      if (seconds >= totalSeconds) {
+        seconds = totalSeconds // Asegura que no sobrepase el tiempo total
+        clearInterval(intervalId)
+        intervalId = null
+      }
+    }, 1000)
+  }
 
-//   const formatTime = (seconds: number) => {
-//     const minutes = Math.floor(seconds / 60)
-//     const remainingSeconds = seconds % 60
-//     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
-//   }
+  // Detener el temporizador
+  const stop = () => {
+    if (intervalId) {
+      clearInterval(intervalId)
+      intervalId = null
+    }
+  }
 
-//   // Iniciar el timer cuando se llame a la función
-//   startTimer()
+  // Obtener el tiempo transcurrido formateado
+  const getElapsedTime = () => formatTime(seconds)
 
-//   return formatTime(seconds)
-// }
+  return {
+    start,
+    stop,
+    getElapsedTime,
+  }
+}
 
-// export default getIncrementalTimer
+export default getIncrementalTimer

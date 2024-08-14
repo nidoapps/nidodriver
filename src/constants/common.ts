@@ -9,6 +9,7 @@ export enum StudentStopStatus {
   scheduled = 'Scheduled',
   dropped = 'Dropped',
   arrived = 'Arrived',
+  noShow = 'NoShow',
 }
 
 export enum StopStatus {

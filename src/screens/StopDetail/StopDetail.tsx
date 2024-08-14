@@ -10,6 +10,7 @@ import { SafeAreaView, View, Text, Animated, Touchable } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 import { ModalCallContacts } from '@/components/ModalCallContacts'
+import { ModalCancelEstudent } from '@/components/ModalCancelEstudent'
 import { ModalCheckinEstudent } from '@/components/ModalCheckinEstudent'
 import { StudentStopStatus } from '@/constants/common'
 import { useDriversContext } from '@/hooks/useDriversContext'
@@ -17,8 +18,9 @@ import { StopStatus } from '@/models/common'
 import { RootStackParams } from '@/navigation/NavigationParams'
 import { setActiveTripStopDataAction } from '@/store/actions/trip'
 import { colors } from '@/themeColors'
+import createTimer from '@/utils/createTimer'
 import { formatDateWithTime } from '@/utils/formatDate'
-import useIncrementalTimer from '@/utils/useIncrementalTimer'
+import getIncrementalTimer from '@/utils/useIncrementalTimer'
 const StyledIcon = styled(Icon)
 const StyledButton = styled(Button)
 
@@ -40,8 +42,32 @@ const ActionStatusClasses = {
   [StudentStopStatus.scheduled]: 'bg-neutral-100',
   [StudentStopStatus.pickedUp]: 'bg-success',
   [StudentStopStatus.arrived]: 'bg-success',
-  [StudentStopStatus.cancelled]: 'bg-error',
+  [StudentStopStatus.cancelled]: 'bg-error-100',
   '': 'bg-neutral-100',
+}
+
+const CancellActionStatusClasses = {
+  [StudentStopStatus.scheduled]: 'bg-neutral-50',
+  [StudentStopStatus.pickedUp]: 'bg-neutral-50',
+  [StudentStopStatus.arrived]: 'bg-neutral-50',
+  [StudentStopStatus.cancelled]: 'bg-error-100',
+  '': 'bg-neutral-50',
+}
+
+const StatusClasses = {
+  [StudentStopStatus.scheduled]: 'text-neutral-800',
+  [StudentStopStatus.pickedUp]: 'text-success',
+  [StudentStopStatus.arrived]: 'text-success',
+  [StudentStopStatus.cancelled]: 'text-error',
+  '': 'text-neutral-800',
+}
+
+const CopyByTripStatus: { [key: string]: string } = {
+  [StudentStopStatus.pickedUp]: 'Recogido',
+  [StudentStopStatus.arrived]: 'En destino',
+  [StudentStopStatus.scheduled]: 'Programado',
+  [StudentStopStatus.cancelled]: 'Cancelado',
+  [StudentStopStatus.noShow]: 'Ausente',
 }
 
 const wsUrl =
@@ -63,16 +89,20 @@ const StopDetail = ({ route }: StopDetailProps) => {
     passengers: [],
   }
   const holdTime = 1
-  const [localStatus, setLocalStatus] = useState(status || StopStatus.scheduled)
+  // const timer = getIncrementalTimer(holdTime)
+
+  const [localStatus, setLocalStatus] = useState(status)
   const [initiatedStop, setInitiatedStop] = useState(
-    false || status === StopStatus.inProgress
+    status === StopStatus.inProgress
   )
   const [visible, setVisible] = useState(false)
+  const [showCancelStudent, setShowCancelStudent] = useState(false)
   const [openModalContacts, setOpenModalContacts] = useState(false)
   const [contactsData, setContactsData] = useState<{
     student?: string
     studentId?: number
     contacts?: any[]
+    status?: StudentStopStatus
   }>({
     student: '',
     contacts: [],
@@ -81,7 +111,7 @@ const StopDetail = ({ route }: StopDetailProps) => {
   useFocusEffect(
     useCallback(() => {
       getTripStopData(stopId)
-    }, [stopId, route, localStatus, initiatedStop, visible])
+    }, [stopId, route, localStatus, initiatedStop])
   )
   useEffect(() => {
     const ws = new WebSocket(wsUrl)
@@ -100,15 +130,6 @@ const StopDetail = ({ route }: StopDetailProps) => {
       try {
         const response = JSON.parse(event.data)
         wsRef.current = ws
-        // console.log('Received message:', response)
-        // if (response) {
-        //   ws.send(
-        //     JSON.stringify({
-        //       event: 'get',
-        //       data: tripStopId || stopId,
-        //     })
-        //   )
-        // }
         if (response.data && response?.data?.passengers) {
           dispatch(setActiveTripStopDataAction(response.data))
         } else {
@@ -153,17 +174,27 @@ const StopDetail = ({ route }: StopDetailProps) => {
     }
   }, [])
 
-  const handleCheckin = useCallback(async () => {
-    await handleChangePassengerStopStatus(
+  const handleCheckin = useCallback(
+    async (status) => {
+      await handleChangePassengerStopStatus(
+        contactsData.studentId,
+        status,
+        tripStopId
+      )
+      await getTripStopData(stopId ?? tripStopId)
+      setVisible(false)
+      setShowCancelStudent(false)
+    },
+    [
       contactsData.studentId,
-      StudentStopStatus.pickedUp,
-      tripStopId
-    )
-    setVisible(false)
-  }, [contactsData.studentId, handleChangePassengerStopStatus, tripStopId])
+      handleChangePassengerStopStatus,
+      tripStopId,
+      stopId,
+    ]
+  )
 
-  const handleInitiateStop = useCallback(() => {
-    handleChangeStopStatus(stopId ?? tripStopId, StopStatus.inProgress)
+  const handleInitiateStop = useCallback(async () => {
+    await handleChangeStopStatus(stopId || tripStopId, StopStatus.inProgress)
     setLocalStatus(StopStatus.inProgress)
     setInitiatedStop(true)
   }, [stopId, tripStopId])
@@ -172,10 +203,6 @@ const StopDetail = ({ route }: StopDetailProps) => {
     handleChangeStopStatus(stopId ?? tripStopId, StopStatus.completed)
     setLocalStatus(StopStatus.completed)
     setInitiatedStop(false)
-
-    setTimeout(() => {
-      navigate('main')
-    }, 4000)
   }, [handleChangeStopStatus, tripStopId, stopId])
 
   const InitStop = () => (
@@ -190,9 +217,23 @@ const StopDetail = ({ route }: StopDetailProps) => {
       <Text className="text-lg font-semibold">Iniciar Parada</Text>
     </TouchableOpacity>
   )
-
   const InProgressStop = () => {
-    const elapsedTime = useIncrementalTimer(holdTime)
+    const [elapsedTime, setElapsedTime] = useState('0:00')
+    useEffect(() => {
+      let elapsedSeconds = 0
+
+      const interval = setInterval(() => {
+        elapsedSeconds++
+
+        const minutes = Math.floor(elapsedSeconds / 60)
+        const seconds = elapsedSeconds % 60
+
+        const formatedTipe = `${minutes.toString().padStart(1, '0')}:${seconds.toString().padStart(2, '0')}`
+        setElapsedTime(formatedTipe)
+      }, 1000)
+
+      return () => clearInterval(interval)
+    }, [])
     const completedAllStudents = useMemo(
       () =>
         passengers.filter(
@@ -287,68 +328,112 @@ const StopDetail = ({ route }: StopDetailProps) => {
   const renderItem = ({ item, index }: any): React.ReactElement => (
     <View
       key={index}
-      className="px-4 py-6 flex-row justify-between items-center">
-      <Text className="text-base font-semibold">
-        {item?.passenger?.name} {item?.passenger?.lastName}
-      </Text>
+      className="px-2 py-6 flex-row justify-between items-center">
+      <View className=" w-28">
+        <Text className="text-base">
+          {item?.passenger?.name} {item?.passenger?.lastName}
+        </Text>
+        <Text className={StatusClasses[item.status]}>
+          {CopyByTripStatus[item?.status]}
+        </Text>
+      </View>
       <View>{renderActions(item)}</View>
     </View>
   )
 
-  const renderActions = (item: any) => {
-    return (
-      <View className="flex flex-row gap-x-4">
-        <Button
-          status="basic"
-          accessoryRight={<Icon name="phone-call-outline" />}
-          onPress={() => {
-            setOpenModalContacts(true)
-            setContactsData({
-              student: item.passenger.name,
-              contacts:
-                ([
-                  ...item.passenger?.family?.members,
-                  ...item.passenger?.family?.responsibles,
-                ] as any) || [],
-            })
-          }}
-        />
-        <StyledButton
-          disabled={
-            item.status !== StudentStopStatus.scheduled ||
-            status === StopStatus.completed ||
-            !initiatedStop
-          }
-          className={ActionStatusClasses[item.status]}
-          status={ActionStatus[item.status]}
-          accessoryRight={
-            <StyledIcon
-              name={
-                item.status !== StudentStopStatus.cancelled
-                  ? 'checkmark'
-                  : 'close'
-              }
-              fill={
-                (item.status === StudentStopStatus.pickedUp ||
-                  item.status === StudentStopStatus.cancelled ||
-                  item.status === StudentStopStatus.arrived ||
-                  status === StopStatus.completed) &&
-                colors.white
-              }
-            />
-          }
-          onPress={() => {
-            if (item.status !== StudentStopStatus.pickedUp)
+  const renderActions = useCallback(
+    (item: any) => {
+      return (
+        <View className="flex flex-row gap-x-3">
+          <Button
+            status="basic"
+            accessoryRight={<Icon name="phone-call-outline" />}
+            onPress={() => {
+              setOpenModalContacts(true)
+              setContactsData({
+                student: `${item.passenger.name} ${item.passenger.lastName}`,
+                contacts:
+                  ([
+                    ...item.passenger?.family?.members,
+                    ...item.passenger?.family?.responsibles,
+                  ] as any) || [],
+              })
+            }}
+          />
+          <StyledButton
+            disabled={status === StopStatus.completed ?? !initiatedStop}
+            className={
+              status === StopStatus.completed || !initiatedStop
+                ? ` opacity-80 ${CancellActionStatusClasses[item.status]}  `
+                : 'bg-neutral-50 !border-neutral-100'
+            }
+            status={
+              item.status === StudentStopStatus.cancelled ? 'danger' : 'basic'
+            }
+            appearance="outline"
+            size="tiny"
+            onPress={() => {
+              setShowCancelStudent(true)
+
               setContactsData({
                 ...contactsData,
                 studentId: item.tripStopPassengerId,
+                student: `${item.passenger.name} ${item.passenger.lastName}`,
+                status: item.status,
               })
-            setVisible(true)
-          }}
-        />
-      </View>
-    )
-  }
+            }}>
+            <StyledIcon
+              name="close"
+              className="w-5 h-5"
+              fill={
+                item.status === StudentStopStatus.cancelled
+                  ? colors.white
+                  : colors.light.darkGrey
+              }
+            />
+          </StyledButton>
+          <StyledButton
+            disabled={
+              status === StopStatus.scheduled || status === StopStatus.completed
+            }
+            className={
+              item.status === StudentStopStatus.pickedUp ||
+              item.status === StudentStopStatus.arrived
+                ? 'bg-success'
+                : 'bg-white border-success'
+            }
+            status={
+              item.status === StudentStopStatus.pickedUp ||
+              item.status === StudentStopStatus.arrived
+                ? 'success'
+                : 'basic'
+            }
+            onPress={() => {
+              setVisible(true)
+
+              setContactsData({
+                ...contactsData,
+                studentId: item.tripStopPassengerId,
+                student: `${item.passenger.name} ${item.passenger.lastName}`,
+                status: item.status,
+              })
+            }}>
+            <StyledIcon
+              className="w-6 h-6"
+              name="checkmark"
+              fill={
+                item.status === StudentStopStatus.arrived ||
+                item.status === StudentStopStatus.pickedUp
+                  ? colors.white
+                  : colors.light.lightBlue
+              }
+            />
+          </StyledButton>
+        </View>
+      )
+    },
+    [status, initiatedStop]
+  )
 
   return (
     <SafeAreaView className="bg-white h-screen">
@@ -384,7 +469,23 @@ const StopDetail = ({ route }: StopDetailProps) => {
           open={visible}
           handleClose={() => setVisible(false)}
           studentName={contactsData.student as string}
-          handleCheckin={() => handleCheckin()}
+          status={contactsData.status || StudentStopStatus.scheduled}
+          handleCheckin={() =>
+            handleCheckin(
+              contactsData.status === StudentStopStatus.cancelled
+                ? StudentStopStatus.pickedUp
+                : null
+            )
+          }
+        />
+      )}
+      {showCancelStudent && (
+        <ModalCancelEstudent
+          open={showCancelStudent}
+          handleClose={() => setShowCancelStudent(false)}
+          studentName={contactsData.student as string}
+          status={contactsData.status || StudentStopStatus.scheduled}
+          handleCheckin={() => handleCheckin(StudentStopStatus.cancelled)}
         />
       )}
       {openModalContacts && (

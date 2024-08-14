@@ -57,7 +57,7 @@ export const useGetTrips = (
       const response = await GetActiveTrip(
         driverId || state?.driverData?.driverId
       )
-      dispatch(setActiveTripAction(response || {}))
+      dispatch(setActiveTripAction(response || []))
     } catch (error) {
       console.log('error', error)
       throw error

@@ -1,6 +1,9 @@
 import { OneSignal } from 'react-native-onesignal'
 
-import { UpdateDriverProfile } from './../../services/auth/index'
+import {
+  GetVehicleAndDriverData,
+  UpdateDriverProfile,
+} from './../../services/auth/index'
 
 import { storage } from '@/App'
 import { GetDriverProfileData } from '@/services/auth'
@@ -12,7 +15,7 @@ export const useHandleDriverData = (dispatch: (action: ActionType) => void) => {
     try {
       const userData = await GetDriverProfileData(Number(userId))
       OneSignal.login(String(userData?.userId))
-      dispatch(setDriverDataAction(userData))
+      getDriverAndVehicleData(userData?.driverId)
       storage.set('driverId', userData?.driverId?.toString())
       return userData
     } catch (error) {
@@ -23,6 +26,7 @@ export const useHandleDriverData = (dispatch: (action: ActionType) => void) => {
 
   const updateDriverProfileData = async (driverId: number, data: any) => {
     try {
+      delete data.vehicle
       const response = await UpdateDriverProfile(driverId, data)
       dispatch(setDriverDataAction(response))
 
@@ -33,5 +37,21 @@ export const useHandleDriverData = (dispatch: (action: ActionType) => void) => {
     }
   }
 
-  return { getDriverProfileData, updateDriverProfileData }
+  const getDriverAndVehicleData = async (driverId: number) => {
+    try {
+      const response = await GetVehicleAndDriverData(driverId)
+      dispatch(setDriverDataAction(response))
+
+      return response
+    } catch (error) {
+      console.log('error', error)
+      return false
+    }
+  }
+
+  return {
+    getDriverProfileData,
+    updateDriverProfileData,
+    getDriverAndVehicleData,
+  }
 }

@@ -1,12 +1,11 @@
-import { Button, Icon } from '@ui-kitten/components'
+import { Button } from '@ui-kitten/components'
 import React from 'react'
 import { StatusBar, View, Text } from 'react-native'
 
 import { Modal } from '@/components/Modal'
 import { StudentStopStatus } from '@/constants/common'
-import { colors } from '@/themeColors'
 
-interface ModalCheckinEstudentProps {
+interface ModalCancelEstudentProps {
   handleClose: () => void
   open: boolean
   studentName: string
@@ -14,23 +13,27 @@ interface ModalCheckinEstudentProps {
   status: string
 }
 
-const ModalCheckinEstudent = ({
+const ModalCancelEstudent = ({
   handleClose,
   open,
   studentName = '',
   handleCheckin,
   status,
-}: ModalCheckinEstudentProps) => {
+}: ModalCancelEstudentProps) => {
   return (
     <Modal open={open} handleClose={handleClose}>
       <View className="px-6 pb-4 items-center justify-between gap-y-4">
-        <Text className="text-xl font-semibold">Confirmar Estudiante</Text>
+        <Text className="text-xl font-semibold">Cancelar Estudiante</Text>
         <Text className="text-lg">{studentName}</Text>
         <View className=" flex-col p-0  gap-y-5 w-full">
-          <Button size="giant" status="primary" onPress={handleCheckin}>
-            <Text className="text-xl">Confirmar</Text>
+          <Button size="giant" status="danger" onPress={handleCheckin}>
+            <Text className="text-xl">Cancelar</Text>
           </Button>
-          <Button appearance="ghost" size="giant" onPress={handleClose}>
+          <Button
+            appearance="ghost"
+            status="danger"
+            size="giant"
+            onPress={handleClose}>
             <Text>Volver</Text>
           </Button>
         </View>
@@ -39,4 +42,4 @@ const ModalCheckinEstudent = ({
   )
 }
 
-export default ModalCheckinEstudent
+export default ModalCancelEstudent

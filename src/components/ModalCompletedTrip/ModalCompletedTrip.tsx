@@ -38,12 +38,11 @@ const ModalCompletedTrip = ({
               stop.status === StopStatus.completed ||
               stop.status === StopStatus.cancelled
           ).length,
-          completedPassengers:
-            uniquePassengers.filter(
-              (passenger) =>
-                passenger.status === StudentStopStatus.pickedUp ||
-                StudentStopStatus.arrived
-            ).length - 1,
+          completedPassengers: uniquePassengers.filter(
+            (passenger: any) =>
+              passenger.status === StudentStopStatus.pickedUp ||
+              passenger.status === StudentStopStatus.arrived
+          ).length,
           totalPassengers: uniquePassengers.length,
         }
     }, [completedTrip]) || {}

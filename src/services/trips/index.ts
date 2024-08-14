@@ -80,6 +80,7 @@ export const ChangePassengerStopStatus = async (
       servicePath: `trip-stop-passenger/change-status-by-driver`,
       data: {
         id: passengerId,
+        status,
       },
     })
     return response

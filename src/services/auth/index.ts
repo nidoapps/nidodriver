@@ -1,6 +1,8 @@
 import { get, patch, post, put } from '../axios/axios'
 import { ServicesTypes } from '../axios/axios.interface'
 
+import { storage } from '@/App'
+
 export const SendOTP = async (phone: string) => {
   return await post({
     servicePath: 'auth/send-sms',
@@ -13,6 +15,7 @@ export const SendOTP = async (phone: string) => {
     })
     .catch((err) => {
       console.log(JSON.stringify(err))
+      return err
     })
 }
 
@@ -110,24 +113,40 @@ export const EmailLogin = async (
 export const GoogleLogin = async (
   email: string,
   name: string
-): Promise<{ authToken: any; userId: any }> => {
+): Promise<{ authToken: any; userId: any; error?: any }> => {
   return await post({
     servicePath: 'auth/google-login',
     data: { username: email.toLowerCase(), name },
   })
     .then((res: any) => {
       if (res && res.access_token) {
+        storage.set('authToken', res.access_token)
         return { authToken: res.access_token, userId: res.userId }
+      } else {
+        return { error: res.error }
       }
     })
     .catch((err) => {
       console.log(JSON.stringify(err))
+      return { error: err }
     })
 }
 
 export const GetDriverProfileData = async (userId: number) => {
   return await get({
     servicePath: `drivers/${userId}/user`,
+  })
+    .then((res: any) => {
+      return res
+    })
+    .catch((err) => {
+      console.log(JSON.stringify(err))
+    })
+}
+
+export const GetVehicleAndDriverData = async (driverId: number) => {
+  return await get({
+    servicePath: `drivers/driver-and-vehicle/${driverId}`,
   })
     .then((res: any) => {
       return res

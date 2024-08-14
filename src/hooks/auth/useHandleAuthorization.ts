@@ -42,8 +42,9 @@ export const useHandleAuthorization = (
       const response = await VerifyEmailOTP(email, code)
       if (response)
         return await handleCompleteLogin(response, completeLoginAction)
+      else throw new Error('Invalid email code')
     } catch (error) {
-      // Handle error
+      throw error
     } finally {
       dispatch(setLoadingAuthAction(false))
     }
@@ -58,36 +59,39 @@ export const useHandleAuthorization = (
 
     try {
       const response = await VerifyOTP(phoneNumber, code)
-      if (response)
+      if (response) {
         return await handleCompleteLogin(response, completeLoginAction)
+      } else {
+        throw new Error('Invalid phone code')
+      }
     } catch (error) {
+      throw error
     } finally {
       dispatch(setLoadingAuthAction(false))
     }
   }
 
-  const handleGoogleSignIn = async (completeLoginAction: (route) => void) => {
+  const handleGoogleSignIn = async (
+    completeLoginAction: (route) => void,
+    setError: (err) => void
+  ) => {
     try {
       await GoogleSignin.hasPlayServices()
       const userInfo = await GoogleSignin.signIn()
       if (userInfo && userInfo.user) {
-        await GoogleLogin(userInfo.user.email, String(userInfo.user.name)).then(
-          (response) => {
-            if (response && response.authToken)
-              handleCompleteLogin(response, completeLoginAction)
+        return await GoogleLogin(
+          userInfo.user.email,
+          String(userInfo.user.name)
+        ).then((response) => {
+          if (response && response.authToken) {
+            handleCompleteLogin(response, completeLoginAction)
+          } else {
+            return setError('email')
           }
-        )
+        })
       }
     } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log('User cancelled the login flow')
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log('Sign in is in progress already')
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        console.log('Play services not available or outdated')
-      } else {
-        console.log('Something went wrong:', error)
-      }
+      throw error?.code
     }
   }
 
