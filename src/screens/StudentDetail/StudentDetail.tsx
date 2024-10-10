@@ -3,7 +3,7 @@ import React from 'react'
 import { View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import MapTest from '@/components/MapTest/MapTest'
+// import MapTest from '@/components/MapTest/MapTest'
 import { AssignedTrips } from '@/mocks/stops'
 import { RootStackParams } from '@/navigation/NavigationParams'
 
@@ -16,11 +16,7 @@ const StudentDetail = ({ route }: StudentDetailProps) => {
   const { students, holdTime, status, latitude, longitude } =
     AssignedTrips[0].stops.find((stop) => stop.id === stopId) || { holdTime: 3 }
 
-  return (
-    <>
-      <MapTest />
-    </>
-  )
+  return <>{/* <MapTest /> */}</>
 }
 
 export default StudentDetail

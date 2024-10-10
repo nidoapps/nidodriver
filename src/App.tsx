@@ -1,5 +1,4 @@
 import * as eva from '@eva-design/eva'
-import MapboxGL from '@rnmapbox/maps'
 import {
   ApplicationProvider,
   IconRegistry,
@@ -25,10 +24,6 @@ import './global.css'
 export const storage = new MMKV()
 
 ModalService.setShouldUseTopInsets = true
-
-MapboxGL.setAccessToken(
-  'pk.eyJ1IjoiZGF2aWRlZ2QiLCJhIjoiY2x1cmpzcHR5MDg4dzJxbng2bnZjaDd6NyJ9.HhUONFQ9j0HeA9Sjahlgtg'
-)
 
 OneSignal.initialize('738993bd-0285-41fe-9eff-33ac439c213e')
 OneSignal.Notifications.requestPermission(true)
