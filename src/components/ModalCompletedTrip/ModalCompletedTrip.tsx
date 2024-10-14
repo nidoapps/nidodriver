@@ -34,9 +34,7 @@ const ModalCompletedTrip = ({
       if (completedTrip && completedTrip?.stops)
         return {
           completedStops: completedTrip?.stops.filter(
-            (stop) =>
-              stop.status === StopStatus.completed ||
-              stop.status === StopStatus.cancelled
+            (stop) => stop.status === StopStatus.completed
           ).length,
           completedPassengers: uniquePassengers.filter(
             (passenger: any) =>

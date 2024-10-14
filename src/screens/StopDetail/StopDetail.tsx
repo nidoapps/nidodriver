@@ -70,8 +70,8 @@ const CopyByTripStatus: { [key: string]: string } = {
   [StudentStopStatus.noShow]: 'Ausente',
 }
 
-const wsUrl =
-  'wss://nidoapp-a3672380868e.herokuapp.com:443/trip-stop/get-status'
+const wsUrl = 'ws://localhost:8000/trip-stop/get-status'
+;('wss://nidoapp-a3672380868e.herokuapp.com:443/trip-stop/get-status')
 
 const StopDetail = ({ route }: StopDetailProps) => {
   const { stopId } = route.params || {}
@@ -84,12 +84,10 @@ const StopDetail = ({ route }: StopDetailProps) => {
       handleChangeStopStatus,
     },
   } = useDriversContext()
-  const { navigate } = useNavigation()
   const { passengers, status, tripStopId } = activeTripStopData || {
     passengers: [],
   }
   const holdTime = 1
-  // const timer = getIncrementalTimer(holdTime)
 
   const [localStatus, setLocalStatus] = useState(status)
   const [initiatedStop, setInitiatedStop] = useState(
@@ -110,9 +108,12 @@ const StopDetail = ({ route }: StopDetailProps) => {
   const wsRef = useRef(null)
   useFocusEffect(
     useCallback(() => {
+      dispatch(setActiveTripStopDataAction(null))
+
       getTripStopData(stopId)
-    }, [stopId, route, localStatus, initiatedStop])
+    }, [stopId, localStatus, initiatedStop])
   )
+  console.log(activeTripStopData)
   useEffect(() => {
     const ws = new WebSocket(wsUrl)
 
@@ -181,7 +182,7 @@ const StopDetail = ({ route }: StopDetailProps) => {
         status,
         tripStopId
       )
-      await getTripStopData(stopId ?? tripStopId)
+      await getTripStopData(stopId)
       setVisible(false)
       setShowCancelStudent(false)
     },
@@ -448,7 +449,7 @@ const StopDetail = ({ route }: StopDetailProps) => {
               {StopActionsByStatus[(status as StopStatus) || localStatus]}
             </View>
             <View className="h-2/3 bg-white">
-              {!passengers && activeTripStopData === 'tripStop' ? (
+              {!passengers && !activeTripStopData ? (
                 <View className="flex h-full justify-center items-center ">
                   <Spinner status="primary" />
                 </View>

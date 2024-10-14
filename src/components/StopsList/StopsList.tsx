@@ -86,12 +86,8 @@ const StopsList = () => {
 
   const showCompleteRoute =
     useMemo(() => {
-      return (
-        activeTrip?.stops?.filter(
-          (stop) =>
-            stop.status === StopStatus.completed ||
-            stop.status === StopStatus.cancelled
-        )?.length === activeTrip?.stops?.length || false
+      return activeTrip?.stops?.every(
+        (stop) => stop.status !== StopStatus.scheduled
       )
     }, [activeTrip]) || false
 

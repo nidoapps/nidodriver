@@ -1,4 +1,4 @@
-import { Card, List } from '@ui-kitten/components'
+import { Button, Card, List } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React from 'react'
 import { View, Text, Animated, Image } from 'react-native'
@@ -20,7 +20,8 @@ const StyledIcon = styled(Icon)
 
 const NotStartedTrip = ({ assignedTrips, driverId }) => {
   const {
-    hooks: { handleChangeTripStatus },
+    hooks: { handleChangeTripStatus, getTripsByDriverId },
+    state: { driverData },
   } = useDriversContext()
 
   const renderLeftActions = () => {
@@ -62,7 +63,7 @@ const NotStartedTrip = ({ assignedTrips, driverId }) => {
             <StyledIcon
               name="arrowhead-right-outline"
               className="w-12 h-12"
-              fill={index ? colors.darkGrey2 : colors.primary}
+              fill={colors.primary}
             />
           </View>
         </Swipeable>
@@ -72,18 +73,31 @@ const NotStartedTrip = ({ assignedTrips, driverId }) => {
 
   return (
     <View className="flex justify-between">
-      <View className="h-1/3 bg-neutral-100 items-center justify-center">
-        <Image source={NidoLogoBlue} className="h-20 w-20" resizeMode="cover" />
+      <View className="h-1/3 bg-teal-50 items-center justify-center">
+        <Image source={NidoLogoBlue} className="h-24 w-24" resizeMode="cover" />
         <Text className="text-2xl font-semibold"> Rutas asignadas</Text>
       </View>
       <View className="h-2/3">
         {assignedTrips && assignedTrips.length ? (
           <List data={assignedTrips || []} renderItem={renderItem} />
         ) : (
-          <View className="flex items-center justify-center h-full">
+          <View className="flex items-center justify-center h-full gap-y-4">
             <Text className="text-xl font-semibold">
               No hay rutas asignadas
             </Text>
+            <Button
+              onPress={() => getTripsByDriverId(driverData.driverId)}
+              status="primary"
+              appearance="ghost"
+              accessoryRight={() => (
+                <StyledIcon
+                  name="sync-outline"
+                  className="w-5 h-5 "
+                  fill={colors.primary}
+                />
+              )}>
+              Actualizar
+            </Button>
           </View>
         )}
       </View>
