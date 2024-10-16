@@ -13,6 +13,7 @@
     },
     "assetBundlePatterns": ["**/*"],
     "assets": ["./src/assets"],
+    "platforms": ["ios", "android"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.nidoapp-driver",
