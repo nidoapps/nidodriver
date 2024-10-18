@@ -15,9 +15,9 @@ import { OneSignal } from 'react-native-onesignal'
 
 import { ColorSchema } from './constants/common'
 import { default as theme } from './custom-theme.json'
+import { default as mapping } from '../mapping.json'
 import { DriversAppProvider } from './hooks/useDriversContext'
 import MainNavigation from './navigation/MainNavigation'
-import { default as mapping } from '../mapping.json'
 
 import './global.css'
 
@@ -51,7 +51,7 @@ export default function App() {
         <ApplicationProvider
           {...eva}
           customMapping={mapping}
-          theme={{ ...eva[colorScheme as ColorSchema], ...theme }}>
+          theme={{ ...eva.light, ...theme }}>
           <StatusBar style="dark" />
           <MainNavigation />
         </ApplicationProvider>

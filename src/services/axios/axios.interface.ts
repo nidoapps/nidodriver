@@ -11,7 +11,7 @@ export interface IGET {
 export interface IPOST {
   servicePath: string
   data: unknown
-  headers?: AxiosRequestHeaders
+  headers?: Partial<AxiosRequestHeaders>
   type?: ServicesTypes
   [x: string]: unknown
 }

@@ -72,5 +72,7 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Nido necesita acceder a tu ubicación para brindar una mejor experiencia.</string>
 </dict>
 </plist>

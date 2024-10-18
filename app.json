@@ -47,6 +47,7 @@
           }
         ]
       },
+      "permissions": ["android.permission.DETECT_SCREEN_CAPTURE"],
       "package": "com.nidoapp.driver"
     },
     "web": {

@@ -192,7 +192,7 @@ const EditDriverProfileScreen = () => {
             </View>
           )}
         </View>
-        <View className=" flex items-center justify-end pb-3 h-1/6 ">
+        <View className=" flex items-center justify-end pb-3 ">
           <TouchableOpacity onPress={() => handleLogOut()}>
             <Text>Cerrar sesión</Text>
           </TouchableOpacity>

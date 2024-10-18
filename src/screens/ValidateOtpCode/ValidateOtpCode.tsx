@@ -93,7 +93,7 @@ const ValidateOtpCode = ({ route }: ValidateOtpCodeProps) => {
               onChangeText={(value) => handleInputChange(value, index)}
               maxLength={1}
               keyboardType="number-pad"
-              className={`w-11 border border-solid border-gray-300 rounded-lg h-14 text-center focus:border-teal-500 ${errorValidatingCode && 'border-error-100'}`}
+              className={`w-10 border border-solid border-gray-300 rounded-lg h-14 text-center focus:border-teal-500 ${errorValidatingCode && 'border-error-100'}`}
               textAlign="center"
               onKeyPress={({ nativeEvent }) => {
                 if (nativeEvent.key === 'Backspace') {

@@ -1,9 +1,10 @@
 import { useNavigation } from '@react-navigation/native'
 import { Icon, List } from '@ui-kitten/components'
 import { styled } from 'nativewind'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { TouchableOpacity, View, Text, Animated } from 'react-native'
 import { RectButton, Swipeable } from 'react-native-gesture-handler'
+import GetLocation from 'react-native-get-location'
 
 import {
   StudentStopStatus,
@@ -14,7 +15,33 @@ import { useDriversContext } from '@/hooks/useDriversContext'
 import { t } from '@/locales/i18n'
 import { PickupStops } from '@/mocks/stops'
 import { StopStatus } from '@/models/common'
+import { SendLocation } from '@/services/trips'
 import { colors } from '@/themeColors'
+import { getLocation } from '@/utils/getLocation'
+// import {
+//   closeConnection,
+//   getLocation,
+//   openConnection,
+// } from '@/utils/getLocation'
+
+const statusClasses: { [key: string]: string } = {
+  [StopStatus.scheduled]: 'border-neutral-300 bg-neutral-50',
+  [StopStatus.completed]: 'border-neutral-300 bg-neutral-50 opacity-80',
+  [StopStatus.inProgress]: 'border-2 border-midblue-400 bg-primary-50',
+}
+
+const statusIcons: { [key: string]: string } = {
+  [StopStatus.inProgress]: 'radio-button-on',
+  [StopStatus.scheduled]: 'radio-button-off',
+  [StopStatus.completed]: 'checkmark-circle-2',
+}
+
+const statusIconsColors: { [key: string]: string } = {
+  [StopStatus.scheduled]: colors.grey,
+  [StopStatus.cancelled]: colors.error,
+  [StopStatus.completed]: colors.success,
+  [StopStatus.inProgress]: colors.primary,
+}
 
 const StyledIcon = styled(Icon)
 const StyledRectButton = styled(RectButton)
@@ -26,30 +53,6 @@ const StopsList = () => {
     hooks: { handleChangeTripStatus },
     state: { activeTrip },
   } = useDriversContext()
-  // const pulseIconRef = React.useRef<Icon<Partial<ImageProps>>>()
-
-  // useEffect(() => {
-  //   getActiveTrip()
-  // }, [])
-
-  const statusClasses: { [key: string]: string } = {
-    [StopStatus.scheduled]: 'border-neutral-300 bg-neutral-50',
-    [StopStatus.completed]: 'border-neutral-300 bg-neutral-50 opacity-80',
-    [StopStatus.inProgress]: 'border-2 border-midblue-400 bg-primary-50',
-  }
-
-  const statusIcons: { [key: string]: string } = {
-    [StopStatus.inProgress]: 'radio-button-on',
-    [StopStatus.scheduled]: 'radio-button-off',
-    [StopStatus.completed]: 'checkmark-circle-2',
-  }
-
-  const statusIconsColors: { [key: string]: string } = {
-    [StopStatus.scheduled]: colors.grey,
-    [StopStatus.cancelled]: colors.error,
-    [StopStatus.completed]: colors.success,
-    [StopStatus.inProgress]: colors.primary,
-  }
 
   const calculateStatus = (item, index) => {
     if (
@@ -90,6 +93,18 @@ const StopsList = () => {
         (stop) => stop.status !== StopStatus.scheduled
       )
     }, [activeTrip]) || false
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout
+
+    setTimeout(() => {
+      intervalId = setInterval(() => getLocation(), 2 * 60 * 1000)
+    }, 2000)
+
+    return () => {
+      clearInterval(intervalId)
+    }
+  }, [])
 
   const renderItem = ({ item, index, ...rest }: any): React.ReactElement => {
     return (

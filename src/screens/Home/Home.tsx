@@ -2,7 +2,7 @@ import { useFocusEffect } from '@react-navigation/native'
 import { Icon } from '@ui-kitten/components'
 import { styled } from 'nativewind'
 import React, { useEffect } from 'react'
-import { SafeAreaView, Text, View } from 'react-native'
+import { Platform, SafeAreaView, Text, View } from 'react-native'
 
 import { storage } from '@/App'
 import { ModalCompletedTrip } from '@/components/ModalCompletedTrip'
@@ -41,7 +41,8 @@ const Home = () => {
   )
 
   return (
-    <SafeAreaView className="flex  bg-neutral-50 justify-between">
+    <SafeAreaView
+      className={`flex  bg-neutral-50 justify-between ${Platform.OS !== 'ios' && 'pt-10'}`}>
       <View className="flex justify-center items-center">
         <Text className="font-semibold text-xl">Nido</Text>
       </View>

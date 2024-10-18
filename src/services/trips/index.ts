@@ -1,4 +1,4 @@
-import { get, patch, put } from '../axios/axios'
+import { get, patch, post, put } from '../axios/axios'
 
 export const GetAssignedTripsByDriverId = async (driverId: string) => {
   try {
@@ -104,6 +104,22 @@ export const GetPassengersInfoByDriver = async (driverId: number) => {
   try {
     const response = await get({
       servicePath: `trips/passengers/driver/${driverId}`,
+    })
+    return response
+  } catch (error) {
+    throw error
+  }
+}
+
+export const SendLocation = async (data: any) => {
+  console.log(data)
+  try {
+    const response = await post({
+      servicePath: `vehicles/12/location`,
+      data,
+      headers: {
+        'X-API-KEY': 'k2ljqYMTqY9yf',
+      },
     })
     return response
   } catch (error) {

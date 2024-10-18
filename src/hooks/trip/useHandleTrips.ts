@@ -1,3 +1,5 @@
+import GetLocation from 'react-native-get-location'
+
 import { useGetTrips } from './useGetTrips'
 
 import { TripStatus } from '@/constants/common'
@@ -29,6 +31,19 @@ export const useHandleTrips = (
     status: string,
     driverId?: number
   ) => {
+    if (status === TripStatus.inProgress) {
+      GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 60000,
+      })
+        .then((location) => {
+          console.log('location', location)
+        })
+        .catch((error) => {
+          const { code, message } = error
+          console.warn(code, message)
+        })
+    }
     dispatch(setActiveTripAction(null))
     dispatch(setStartedTripAction(null))
     const response = await ChangeTripStatus(tripId, status)
